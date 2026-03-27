@@ -1,5 +1,4 @@
 import Modal from '@/components/modal'
-import { useAuth } from '@/context/auth.context'
 import AuthForm from './auth-form/auth-form'
 import { SettingModal } from '../../setting-modal'
 interface FriendSettingModalProps {
@@ -12,9 +11,8 @@ export const UserAccountModal = ({
 	onClose,
 	selectedTab,
 }: FriendSettingModalProps) => {
-	const { isAuthenticated } = useAuth()
-
-	if (!isAuthenticated)
+	
+	if (!true)
 		return (
 			<Modal
 				isOpen={isOpen}

@@ -9,13 +9,11 @@ import type {
 import { WidgetContainer } from '../widget-container'
 import { Forecast } from './forecast/forecast'
 import { CurrentWeatherBox } from './current/current-box.weather'
-import { useAuth } from '@/context/auth.context'
 import { useGetWeatherByLatLon } from '@/services/hooks/weather/getWeatherByLatLon'
 import { useGetForecastWeatherByLatLon } from '@/services/hooks/weather/getForecastWeatherByLatLon'
 
 export function WeatherLayout() {
-	const { user } = useAuth()
-	const [weatherSettings, setWeatherSettings] = useState<WeatherSettings | null>(null)
+		const [weatherSettings, setWeatherSettings] = useState<WeatherSettings | null>(null)
 	const [weatherState, setWeather] = useState<FetchedWeather | null>(null)
 	const [forecastWeather, setForecastWeather] = useState<FetchedForecast[] | null>(null)
 	const {

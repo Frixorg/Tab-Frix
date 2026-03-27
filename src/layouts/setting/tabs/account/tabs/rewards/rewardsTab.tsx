@@ -4,12 +4,9 @@ import { SectionPanel } from '@/components/section-panel'
 import { useGetReferrals } from '@/services/hooks/user/referralsService.hook'
 import { ReferralCodeSection } from './components/ReferralCodeSection'
 import { RewardTasks } from './components/tasks'
-import { RequireVerification } from '@/components/auth/require-verification'
-import { useAuth } from '@/context/auth.context'
 
 export const RewardsTab = () => {
-	const { user } = useAuth()
-	const { data, isLoading } = useGetReferrals({
+		const { data, isLoading } = useGetReferrals({
 		enabled: user?.phone !== null || (user?.email !== null && user?.verified),
 	})
 
@@ -18,7 +15,7 @@ export const RewardsTab = () => {
 
 	return (
 		<div className="space-y-2">
-			<RequireVerification mode="preview">
+			
 				<SectionPanel
 					title={
 						<div className="flex items-center gap-2">
@@ -53,7 +50,7 @@ export const RewardsTab = () => {
 
 				<ReferralCodeSection code={code} />
 				<RewardTasks tasks={tasks} isLoading={isLoading} />
-			</RequireVerification>
+			
 		</div>
 	)
 }

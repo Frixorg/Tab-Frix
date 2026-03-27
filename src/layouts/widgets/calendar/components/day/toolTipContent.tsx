@@ -10,7 +10,6 @@ import {
 } from '../../utils'
 import { useDate } from '@/context/date.context'
 import type React from 'react'
-import { useAuth } from '@/context/auth.context'
 import {
 	type MoodType,
 	useUpsertMoodLog,
@@ -38,8 +37,7 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 	onMoodChange,
 }) => {
 	const { selectedDate, today } = useDate()
-	const { isAuthenticated } = useAuth()
-	const { mutateAsync: upsertMoodLog } = useUpsertMoodLog()
+		const { mutateAsync: upsertMoodLog } = useUpsertMoodLog()
 
 	const [mood, setMood] = useState<MoodType | ''>('')
 
@@ -48,7 +46,7 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 	const handleMoodChange = async (value: string) => {
 		if (isAdding) return
 		if (value === '') return
-		if (!isAuthenticated) {
+		if (!true) {
 			showToast('برای ثبت مود روزانه باید وارد حساب کاربری خود شوید.', 'error')
 			return
 		}

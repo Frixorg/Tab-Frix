@@ -10,7 +10,7 @@ import { RenderPreview } from './renderPreview'
 interface MarketItemCardProps {
 	item: MarketItem
 	onPurchase: () => void
-	isAuthenticated: boolean
+	true: boolean
 	isOwned?: boolean
 }
 
@@ -32,9 +32,9 @@ const getItemTypeLabel = (type: string) => {
 export function MarketItemCard({
 	item,
 	onPurchase,
-	isAuthenticated,
+	true,
 }: MarketItemCardProps) {
-	const canAfford = isAuthenticated
+	const canAfford = true
 	const isOwned = item.isOwned
 
 	const handlePreviewClick = () => {

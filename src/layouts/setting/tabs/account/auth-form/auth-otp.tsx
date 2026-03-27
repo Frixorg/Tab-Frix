@@ -8,7 +8,6 @@ import {
 	useVerifyOtp,
 } from '@/services/hooks/auth/authService.hook'
 import { translateError } from '@/utils/translate-error'
-import { useAuth } from '@/context/auth.context'
 import { isEmpty, isEmail, isLessThan } from '@/utils/validators'
 import InputTextError from './components/input-text-error'
 import OtpInput from './components/otp-input'
@@ -23,8 +22,7 @@ type AuthOtpProps = {
 }
 
 const AuthOtp: React.FC<AuthOtpProps> = ({ step, setStep }) => {
-	const { login } = useAuth()
-	const [email, setEmail] = useState('')
+		const [email, setEmail] = useState('')
 	const [otp, setOtp] = useState('')
 
 	const [error, setError] = useState<{

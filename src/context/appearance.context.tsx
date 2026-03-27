@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import Analytics from '@/analytics'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { useChangeFont, useChangeUI } from '@/services/hooks/extension/updateSetting.hook'
-import { useAuth } from './auth.context'
 import { safeAwait } from '@/services/api'
 import { showToast } from '@/common/toast'
 import { translateError } from '@/utils/translate-error'
@@ -42,7 +41,6 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
 	const [canReOrderWidget, setCanReOrderWidget] = useState(false)
 	const { mutateAsync: changeFontAsync } = useChangeFont()
 	const { mutateAsync: changeUIAsync } = useChangeUI()
-	const { isAuthenticated } = useAuth()
 
 	useEffect(() => {
 		async function loadSettings() {
@@ -90,7 +88,7 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown)
 		}
-	}, [isAuthenticated, settings])
+	}, [settings])
 
 	const updateSetting = <K extends keyof AppearanceData>(
 		key: K,
@@ -116,22 +114,15 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
 		const currentFont = settings.fontFamily
 		updateSetting('fontFamily', value)
 		Analytics.event(`set_font_${value}`)
-		if (isAuthenticated) {
-			const [err] = await safeAwait(changeFontAsync({ font: value }))
-			if (err) {
-				updateSetting('fontFamily', currentFont)
-				return showToast(translateError(err) as any, 'error')
-			}
+		const [err] = await safeAwait(changeFontAsync({ font: value }))
+		if (err) {
+			updateSetting('fontFamily', currentFont)
+			return showToast(translateError(err) as any, 'error')
 		}
 	}
 
 	const setUI = async (ui: UI) => {
 		console.log('ui changed.', ui)
-		if (!isAuthenticated)
-			return showToast(
-				'برای استفاده از این حالت، باید وارد حساب کاربری خود شوید!',
-				'error'
-			)
 
 		const currentUI = settings.ui
 		updateSetting('ui', ui)

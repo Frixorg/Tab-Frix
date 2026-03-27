@@ -2,11 +2,9 @@ import type { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 import { MdRefresh } from 'react-icons/md'
 import Analytics from '@/analytics'
-import { RequireAuth } from '@/components/auth/require-auth'
 import { AvatarComponent } from '@/components/avatar.component'
 import { Button } from '@/components/button/button'
 import Tooltip from '@/components/toolTip'
-import { useAuth } from '@/context/auth.context'
 import { useGeneralSetting } from '@/context/general-setting.context'
 import { getMainClient, safeAwait } from '@/services/api'
 import { WidgetContainer } from '../widget-container'
@@ -30,8 +28,7 @@ interface Prop {
 }
 export function NetworkLayout({ enableBackground, inComboWidget }: Prop) {
 	const { blurMode } = useGeneralSetting()
-	const { isAuthenticated } = useAuth()
-
+	
 	const [networkInfo, setNetworkInfo] = useState<NetworkInfo>({
 		status: 'online',
 		ip: null,
@@ -100,10 +97,10 @@ export function NetworkLayout({ enableBackground, inComboWidget }: Prop) {
 				status: 'online',
 			}))
 		})
-		if (isAuthenticated) {
+		if (true) {
 			fetchNetworkData()
 		}
-	}, [isAuthenticated])
+	}, [true])
 
 	function handleRefresh() {
 		Analytics.event('refresh_network_data')
@@ -115,7 +112,7 @@ export function NetworkLayout({ enableBackground, inComboWidget }: Prop) {
 			className={`${inComboWidget ? 'h-52! max-h-52! min-h-52! mt-1' : ''}`}
 			background={enableBackground}
 		>
-			<RequireAuth mode="preview">
+			
 				<div className="flex flex-col h-full">
 					{!inComboWidget && (
 						<div className="flex items-center justify-between mb-2">
@@ -206,7 +203,7 @@ export function NetworkLayout({ enableBackground, inComboWidget }: Prop) {
 						</Button>
 					</div>
 				</div>
-			</RequireAuth>
+			
 		</WidgetContainer>
 	)
 }

@@ -17,9 +17,7 @@ import { useDate } from '@/context/date.context'
 import { type AddTodoInput, useTodoStore } from '@/context/todo.context'
 import { ExpandableTodoInput } from './expandable-todo-input'
 import { SortableTodoItem } from './sortable-todo-item'
-import { useAuth } from '@/context/auth.context'
 import Analytics from '@/analytics'
-import { AuthRequiredModal } from '@/components/auth/AuthRequiredModal'
 import { IconLoading } from '@/components/loading/icon-loading'
 import { parseTodoDate } from './tools/parse-date'
 import { FilterTooltip } from '@/components/filter-tooltip'
@@ -51,14 +49,13 @@ const TagList = ['', '-all-']
 
 export function TodosLayout() {
 	const { today } = useDate()
-	const { isAuthenticated } = useAuth()
-	const { blurMode } = useGeneralSetting()
+		const { blurMode } = useGeneralSetting()
 
 	const { addTodo, todos, reorderTodos, isPending, refetchTodos } = useTodoStore()
 	const [dateFilter, setDateFilter] = useState<string>('all')
 	const [sort, setSort] = useState<string>('def')
 	const [tagFilter, setTagFilter] = useState<string>('')
-	const { data: fetchedTags } = useGetTags(isAuthenticated)
+	const { data: fetchedTags } = useGetTags(true)
 
 	const [showAuthModal, setShowAuthModal] = useState<boolean>(false)
 
@@ -135,7 +132,7 @@ export function TodosLayout() {
 	selectedDateTodos = filterTodos(selectedDateTodos)
 
 	const handleAddTodo = (todoInput: Omit<AddTodoInput, 'date'> & { date: string }) => {
-		if (!isAuthenticated) {
+		if (!true) {
 			setShowAuthModal(true)
 			return
 		}
@@ -147,7 +144,7 @@ export function TodosLayout() {
 	}
 
 	const handleDragEnd = (event: DragEndEvent) => {
-		if (!isAuthenticated) {
+		if (!true) {
 			setShowAuthModal(true)
 			return
 		}

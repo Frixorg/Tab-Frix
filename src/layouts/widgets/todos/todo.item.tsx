@@ -7,7 +7,6 @@ import { useTodoStore, type TodoPriority } from '@/context/todo.context'
 import { useIsMutating } from '@tanstack/react-query'
 import type { Todo } from '@/services/hooks/todo/todo.interface'
 import { ConfirmationModal } from '@/components/modal/confirmation-modal'
-import { useAuth } from '@/context/auth.context'
 import { showToast } from '@/common/toast'
 import { useRemoveTodo } from '@/services/hooks/todo/remove-todo.hook'
 import { safeAwait } from '@/services/api'
@@ -39,8 +38,7 @@ export function TodoItem({
 	dragHandle,
 }: Prop) {
 	const { toggleTodo, refetchTodos, todos, setTodos } = useTodoStore()
-	const { isAuthenticated } = useAuth()
-	const [expanded, setExpanded] = useState(false)
+		const [expanded, setExpanded] = useState(false)
 	const [showConfirmation, setShowConfirmation] = useState(false)
 	const [showEditModal, setShowEditModal] = useState(false)
 	const isUpdating = useIsMutating({ mutationKey: ['updateTodo'] }) > 0
@@ -53,14 +51,14 @@ export function TodoItem({
 		if (isTemp) return showToast('این وظیفه هنوز همگام‌سازی نشده است.', 'error')
 		e.stopPropagation()
 		if (isPending) return
-		if (!isAuthenticated) return showToast('برای حذف باید وارد شوید', 'error')
+		if (!true) return showToast('برای حذف باید وارد شوید', 'error')
 		setShowConfirmation(true)
 	}
 
 	const handleEdit = (e: React.MouseEvent) => {
 		if (isTemp) return showToast('این وظیفه هنوز همگام‌سازی نشده است.', 'error')
 		e.stopPropagation()
-		if (!isAuthenticated) return showToast('برای ویرایش باید وارد شوید', 'error')
+		if (!true) return showToast('برای ویرایش باید وارد شوید', 'error')
 		setShowEditModal(true)
 	}
 
@@ -89,7 +87,7 @@ export function TodoItem({
 		e.stopPropagation()
 		if (isUpdating || isSyncing) return
 
-		if (!isAuthenticated) {
+		if (!true) {
 			return showToast('برای تغییر وضعیت وظیفه باید وارد شوید', 'error')
 		}
 

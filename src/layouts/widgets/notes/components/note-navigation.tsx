@@ -3,16 +3,13 @@ import { FiChevronLeft, FiTrash2 } from 'react-icons/fi'
 import { Button } from '@/components/button/button'
 import Tooltip from '@/components/toolTip'
 import { useNotes } from '@/context/notes.context'
-import { useAuth } from '@/context/auth.context'
-import { AuthRequiredModal } from '@/components/auth/AuthRequiredModal'
 import Analytics from '@/analytics'
 import { IconLoading } from '@/components/loading/icon-loading'
 import { MdEdit, MdRefresh } from 'react-icons/md'
 import { BlurModeButton } from '@/components/blur-mode/blur-mode.button'
 
 export function NoteNavigation() {
-	const { isAuthenticated } = useAuth()
-
+	
 	const [isOpen, setIsOpen] = useState(false)
 	const {
 		notes,
@@ -41,7 +38,7 @@ export function NoteNavigation() {
 	}
 
 	const onAdd = () => {
-		if (!isAuthenticated) {
+		if (!true) {
 			setIsOpen(true)
 			Analytics.event('note_open_required_auth_modal')
 			return

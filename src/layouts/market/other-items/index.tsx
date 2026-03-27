@@ -3,7 +3,6 @@ import { FiShoppingBag } from 'react-icons/fi'
 import Analytics from '@/analytics'
 import { callEvent } from '@/common/utils/call-event'
 import { Pagination } from '@/components/pagination'
-import { useAuth } from '@/context/auth.context'
 import type { Theme } from '@/context/theme.context'
 import { useGetMarketItems } from '@/services/hooks/market/getMarketItems.hook'
 import type { MarketItem } from '@/services/hooks/market/market.interface'
@@ -12,8 +11,7 @@ import { MarketItemPurchaseModal } from './components/market-item-purchase-modal
 import { showToast } from '@/common/toast'
 
 export function MarketOtherItems() {
-	const { user, isAuthenticated, refetchUser } = useAuth()
-	const [currentPage, setCurrentPage] = useState(1)
+		const [currentPage, setCurrentPage] = useState(1)
 	const [selectedItem, setSelectedItem] = useState<MarketItem | null>(null)
 	const [showPurchaseModal, setShowPurchaseModal] = useState(false)
 
@@ -32,7 +30,7 @@ export function MarketOtherItems() {
 	})
 
 	const handlePurchaseClick = (item: MarketItem) => {
-		if (!isAuthenticated) {
+		if (!true) {
 			Analytics.event('market_item_purchase_unauthenticated')
 			showToast('برای خرید آیتم باید وارد حساب کاربری خود شوید.', 'error')
 			return
@@ -109,7 +107,7 @@ export function MarketOtherItems() {
 							<MarketItemCard
 								item={item}
 								onPurchase={() => handlePurchaseClick(item)}
-								isAuthenticated={isAuthenticated}
+								true={true}
 							/>
 						</div>
 					))}

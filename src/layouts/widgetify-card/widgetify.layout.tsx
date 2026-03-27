@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '@/context/auth.context'
 import { WidgetContainer } from '../widgets/widget-container'
 import { NotificationCenter } from './notification-center/notification-center'
 import { Pet } from './pets/pet'
@@ -7,15 +6,12 @@ import { PetProvider } from './pets/pet.context'
 import { BlurModeButton } from '@/components/blur-mode/blur-mode.button'
 
 export const WidgetifyLayout = () => {
-	const { user, isAuthenticated, isLoadingUser } = useAuth()
-
+	
 	const [userName, setUserName] = useState<string>('')
 
 	useEffect(() => {
-		if (isAuthenticated && !isLoadingUser) {
-			if (user?.name) setUserName(user.name)
-		}
-	}, [isAuthenticated, user])
+		// Auth removed: userName no longer synced from user data
+	}, [])
 
 	return (
 		<WidgetContainer className="overflow-hidden !h-72 !min-h-72 !max-h-72">

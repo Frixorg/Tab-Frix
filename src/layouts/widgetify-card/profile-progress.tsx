@@ -1,10 +1,8 @@
 import Analytics from '@/analytics'
 import { callEvent } from '@/common/utils/call-event'
-import { useAuth } from '@/context/auth.context'
 import { HiXMark } from 'react-icons/hi2'
 
 export function ProfileProgressNotification() {
-	const { profilePercentage } = useAuth()
 	const onRemoveNotif = () => {
 		callEvent('remove_from_notifications', { id: 'update_profile', ttl: 240 })
 		Analytics.event('profile_progressbar_remove')
@@ -22,7 +20,7 @@ export function ProfileProgressNotification() {
 			onClick={() => onClick()}
 		>
 			<div className="flex flex-row items-center w-full gap-2 rounded-xl ">
-				<RadialProgressSmall percentage={profilePercentage} size={15} />
+				<RadialProgressSmall percentage={0} size={15} />
 				<p className="text-[11px] w-fit font-normal text-base-content/60">
 					پروفایلت رو کامل کن و پاداش بگیر!
 				</p>

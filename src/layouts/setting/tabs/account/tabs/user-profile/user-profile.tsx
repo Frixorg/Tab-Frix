@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { FiLogOut } from 'react-icons/fi'
 import { Button } from '@/components/button/button'
 import { SectionPanel } from '@/components/section-panel'
-import { useAuth } from '@/context/auth.context'
 import { useGetOrCreateReferralCode } from '@/services/hooks/user/referralsService.hook'
 import {
 	useGetUserProfile,
@@ -16,8 +15,7 @@ import { showToast } from '@/common/toast'
 import { translateError } from '@/utils/translate-error'
 
 export const UserProfile = () => {
-	const { logout } = useAuth()
-	const {
+		const {
 		data: profile,
 		isLoading,
 		isError,

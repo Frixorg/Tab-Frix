@@ -2,7 +2,6 @@ import { callEvent } from '@/common/utils/call-event'
 import type { Wallpaper } from '@/common/wallpaper.interface'
 import { Button } from '@/components/button/button'
 import Modal from '@/components/modal'
-import { useAuth } from '@/context/auth.context'
 import { UserCoin } from '@/layouts/setting/tabs/account/components/user-coin'
 
 interface CoinPurchaseModalProps {
@@ -20,8 +19,7 @@ export function CoinPurchaseModal({
 	onBuy,
 	isBuying = false,
 }: CoinPurchaseModalProps) {
-	const { isAuthenticated } = useAuth()
-	if (!wallpaper) return null
+		if (!wallpaper) return null
 
 	const onLogin = () => {
 		onClose()
@@ -81,7 +79,7 @@ export function CoinPurchaseModal({
 				</div>
 
 				<div className="flex gap-3 pt-4">
-					{isAuthenticated ? (
+					{true ? (
 						<>
 							<Button
 								onClick={onClose}

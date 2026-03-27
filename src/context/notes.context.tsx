@@ -13,7 +13,6 @@ import { safeAwait } from '@/services/api'
 import { translateError } from '@/utils/translate-error'
 import { showToast } from '@/common/toast'
 import { useGetNotes } from '@/services/hooks/note/get-notes.hook'
-import { useAuth } from './auth.context'
 import { useRemoveNote } from '@/services/hooks/note/delete-note.hook'
 import { useUpsertNote } from '@/services/hooks/note/upsert-note.hook'
 import type { FetchedNote } from '@/services/hooks/note/note.interface'
@@ -34,7 +33,6 @@ interface NotesContextType {
 const NotesContext = createContext<NotesContextType | undefined>(undefined)
 
 export function NotesProvider({ children }: { children: ReactNode }) {
-	const { isAuthenticated } = useAuth()
 	const [notes, setNotes] = useState<FetchedNote[]>([])
 	const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
 	const [isSaving, setIsSaving] = useState(false)
@@ -46,7 +44,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
 		refetch,
 		dataUpdatedAt,
 		isRefetching,
-	} = useGetNotes(isAuthenticated)
+	} = useGetNotes(true)
 	const { mutateAsync: removeNoteAsync } = useRemoveNote()
 	const { mutateAsync: upsertNoteAsync } = useUpsertNote()
 

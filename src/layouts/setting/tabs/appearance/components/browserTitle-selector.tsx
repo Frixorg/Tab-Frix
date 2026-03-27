@@ -28,9 +28,8 @@ const defaultBrowserTitles: BrowserTitle[] = [
 
 interface Prop {
 	fetched_browserTitles: UserInventoryItem[]
-	isAuthenticated: boolean
 }
-export function BrowserTitleSelector({ fetched_browserTitles, isAuthenticated }: Prop) {
+export function BrowserTitleSelector({ fetched_browserTitles }: Prop) {
 	const [browserTitles, setBrowserTitles] =
 		useState<BrowserTitle[]>(defaultBrowserTitles)
 	const [selected, setSelected] = useState<BrowserTitle | null>(null)
@@ -41,7 +40,7 @@ export function BrowserTitleSelector({ fetched_browserTitles, isAuthenticated }:
 		setSelected(item)
 		Analytics.event('browser_title_selected')
 
-		if (isAuthenticated) {
+		if (true) {
 			const [error] = await safeAwait<AxiosError, any>(
 				mutateAsync({ browserTitleId: item.id })
 			)

@@ -7,7 +7,6 @@ import {
 	type FetchedTimezone,
 	getTimezones,
 } from '@/services/hooks/timezone/getTimezones.hook'
-import { useAuth } from './auth.context'
 
 export interface GeneralData {
 	blurMode: boolean
@@ -42,7 +41,6 @@ export const GeneralSettingContext = createContext<GeneralSettingContextType | n
 export function GeneralSettingProvider({ children }: { children: React.ReactNode }) {
 	const [settings, setSettings] = useState<GeneralData>(DEFAULT_SETTINGS)
 	const [isInitialized, setIsInitialized] = useState(false)
-	const { isAuthenticated, user } = useAuth()
 	const { mutateAsync } = useUpdateExtensionSettings()
 
 	useEffect(() => {
@@ -76,22 +74,9 @@ export function GeneralSettingProvider({ children }: { children: React.ReactNode
 
 	useEffect(() => {
 		async function getTimeZone() {
-			if (user?.timeZone && user.timeZone !== settings?.selected_timezone?.value) {
-				const timezones = await getTimezones()
-				if (timezones?.length) {
-					const matchingTimezone = timezones.find(
-						(tz) => tz.value === user.timeZone
-					)
-					if (matchingTimezone) {
-						updateSetting('selected_timezone', matchingTimezone)
-					}
-				}
-			}
+			// Auth removed: no user timezone sync needed
 		}
-		if (user) {
-			getTimeZone()
-		}
-	}, [user])
+	}, [])
 
 	async function browserHasPermission(
 		permissions: Browser.runtime.ManifestPermissions[]
@@ -119,9 +104,7 @@ export function GeneralSettingProvider({ children }: { children: React.ReactNode
 	}
 	const setTimezone = async (value: FetchedTimezone) => {
 		updateSetting('selected_timezone', value)
-		if (isAuthenticated) {
-			await mutateAsync({ timeZone: value.value })
-		}
+		await mutateAsync({ timeZone: value.value })
 	}
 
 	//#region [⚠️ Important note:]

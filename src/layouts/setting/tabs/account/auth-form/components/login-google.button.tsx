@@ -1,5 +1,4 @@
 import { IconLoading } from '@/components/loading/icon-loading'
-import { useAuth } from '@/context/auth.context'
 import {
 	type AuthResponse,
 	useGoogleSignIn,
@@ -14,8 +13,7 @@ import { callEvent } from '@/common/utils/call-event'
 import { sleep } from '@/common/utils/timeout'
 
 export default function LoginGoogleButton() {
-	const { login } = useAuth()
-	const [isLoading, setIsLoading] = useState(false)
+		const [isLoading, setIsLoading] = useState(false)
 	const googleSignInMutation = useGoogleSignIn()
 
 	const loginGoogle = async () => {

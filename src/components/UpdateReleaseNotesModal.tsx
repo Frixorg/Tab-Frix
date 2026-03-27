@@ -4,7 +4,6 @@ import { Button } from './button/button'
 import Modal from './modal'
 import { ConfigKey } from '@/common/constant/config.key'
 import { callEvent } from '@/common/utils/call-event'
-import { useAuth } from '@/context/auth.context'
 import Analytics from '@/analytics'
 type MediaContent = {
 	type: 'image' | 'video'
@@ -37,8 +36,7 @@ export const UpdateReleaseNotesModal = ({
 	const [counter, setCounter] = useState<number>(0)
 	const [activated, setActivated] = useState<boolean>(false)
 	const videoRef = useRef<HTMLVideoElement>(null)
-	const { isAuthenticated } = useAuth()
-	useEffect(() => {
+		useEffect(() => {
 		if (isOpen && counterValue !== null) {
 			setCounter(counterValue === null ? 10 : counterValue)
 			const interval = setInterval(() => {
@@ -140,16 +138,15 @@ export const UpdateReleaseNotesModal = ({
 							))}
 						</ul>
 
-						{isAuthenticated && (
-							<button
-								onClick={handleActivate}
-								disabled={activated}
-								className={`w-full py-2.5 rounded-xl cursor-pointer text-xs font-black transition-all active:scale-95 border ${
-									activated
-										? 'bg-green-500/10 border-green-500/30 text-green-500 cursor-default'
-										: 'bg-primary/10 border-primary/20 text-primary hover:bg-primary/20'
-								}`}
-							>
+						<button
+							onClick={handleActivate}
+							disabled={activated}
+							className={`w-full py-2.5 rounded-xl cursor-pointer text-xs font-black transition-all active:scale-95 border ${
+								activated
+									? 'bg-green-500/10 border-green-500/30 text-green-500 cursor-default'
+									: 'bg-primary/10 border-primary/20 text-primary hover:bg-primary/20'
+							}`}
+						>
 								{activated ? (
 									<span className="flex items-center justify-center gap-2">
 										<RiCheckboxCircleLine size={14} />
@@ -159,12 +156,9 @@ export const UpdateReleaseNotesModal = ({
 									<span className="flex items-center justify-center gap-2">
 										همین الان امتحانش کن
 									</span>
-								)}
-							</button>
-						)}
-					</div>
-
-					<div className="flex items-center justify-center gap-2 py-1 text-muted">
+							)}
+						</button>
+					</div>					<div className="flex items-center justify-center gap-2 py-1 text-muted">
 						<RiThumbUpLine size={14} />
 						<span className="text-xs">دمت گرم که همراه مایی</span>
 					</div>

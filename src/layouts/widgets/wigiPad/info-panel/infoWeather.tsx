@@ -1,5 +1,4 @@
 import { useGetWeatherByLatLon } from '@/services/hooks/weather/getWeatherByLatLon'
-import { useAuth } from '@/context/auth.context'
 import { TbWind } from 'react-icons/tb'
 import { WiHumidity } from 'react-icons/wi'
 import { unitsFlag } from '../../weather/unitSymbols'
@@ -8,8 +7,7 @@ import { useGetForecastWeatherByLatLon } from '@/services/hooks/weather/getForec
 import moment from 'jalali-moment'
 
 export function InfoWeather() {
-	const { user } = useAuth()
-
+	
 	const { data: weather } = useGetWeatherByLatLon({
 		units: 'metric',
 		lat: user?.city?.id ? undefined : 35.696111,

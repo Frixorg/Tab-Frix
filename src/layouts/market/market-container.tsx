@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { FaPaintBrush } from 'react-icons/fa'
 import { FaPhotoFilm } from 'react-icons/fa6'
-import { useAuth } from '@/context/auth.context'
 import { MarketWallpaper } from './marketWallpaper'
 import { MarketOtherItems } from './other-items'
 import { UserCoin } from '../setting/tabs/account/components/user-coin'
@@ -9,8 +8,7 @@ import Analytics from '@/analytics'
 import { TabNavigation } from '@/components/tab-navigation'
 
 export function MarketContainer() {
-	const { isAuthenticated, user } = useAuth()
-	const [activeTab, setActiveTab] = useState('other')
+		const [activeTab, setActiveTab] = useState('other')
 
 	const tabs = [
 		{
@@ -45,11 +43,9 @@ export function MarketContainer() {
 						size="medium"
 					/>
 
-					{isAuthenticated && (
-						<div className="flex items-center ">
-							<UserCoin coins={user?.coins || 0} title="موجودی ویج‌کوین" />
-						</div>
-					)}
+					<div className="flex items-center ">
+						<UserCoin coins={0} title="موجودی ویج‌کوین" />
+					</div>
 				</div>
 
 				<div className="relative flex-1 overflow-x-hidden overflow-y-auto rounded-xl custom-scrollbar">

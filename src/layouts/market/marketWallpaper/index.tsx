@@ -1,13 +1,11 @@
 import Analytics from '@/analytics'
 import { Pagination } from '@/components/pagination'
-import { useAuth } from '@/context/auth.context'
 import { useWallpaper } from '@/layouts/setting/tabs/wallpapers/hooks/use-wallpaper'
 import { WallpaperItem } from '@/layouts/setting/tabs/wallpapers/tab/gallery/components/wallpaper-item/wallpaper-item'
 import { useGetWallpapers } from '@/services/hooks/wallpapers/getWallpaperCategories.hook'
 
 export function MarketWallpaper() {
-	const { isAuthenticated } = useAuth()
-	const [currentPage, setCurrentPage] = useState(1)
+		const [currentPage, setCurrentPage] = useState(1)
 	const { data } = useGetWallpapers(
 		{
 			market: true,
@@ -18,7 +16,7 @@ export function MarketWallpaper() {
 	)
 	const { selectedBackground, handleSelectBackground } = useWallpaper(
 		data?.wallpapers,
-		isAuthenticated
+		true
 	)
 	const onNextPage = () => {
 		setCurrentPage(currentPage + 1)

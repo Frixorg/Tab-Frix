@@ -16,7 +16,6 @@ import { ToolsLayout } from '@/layouts/widgets/tools/tools.layout'
 import { WeatherLayout } from '@/layouts/widgets/weather/weather.layout'
 import { WigiArzLayout } from '@/layouts/widgets/wigiArz/wigi_arz.layout'
 import { YouTubeLayout } from '@/layouts/widgets/youtube/youtube.layout'
-import { useAuth } from './auth.context'
 import { CurrencyProvider } from './currency.context'
 import { showToast } from '@/common/toast'
 import { YadkarWidget } from '@/layouts/widgets/yadkar/yadkar'
@@ -176,7 +175,6 @@ export function WidgetVisibilityProvider({ children }: { children: ReactNode }) 
 	const [widgetOrders, setWidgetOrders] =
 		useState<Record<WidgetKeys, number>>(getDefaultWidgetOrders)
 	const firstRender = useRef(true)
-	const { isAuthenticated } = useAuth()
 
 	const saveActiveWidgets = () => {
 		const activeWidgets = widgetItems
@@ -241,13 +239,7 @@ export function WidgetVisibilityProvider({ children }: { children: ReactNode }) 
 			const isCurrentlyVisible = prev.includes(widgetId)
 
 			if (!isCurrentlyVisible) {
-				if (!isAuthenticated && prev.length >= MAX_VISIBLE_WIDGETS) {
-					showToast(
-						`کاربران مهمان تنها می‌توانند حداکثر ${MAX_VISIBLE_WIDGETS} ویجت فعال کنند. برای فعال کردن ویجت‌های بیشتر، وارد حساب کاربری خود شوید.`,
-						'error'
-					)
-					return prev
-				}
+				// Auth removed: no guest widget limit
 			}
 
 			const newVisibility = isCurrentlyVisible

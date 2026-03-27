@@ -4,7 +4,6 @@ import { validate } from 'uuid'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { callEvent, listenEvent } from '@/common/utils/call-event'
 import Analytics from '@/analytics'
-import { useAuth } from './auth.context'
 import { showToast } from '@/common/toast'
 import { useAddTodo } from '@/services/hooks/todo/add-todo.hook'
 import { safeAwait } from '@/services/api'
@@ -49,7 +48,6 @@ interface TodoContextType {
 const TodoContext = createContext<TodoContextType | null>(null)
 
 export function TodoProvider({ children }: { children: React.ReactNode }) {
-	const { isAuthenticated } = useAuth()
 	const [todos, setTodos] = useState<Todo[] | null>(null)
 
 	const {
@@ -57,7 +55,7 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
 		refetch,
 		isPending,
 		isRefetching,
-	} = useGetTodos(isAuthenticated)
+	} = useGetTodos(true)
 	const { mutateAsync: addTodoAsync, isPending: isAdding } = useAddTodo()
 	const { mutateAsync: updateTodoAsync, isPending: isUpdating } = useUpdateTodo()
 	const { mutateAsync: reorderTodosAsync } = useReorderTodos()
@@ -118,11 +116,6 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
 	}, [todos])
 
 	const addTodo = async (input: AddTodoInput) => {
-		if (!isAuthenticated) {
-			showToast('برای اضافه کردن وظیفه باید وارد حساب کاربری شوید.', 'error')
-			return
-		}
-
 		const old = todos || []
 		const sameDateTodos = old.filter((t) => t.date === input.date)
 		const maxOrder =
@@ -162,8 +155,6 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
 	}
 
 	const toggleTodo = async (id: string) => {
-		if (!isAuthenticated) return console.log('Not authenticated, toggle aborted')
-
 		const current = todos?.find((todo) => todo.id === id || todo.onlineId === id)
 		if (!current) return console.log('Todo not found, toggle aborted')
 		const onlineId = current.onlineId || current.id
@@ -208,8 +199,6 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
 	}
 
 	const updateTodo = async (id: string, updates: Partial<Omit<Todo, 'id'>>) => {
-		if (!isAuthenticated) return
-
 		const current = todos?.find((todo) => todo.id === id || todo.onlineId === id)
 		if (!current) return
 		const onlineId = current.onlineId || current.id
@@ -252,7 +241,7 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
 	}
 
 	const reorderTodos = async (reorderedTodos: Todo[]) => {
-		if (!isAuthenticated || !todos) return
+		if (!todos) return
 
 		const todosWithNewOrder = reorderedTodos.map((todo, index) => ({
 			...todo,

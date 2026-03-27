@@ -170,13 +170,18 @@ export function ContentSection() {
 												</div>
 											)
 										}
-										return canReOrderWidget ? (
-											<SortableWidget
-												key={widget.id}
-												widget={widget}
-											/>
-										) : (
-											widget.node
+										if (canReOrderWidget) {
+											return (
+												<SortableWidget
+													key={widget.id}
+													widget={widget}
+												/>
+											)
+										}
+										return (
+											<div key={widget.id}>
+												{widget.node}
+											</div>
 										)
 									})}
 								</div>

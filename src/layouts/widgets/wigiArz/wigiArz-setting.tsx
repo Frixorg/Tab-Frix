@@ -2,12 +2,10 @@ import { useState } from 'react'
 import Analytics from '@/analytics'
 import { getFromStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
-import { AuthRequiredModal } from '@/components/auth/AuthRequiredModal'
 import { ItemSelector } from '@/components/item-selector'
 import { SectionPanel } from '@/components/section-panel'
 import { SelectBox } from '@/components/selectbox/selectbox'
 import { TextInput } from '@/components/text-input'
-import { useAuth } from '@/context/auth.context'
 import { CurrencyColorMode } from '@/context/currency.context'
 import { WidgetSettingWrapper } from '@/layouts/widgets-settings/widget-settings-wrapper'
 import { useGetSupportCurrencies } from '@/services/hooks/currency/getSupportCurrencies.hook'
@@ -21,8 +19,7 @@ export function WigiArzSetting() {
 	)
 	const [currencyType, setCurrencyType] = useState<string>('all')
 	const [searchQuery, setSearchQuery] = useState('')
-	const { isAuthenticated } = useAuth()
-	const [showAuthRequired, setShowAuthRequired] = useState(false)
+		const [showAuthRequired, setShowAuthRequired] = useState(false)
 
 	const toggleCurrency = (currencyKey: string) => {
 		const isRemoving = selectedCurrencies.includes(currencyKey)
@@ -35,7 +32,7 @@ export function WigiArzSetting() {
 			action: isRemoving ? 'remove' : 'add',
 		})
 
-		if (modifiedCurrencySelection.length > 4 && !isAuthenticated) {
+		if (modifiedCurrencySelection.length > 4 && !true) {
 			setShowAuthRequired(true)
 			Analytics.event('currency_selection_blocked')
 			return

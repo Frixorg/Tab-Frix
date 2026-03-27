@@ -1,4 +1,3 @@
-import { useAuth } from '@/context/auth.context'
 import { useGeneralSetting } from '@/context/general-setting.context'
 import { useGetEvents } from '@/services/hooks/date/getEvents.hook'
 import type React from 'react'
@@ -22,8 +21,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 	selectedDate,
 	setSelectedDate,
 }) => {
-	const { isAuthenticated } = useAuth()
-	const [isOpenTooltip, setIsOpenTooltip] = useState<boolean>(false)
+		const [isOpenTooltip, setIsOpenTooltip] = useState<boolean>(false)
 	const { selected_timezone: timezone } = useGeneralSetting()
 	const [clickedElement, setClickedElement] = useState<HTMLDivElement | null>(null)
 
@@ -36,7 +34,6 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 	}
 
 	const { data: calendarData, refetch } = useGetCalendarData(
-		isAuthenticated,
 		currentDate.clone().doAsGregorian().startOf('jMonth').format('YYYY-MM-DD'),
 		currentDate.clone().doAsGregorian().endOf('jMonth').format('YYYY-MM-DD')
 	)

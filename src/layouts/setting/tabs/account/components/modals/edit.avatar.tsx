@@ -4,7 +4,6 @@ import { AvatarComponent } from '@/components/avatar.component'
 import { Button } from '@/components/button/button'
 import Modal from '@/components/modal'
 import { SectionPanel } from '@/components/section-panel'
-import { useAuth } from '@/context/auth.context'
 import { useUpdateUserProfile } from '@/services/hooks/auth/authService.hook'
 import { useRef, useState } from 'react'
 import { TbCameraPlus } from 'react-icons/tb'
@@ -14,8 +13,7 @@ interface Prop {
 	onClose: () => void
 }
 export function EditAvatarModal({ show, onClose }: Prop) {
-	const { refetchUser } = useAuth()
-	const [avatar, setAvatar] = useState<File | null>(null)
+		const [avatar, setAvatar] = useState<File | null>(null)
 	const avatarRef = useRef<HTMLInputElement | null>(null)
 	const updateProfileMutation = useUpdateUserProfile()
 

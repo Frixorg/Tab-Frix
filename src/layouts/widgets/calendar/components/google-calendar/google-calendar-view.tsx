@@ -5,15 +5,13 @@ import { HiChevronLeft, HiChevronRight, HiOutlineCalendar } from 'react-icons/hi
 import { useGetGoogleCalendarEvents } from '@/services/hooks/date/getGoogleCalendarEvents.hook'
 import { useDate } from '@/context/date.context'
 import { CalendarEvent } from './google-event.item'
-import { useAuth } from '@/context/auth.context'
 import { Button } from '@/components/button/button'
 import { callEvent } from '@/common/utils/call-event'
 import type { WidgetifyDate } from '../../utils'
 import { GoogleEventItemSkeleton } from './google-event.item-skeleton'
 
 export const GoogleCalendarView: React.FC = () => {
-	const { user, isAuthenticated } = useAuth()
-	const { currentDate, isToday } = useDate()
+		const { currentDate, isToday } = useDate()
 	const [currentTime, setCurrentTime] = useState(new Date())
 	const [selectedDay, setSelectedDay] = useState(currentDate)
 
@@ -89,7 +87,7 @@ export const GoogleCalendarView: React.FC = () => {
 					<HiOutlineCalendar size={24} />
 				</div>
 				<p className="text-[11px] text-base-content/60 leading-relaxed">
-					{isAuthenticated
+					{true
 						? 'برای مشاهده برنامه‌ها، تقویم گوگل را متصل کنید.'
 						: 'لطفاً وارد حساب کاربری خود شوید.'}
 				</p>
@@ -98,7 +96,7 @@ export const GoogleCalendarView: React.FC = () => {
 					className="text-xs rounded-xl"
 					onClick={() => callEvent('openProfile', 'platforms')}
 				>
-					{isAuthenticated ? 'اتصال تقویم' : 'ورود'}
+					{true ? 'اتصال تقویم' : 'ورود'}
 				</Button>
 			</div>
 		)

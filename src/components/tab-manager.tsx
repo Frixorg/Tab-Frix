@@ -1,10 +1,8 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 import Analytics from '@/analytics'
-import { useAuth } from '@/context/auth.context'
 
 export interface TabItem {
 	parentName?: string
-	needAuth?: boolean
 	children?: {
 		label: string
 		value: string
@@ -35,7 +33,6 @@ export const TabManager = ({
 	tabPosition,
 	children,
 }: TabManagerProps) => {
-	const { isAuthenticated } = useAuth()
 	const [activeTab, setActiveTab] = useState(defaultTab || '')
 	const contentRef = useRef<HTMLDivElement>(null)
 
@@ -83,9 +80,7 @@ export const TabManager = ({
 					className={`flex  w-full md:h-full justify-between overflow-x-auto rounded-lg ${contentClass}`}
 				>
 					<div className="flex flex-row sm:flex-col sm:gap-4">
-						{tabs
-							.filter((f) => !f.needAuth || isAuthenticated)
-							.map((group, idx) => (
+						{tabs.map((group, idx) => (
 								<div key={idx} className="flex flex-col gap-1">
 									{group.parentName && (
 										<div className="relative mx-4 my-2">

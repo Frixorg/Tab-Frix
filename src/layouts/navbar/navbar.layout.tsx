@@ -7,11 +7,7 @@ import { getFromStorage, setToStorage } from '@/common/storage'
 import { listenEvent } from '@/common/utils/call-event'
 import { SettingModal } from '../setting/setting-modal'
 import { SettingsDropdown } from './components/settingsDropdown'
-import { FriendsList } from './friends-list/friends'
-import { ProfileNav } from './profile/profile'
-import { SyncButton } from './sync/sync'
 import { useAppearanceSetting } from '@/context/appearance.context'
-import { MarketButton } from './market/market-button'
 import Analytics from '@/analytics'
 import { HiRectangleGroup } from 'react-icons/hi2'
 import { usePage } from '@/context/page.context'
@@ -167,37 +163,16 @@ export function NavbarLayout(): JSX.Element {
 
 					<div className="relative z-10 w-[1px] h-6 bg-white/[0.08]" />
 
-					<div className="relative z-10 flex items-center gap-0.5">
-						<ProfileNav />
-						<SyncButton />
-						<FriendsList />
-					</div>
 
 					<div className="relative z-10 w-[1px] h-6 bg-white/[0.08]" />
 
 					<div className="relative z-10 flex items-center gap-0.5">
-						<MarketButton />
 
 						<SettingsDropdown setShowSettings={setShowSettings} />
 					</div>
 
 					<div className="relative z-10 w-[1px] h-6 bg-white/[0.08]" />
 
-					<div className="relative z-10 flex items-center gap-2 pr-1 ml-0.5">
-						<NavbarTabs />
-						<a
-							href={WIDGETIFY_URLS.website}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="flex items-center justify-center w-8 h-8 border rounded-full border-white/10 bg-black/20"
-						>
-							<img
-								src={'https://cdn.widgetify.ir/extension/logo.png'}
-								alt="Logo"
-								className="object-contain w-5 h-5 opacity-80"
-							/>
-						</a>
-					</div>
 				</nav>
 			</div>
 

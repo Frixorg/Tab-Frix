@@ -4,7 +4,6 @@ import Analytics from '@/analytics'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { listenEvent } from '@/common/utils/call-event'
 import { useChangeTheme } from '@/services/hooks/extension/updateSetting.hook'
-import { useAuth } from './auth.context'
 
 interface ThemeContextType {
 	theme: string
@@ -24,7 +23,6 @@ export const ThemeContext = createContext<ThemeContextType | null>(null)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
 	const [theme, setTheme] = useState<string>('')
-	const { isAuthenticated } = useAuth()
 	const { mutateAsync } = useChangeTheme()
 	async function loadTheme() {
 		const theme = await getFromStorage('theme')
@@ -85,9 +83,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 	const setThemeCallback = async (theme: string) => {
 		applyThemeChange(theme)
-		if (isAuthenticated) {
-			await mutateAsync({ theme: theme })
-		}
+		await mutateAsync({ theme: theme })
 	}
 
 	const applyThemeChange = (theme: string) => {

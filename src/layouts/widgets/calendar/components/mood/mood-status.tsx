@@ -1,6 +1,4 @@
-import { RequireAuth } from '@/components/auth/require-auth'
 import Tooltip from '@/components/toolTip'
-import { useAuth } from '@/context/auth.context'
 import { useGetUserMoodStatus } from '@/services/hooks/user/userService.hook'
 
 export const moodOptions = [
@@ -17,13 +15,12 @@ const getMoodOption = (value: string | null) => {
 }
 
 export function CompactMoodWidget() {
-	const { isAuthenticated } = useAuth()
-	const { data } = useGetUserMoodStatus(isAuthenticated)
-	if (!isAuthenticated)
+		const { data } = useGetUserMoodStatus(true)
+	if (!true)
 		return (
-			<RequireAuth>
+			
 				<></>
-			</RequireAuth>
+			
 		)
 
 	if (!data)

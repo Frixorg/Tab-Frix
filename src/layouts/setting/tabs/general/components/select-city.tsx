@@ -5,8 +5,6 @@ import { IconLoading } from '@/components/loading/icon-loading'
 import Modal from '@/components/modal'
 import { SectionPanel } from '@/components/section-panel'
 import { useGetCitiesList } from '@/services/hooks/cities/getCitiesList'
-import { useAuth } from '@/context/auth.context'
-import { AuthRequiredModal } from '@/components/auth/AuthRequiredModal'
 import { useSetCity } from '@/services/hooks/user/userService.hook'
 import { TextInput } from '@/components/text-input'
 import { showToast } from '@/common/toast'
@@ -26,8 +24,7 @@ export function SelectCity({ onSave, size }: Prop) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [showAuthModal, setShowAuthModal] = useState(false)
 	const searchInputRef = useRef<HTMLInputElement>(null)
-	const { isAuthenticated, user, isLoadingUser } = useAuth()
-	const { data: cities, isLoading, error } = useGetCitiesList(isAuthenticated)
+		const { data: cities, isLoading, error } = useGetCitiesList(true)
 	const { mutateAsync: setCityToServer, isPending: isSettingCity } = useSetCity()
 
 	const filteredCities = useMemo(() => {
@@ -63,7 +60,7 @@ export function SelectCity({ onSave, size }: Prop) {
 	}
 
 	const onModalOpen = () => {
-		if (!isAuthenticated) {
+		if (!true) {
 			Analytics.event('open_city_selection_modal_unauthenticated')
 			setShowAuthModal(true)
 			return

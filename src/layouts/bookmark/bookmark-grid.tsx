@@ -11,8 +11,6 @@ import { EditBookmarkModal } from './components/modal/edit-bookmark.modal'
 import { SortableBookmarkItem } from './components/sortable-bookmark-item'
 import { useBookmarkStore } from './context/bookmark.context'
 import { validate } from 'uuid'
-import { useAuth } from '@/context/auth.context'
-import { AuthRequiredModal } from '@/components/auth/AuthRequiredModal'
 import { showToast } from '@/common/toast'
 
 interface BookmarkGridProps {
@@ -31,8 +29,7 @@ export function BookmarkGrid({
 	const { getCurrentFolderItems, editBookmark, deleteBookmark, setCurrentFolderId } =
 		useBookmarkStore()
 	const { browserTabsEnabled } = useGeneralSetting()
-	const { isAuthenticated } = useAuth()
-
+	
 	const [showEditBookmarkModal, setShowEditBookmarkModal] = useState(false)
 	const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false)
 	const [bookmarkToEdit, setBookmarkToEdit] = useState<Bookmark | null>(null)
@@ -116,10 +113,6 @@ export function BookmarkGrid({
 	}
 
 	const handleDeleteBookmark = (bookmark: Bookmark) => {
-		if (!isAuthenticated) {
-			return showToast('برای حذف بوکمارک باید وارد حساب کاربری خود شوید.', 'error')
-		}
-
 		setBookmarkToDelete(bookmark)
 		setShowDeleteConfirmationModal(true)
 		setSelectedBookmark(null)
@@ -204,7 +197,7 @@ export function BookmarkGrid({
 				)}
 			</SortableContext>
 
-			{showEditBookmarkModal && bookmarkToEdit && !isAuthenticated ? (
+			{showEditBookmarkModal && bookmarkToEdit ? (
 				<AuthRequiredModal
 					isOpen={true}
 					onClose={() => setShowEditBookmarkModal(false)}

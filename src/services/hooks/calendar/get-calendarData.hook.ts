@@ -12,12 +12,12 @@ export interface GetCalendarDataResponse {
 	googleEvents: GoogleCalendarEvent[]
 }
 
-export const useGetCalendarData = (enabled: boolean, start: string, end: string) => {
+export const useGetCalendarData = (start: string, end: string) => {
 	return useQuery<GetCalendarDataResponse>({
 		queryKey: ['get-calendar-data', start, end],
 		queryFn: async () => getCalendarData(start, end),
 		retry: 0,
-		enabled: enabled && !!start && !!end,
+		enabled: !!start && !!end,
 		staleTime: 5 * 60 * 1000,
 		gcTime: 10 * 60 * 1000,
 		refetchOnWindowFocus: false,

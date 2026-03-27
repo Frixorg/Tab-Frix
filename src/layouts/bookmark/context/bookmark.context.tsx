@@ -7,7 +7,6 @@ import type { Bookmark } from '@/layouts/bookmark/types/bookmark.types'
 import { safeAwait } from '@/services/api'
 import { useRemoveBookmark } from '@/services/hooks/bookmark/remove-bookmark.hook'
 import { translateError } from '@/utils/translate-error'
-import { useAuth } from '@/context/auth.context'
 import { useAddBookmark } from '@/services/hooks/bookmark/add-bookmark.hook'
 import type { AxiosError } from 'axios'
 import type { BookmarkCreateFormFields } from '../components/modal/add-bookmark.modal'
@@ -48,8 +47,7 @@ export const BookmarkProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [bookmarks, setBookmarks] = useState<Bookmark[] | null>(null)
 	const [currentFolderId, setCurrentFolderId] = useState<string | null>(null)
-	const { isAuthenticated } = useAuth()
-	const { data, refetch, dataUpdatedAt } = useGetBookmarks(null, isAuthenticated)
+	const { data, refetch, dataUpdatedAt } = useGetBookmarks(null, true)
 
 	const { mutateAsync: removeBookmarkAsync } = useRemoveBookmark()
 	const { mutateAsync: addBookmarkAsync } = useAddBookmark()
@@ -158,9 +156,6 @@ export const BookmarkProvider: React.FC<{ children: React.ReactNode }> = ({
 		inputBookmark: BookmarkCreateFormFields,
 		cb: () => void
 	) => {
-		if (!isAuthenticated)
-			return showToast('برای افزودن بوکمارک باید وارد شوید.', 'error')
-
 		try {
 			if (inputBookmark.icon && inputBookmark.icon.size > MAX_ICON_SIZE) {
 				showToast(
@@ -223,8 +218,6 @@ export const BookmarkProvider: React.FC<{ children: React.ReactNode }> = ({
 	}
 
 	const editBookmark = async (input: BookmarkUpdateFormFields, cb: () => void) => {
-		if (!isAuthenticated) return
-
 		if (!input.title?.trim() || !bookmarks) return
 
 		const foundedBookmark = bookmarks.find(
@@ -279,8 +272,6 @@ export const BookmarkProvider: React.FC<{ children: React.ReactNode }> = ({
 	}
 
 	const deleteBookmark = async (id: string, cb: () => void) => {
-		if (!isAuthenticated) return
-
 		if (!bookmarks) return
 
 		const bookmarkToDelete = bookmarks.find((b) => b.id === id || b.onlineId === id)

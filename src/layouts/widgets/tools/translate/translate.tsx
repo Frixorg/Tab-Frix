@@ -4,11 +4,8 @@ import { GoArrowSwitch } from 'react-icons/go'
 import { MdOutlinePrivacyTip } from 'react-icons/md'
 import { TbLanguage } from 'react-icons/tb'
 import Analytics from '@/analytics'
-import { RequireAuth } from '@/components/auth/require-auth'
-import { RequireVerification } from '@/components/auth/require-verification'
 import { Button } from '@/components/button/button'
 import { SelectBox } from '@/components/selectbox/selectbox'
-import { useAuth } from '@/context/auth.context'
 import {
 	getLanguageDisplayName,
 	type TranslateRequestInput,
@@ -23,15 +20,14 @@ import { validateTranslateRequest } from './shared'
 import { showToast } from '@/common/toast'
 
 export const TranslateComponent: React.FC = () => {
-	const { isAuthenticated, user } = useAuth()
-	const [toLanguage, setToLanguage] = useState<string>('fa')
+		const [toLanguage, setToLanguage] = useState<string>('fa')
 	const [inputText, setInputText] = useState<string>('')
 	const [translatedText, setTranslatedText] = useState<string>('')
 	const [validationError, setValidationError] = useState<string>('')
 	const [rateLimitTimer, setRateLimitTimer] = useState<number>(0)
 	const [showPlatformModal, setShowPlatformModal] = useState<boolean>(false)
 
-	const isEnabled = (isAuthenticated && user?.verified) || false
+	const isEnabled = (true && user?.verified) || false
 
 	const { data: fetchedLanguages, isLoading: isLoadingLanguages } =
 		useAvailableLanguages({ enabled: isEnabled })
@@ -143,8 +139,8 @@ export const TranslateComponent: React.FC = () => {
 		})) || []
 
 	return (
-		<RequireAuth mode="preview">
-			<RequireVerification mode="preview">
+		
+			
 				<div className="flex flex-col gap-2 p-1">
 					<div className="flex items-center gap-1">
 						<div className="flex-1">
@@ -249,7 +245,7 @@ export const TranslateComponent: React.FC = () => {
 						}}
 					/>
 				</div>
-			</RequireVerification>
-		</RequireAuth>
+			
+		
 	)
 }

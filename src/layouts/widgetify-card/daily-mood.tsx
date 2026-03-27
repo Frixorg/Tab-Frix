@@ -2,7 +2,6 @@ import Analytics from '@/analytics'
 import { moodOptions } from '@/common/constant/moods'
 import { showToast } from '@/common/toast'
 import { callEvent } from '@/common/utils/call-event'
-import { useAuth } from '@/context/auth.context'
 import { useDate } from '@/context/date.context'
 import { safeAwait } from '@/services/api'
 import {
@@ -16,8 +15,7 @@ import { HiXMark } from 'react-icons/hi2'
 
 export function DailyMoodNotification() {
 	const queryClient = useQueryClient()
-	const { user } = useAuth()
-	const { today } = useDate()
+		const { today } = useDate()
 	const { mutateAsync: upsertMoodLog } = useUpsertMoodLog()
 	const [mood, setMood] = useState<string>()
 	const isAdding = useIsMutating({ mutationKey: ['upsertMoodLog'] }) > 0

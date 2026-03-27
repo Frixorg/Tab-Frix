@@ -4,7 +4,6 @@ import { Button } from '@/components/button/button'
 import { showToast } from '@/common/toast'
 import { TextInput } from '@/components/text-input'
 import Analytics from '@/analytics'
-import { RequireAuth } from '@/components/auth/require-auth'
 import { getMainClient } from '@/services/api'
 import { translateError } from '@/utils/translate-error'
 
@@ -94,7 +93,7 @@ export function ImageSearchPortal({ onClose }: { onClose: () => void }) {
 			</div>
 
 			<div className="flex flex-col gap-4">
-				<RequireAuth mode="preview">
+				
 					<div
 						onDragOver={(e) => e.preventDefault()}
 						onDrop={(e) => {
@@ -182,7 +181,7 @@ export function ImageSearchPortal({ onClose }: { onClose: () => void }) {
 							</div>
 						)}
 					</div>
-				</RequireAuth>
+				
 				<div className="flex items-center gap-2 p-1 border bg-base-200 rounded-xl border-base-content/5">
 					<div className="pl-3 text-base-content/30">
 						<MdLink size={20} />

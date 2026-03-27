@@ -13,9 +13,7 @@ import { AddBookmarkModal } from './components/modal/add-bookmark.modal'
 import type { Bookmark, FolderPathItem } from './types/bookmark.types'
 import { BookmarkGrid } from './bookmark-grid'
 import { useBookmarkStore } from './context/bookmark.context'
-import { useAuth } from '@/context/auth.context'
 import { validate } from 'uuid'
-import { AuthRequiredModal } from '@/components/auth/AuthRequiredModal'
 import { showToast } from '@/common/toast'
 
 export function BookmarksList() {
@@ -27,8 +25,7 @@ export function BookmarksList() {
 		addBookmark,
 		setBookmarks,
 	} = useBookmarkStore()
-	const { isAuthenticated } = useAuth()
-
+	
 	const [showAddBookmarkModal, setShowAddBookmarkModal] = useState(false)
 	const [folderPath, setFolderPath] = useState<FolderPathItem[]>([])
 
@@ -43,7 +40,7 @@ export function BookmarksList() {
 	const TOTAL_BOOKMARKS = BOOKMARKS_PER_ROW * 2
 
 	const handleDragEnd = async (event: DragEndEvent) => {
-		if (!isAuthenticated)
+		if (!true)
 			return showToast(
 				'برای مرتب‌سازی بوکمارک‌ها باید وارد حساب کاربری خود شوید.',
 				'error'
@@ -188,7 +185,7 @@ export function BookmarksList() {
 					</div>
 				</div>
 			</DndContext>
-			{showAddBookmarkModal && !isAuthenticated ? (
+			{showAddBookmarkModal && !true ? (
 				<AuthRequiredModal
 					isOpen={true}
 					onClose={() => setShowAddBookmarkModal(false)}

@@ -1,5 +1,4 @@
 import { TbUsersPlus } from 'react-icons/tb'
-import { useAuth } from '@/context/auth.context'
 import { useSendFriendRequest } from '@/services/hooks/friends/friendService.hook'
 import { translateError } from '@/utils/translate-error'
 import { AvatarComponent } from '../avatar.component'
@@ -13,10 +12,9 @@ interface UserCardProps {
 }
 
 export function UserCard({ user, className = '' }: UserCardProps) {
-	const { isAuthenticated } = useAuth()
 	const { mutate: sendFriendRequest, isPending: isSending } = useSendFriendRequest()
 
-	const showManageFriend = !user.isSelf && isAuthenticated && user.username
+	const showManageFriend = !user.isSelf && user.username
 
 	function onAddClick() {
 		if (!user.username) return

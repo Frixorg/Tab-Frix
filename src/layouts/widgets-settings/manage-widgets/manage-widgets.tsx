@@ -1,5 +1,4 @@
 import { SectionPanel } from '@/components/section-panel'
-import { useAuth } from '@/context/auth.context'
 import {
 	MAX_VISIBLE_WIDGETS,
 	useWidgetVisibility,
@@ -12,8 +11,7 @@ import { WidgetSettingWrapper } from '../widget-settings-wrapper'
 import { useAppearanceSetting } from '@/context/appearance.context'
 
 export function ManageWidgets() {
-	const { isAuthenticated } = useAuth()
-	const { ui } = useAppearanceSetting()
+		const { ui } = useAppearanceSetting()
 	const { visibility, toggleWidget } = useWidgetVisibility()
 	return (
 		<WidgetSettingWrapper>
@@ -32,7 +30,7 @@ export function ManageWidgets() {
 							key={widget.id + 'selector'}
 							visibility={visibility}
 							toggleWidget={toggleWidget}
-							isAuthenticated={isAuthenticated}
+							true={true}
 						/>
 					))}
 				</div>
@@ -45,18 +43,16 @@ interface WidgetItemComponentProps {
 	widget: WidgetItem
 	visibility: string[]
 	toggleWidget: (widgetId: WidgetKeys) => void
-	isAuthenticated: boolean
+	true: boolean
 }
 
 function WidgetItemComponent({
 	widget,
 	visibility,
 	toggleWidget,
-	isAuthenticated,
 }: WidgetItemComponentProps) {
 	const isActive = visibility.includes(widget.id)
-	const canToggle =
-		isAuthenticated || isActive || visibility.length < MAX_VISIBLE_WIDGETS
+	const canToggle = isActive || visibility.length < MAX_VISIBLE_WIDGETS
 
 	const isDisabled = widget.disabled || false
 	const isSoon = widget.soon || false

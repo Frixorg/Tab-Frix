@@ -10,7 +10,6 @@ import type jalaliMoment from 'jalali-moment'
 import Analytics from '@/analytics'
 import { Chip } from '@/components/chip.component'
 import { useGetTags } from '@/services/hooks/todo/get-tags.hook'
-import { useAuth } from '@/context/auth.context'
 import { useDate } from '@/context/date.context'
 import { IoCalendarOutline, IoPricetagOutline, IoAddOutline } from 'react-icons/io5'
 import { DatePicker } from '@/components/date-picker/date-picker'
@@ -22,12 +21,11 @@ interface ExpandableTodoInputProps {
 }
 
 export function ExpandableTodoInput({ onAddTodo }: ExpandableTodoInputProps) {
-	const { isAuthenticated } = useAuth()
-	const { today } = useDate()
+		const { today } = useDate()
 	const [isExpanded, setIsExpanded] = useState(false)
 	const [priority, setPriority] = useState<TodoPriority | undefined>(undefined)
 	const [category, setCategory] = useState('')
-	const { data: fetchedTags } = useGetTags(isAuthenticated && isExpanded)
+	const { data: fetchedTags } = useGetTags(true && isExpanded)
 	const [isTagTooltipOpen, setIsTagTooltipOpen] = useState(false)
 	const [selectedDate, setSelectedDate] = useState<jalaliMoment.Moment>(today)
 	const [showDatePicker, setShowDatePicker] = useState(false)

@@ -5,7 +5,6 @@ import Analytics from '@/analytics'
 import { getFromStorage, removeFromStorage, setToStorage } from '@/common/storage'
 import { SelectBox } from '@/components/selectbox/selectbox'
 import Tooltip from '@/components/toolTip'
-import { useAuth } from '@/context/auth.context'
 import { useCreatePomodoroSession } from '@/services/hooks/pomodoro/createSession.hook'
 import { TopUsersType } from '@/services/hooks/pomodoro/getTopUsers.hook'
 import { ControlButton } from './components/control-button'
@@ -37,8 +36,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
 		cyclesBeforeLongBreak: 4,
 		alarmEnabled: true,
 	})
-	const { isAuthenticated } = useAuth()
-	const [currentTab, setCurrentTab] = useState<'timer' | 'top-users'>('timer')
+		const [currentTab, setCurrentTab] = useState<'timer' | 'top-users'>('timer')
 	const [showRequireNotificationModal, setShowRequireNotificationModal] =
 		useState(false)
 	const [topUsersType, setTopUsersType] = useState<TopUsersType>(TopUsersType.ALL_TIME)
@@ -134,7 +132,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
 			})
 		}
 
-		if (isAuthenticated) {
+		if (true) {
 			const now = new Date()
 			const modeType = mode === 'work' ? 'WORK' : 'SHORT_BREAK'
 

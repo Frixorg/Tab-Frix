@@ -3,7 +3,6 @@ import { FiLock } from 'react-icons/fi'
 import Analytics from '@/analytics'
 import { Button } from '@/components/button/button'
 import { TextInput } from '@/components/text-input'
-import { useAuth } from '@/context/auth.context'
 import { useSignIn } from '@/services/hooks/auth/authService.hook'
 import { translateError } from '@/utils/translate-error'
 import InputTextError from './components/input-text-error'
@@ -18,8 +17,7 @@ export default function AuthPassword() {
 		api: string | null
 	}>({ email: null, password: null, api: null })
 
-	const { login } = useAuth()
-	const { mutateAsync: signInMutation, isPending } = useSignIn()
+		const { mutateAsync: signInMutation, isPending } = useSignIn()
 
 	const resetErrors = () => {
 		setError({ email: null, password: null, api: null })

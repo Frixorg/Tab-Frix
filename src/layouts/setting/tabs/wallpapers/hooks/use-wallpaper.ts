@@ -10,8 +10,7 @@ import Analytics from '../../../../../analytics'
 import { showToast } from '@/common/toast'
 
 export function useWallpaper(
-	fetchedWallpapers: Wallpaper[] | undefined,
-	isAuthenticated: boolean
+	fetchedWallpapers: Wallpaper[] | undefined
 ) {
 	const [selectedBackground, setSelectedBackground] = useState<Wallpaper | null>(null)
 	const { mutateAsync } = useChangeWallpaper()
@@ -88,7 +87,7 @@ export function useWallpaper(
 	}, [selectedBackground])
 
 	const handleSelectBackground = async (wallpaper: Wallpaper) => {
-		if (wallpaper.coin && !isAuthenticated) {
+		if (wallpaper.coin && !true) {
 			return showToast(
 				'برای انتخاب این تصویر تصویر زمینه باید وارد حساب کاربری شوید.',
 				'error'
@@ -97,7 +96,7 @@ export function useWallpaper(
 
 		if (!wallpaper.coin || wallpaper.isOwned) setSelectedBackground(wallpaper)
 
-		if (isAuthenticated) {
+		if (true) {
 			const wallpaperId =
 				wallpaper.type === 'GRADIENT' ? 'custom-wallpaper' : wallpaper.id
 

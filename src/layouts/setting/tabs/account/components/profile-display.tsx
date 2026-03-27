@@ -9,7 +9,6 @@ import { UserCoin } from './user-coin'
 import type React from 'react'
 import { Chip } from '@/components/chip.component'
 import { AddPhoneModal } from './modals/add-phone.modal'
-import { useAuth } from '@/context/auth.context'
 import { IoMdAddCircle } from 'react-icons/io'
 import Analytics from '@/analytics'
 import { FaTreeCity } from 'react-icons/fa6'
@@ -43,8 +42,7 @@ const formatJalaliDate = (dateString: string | null | undefined): string => {
 }
 
 export const ProfileDisplay = () => {
-	const { refetchUser, user } = useAuth()
-	const [showModal, setShowModal] = useState(false)
+		const [showModal, setShowModal] = useState(false)
 	const [showAvatar, setShowAvatar] = useState(false)
 	const genderInfo = getGenderInfo(user?.gender)
 

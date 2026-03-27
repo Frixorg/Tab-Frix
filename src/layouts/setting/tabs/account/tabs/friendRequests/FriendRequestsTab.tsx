@@ -4,7 +4,6 @@ import { Button } from '@/components/button/button'
 import { SectionPanel } from '@/components/section-panel'
 import { TextInput } from '@/components/text-input'
 import Tooltip from '@/components/toolTip'
-import { useAuth } from '@/context/auth.context'
 import {
 	type Friend,
 	useHandleFriendRequest,
@@ -16,8 +15,7 @@ import { RemoveFriendButton } from '../../components/remove-button'
 import { showToast } from '@/common/toast'
 
 export const FriendRequestsTab = () => {
-	const { user } = useAuth()
-	const [username, setUsername] = useState('')
+		const [username, setUsername] = useState('')
 	const [translatedError, setTranslatedError] = useState<string | null>(null)
 	const { mutate: sendFriendRequest, isPending: isSending } = useSendFriendRequest()
 

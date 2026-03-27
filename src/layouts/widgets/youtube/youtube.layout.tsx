@@ -4,7 +4,6 @@ import { FaYoutube } from 'react-icons/fa'
 import { FaGear } from 'react-icons/fa6'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { sleep } from '@/common/utils/timeout'
-import { RequireAuth } from '@/components/auth/require-auth'
 import { Button } from '@/components/button/button'
 import {
 	type FetchedYouTubeProfile,
@@ -83,7 +82,7 @@ export function YouTubeLayout() {
 	return (
 		<>
 			<WidgetContainer className="flex flex-col">
-				<RequireAuth mode="preview">
+				
 					{/* Header */}
 					<div
 						className="flex items-center justify-between"
@@ -167,7 +166,7 @@ export function YouTubeLayout() {
 							/>
 						)}
 					</div>
-				</RequireAuth>
+				
 			</WidgetContainer>{' '}
 			<YouTubeSettingsModal isOpen={showSettings} onClose={handleSettingsClose} />
 		</>
