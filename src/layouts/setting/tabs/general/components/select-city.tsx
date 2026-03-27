@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { CiLocationOn } from 'react-icons/ci'
 import Analytics from '@/analytics'
 import { IconLoading } from '@/components/loading/icon-loading'
@@ -22,9 +22,8 @@ interface Prop {
 export function SelectCity({ onSave, size }: Prop) {
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [showAuthModal, setShowAuthModal] = useState(false)
 	const searchInputRef = useRef<HTMLInputElement>(null)
-		const { data: cities, isLoading, error } = useGetCitiesList(true)
+	const { data: cities, isLoading, error } = useGetCitiesList(true)
 	const { mutateAsync: setCityToServer, isPending: isSettingCity } = useSetCity()
 
 	const filteredCities = useMemo(() => {
@@ -60,12 +59,6 @@ export function SelectCity({ onSave, size }: Prop) {
 	}
 
 	const onModalOpen = () => {
-		if (!true) {
-			Analytics.event('open_city_selection_modal_unauthenticated')
-			setShowAuthModal(true)
-			return
-		}
-
 		setIsModalOpen(true)
 		Analytics.event('open_city_selection_modal')
 		setTimeout(() => {
@@ -73,9 +66,7 @@ export function SelectCity({ onSave, size }: Prop) {
 		}, 300)
 	}
 
-	const selected = user?.city
-		? filteredCities.find((c) => c.cityId === user.city?.id)
-		: null
+	const selected = null
 
 	return (
 		<SectionPanel title="انتخاب شهر" size={size ? size : 'sm'}>
@@ -85,10 +76,8 @@ export function SelectCity({ onSave, size }: Prop) {
 					disabled={isSettingCity}
 					className="flex items-center justify-between w-full p-3 text-right transition-colors border cursor-pointer rounded-2xl bg-base-100 border-base-300 hover:bg-base-200 disabled:opacity-50 disabled:cursor-not-allowed"
 				>
-					{isLoadingUser ? (
+					{isLoading ? (
 						<IconLoading className="mx-auto text-center" />
-					) : selected ? (
-						selected.city
 					) : (
 						'انتخاب شهر...'
 					)}
@@ -110,13 +99,6 @@ export function SelectCity({ onSave, size }: Prop) {
 					</div>
 				)}
 			</div>
-			{showAuthModal && (
-				<AuthRequiredModal
-					isOpen={showAuthModal}
-					onClose={() => setShowAuthModal(!showAuthModal)}
-					message="برای انتخاب شهر، لطفاً وارد حساب کاربری خود شوید."
-				/>
-			)}
 			<Modal
 				isOpen={isModalOpen}
 				onClose={() => {
