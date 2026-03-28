@@ -9,11 +9,14 @@ import {
 	useUpsertMoodLog,
 } from '@/services/hooks/moodLog/upsert-moodLog.hook'
 import { translateError } from '@/utils/translate-error'
+import { useGetUserProfile } from '@/services/hooks/user/userService.hook'
 import { useIsMutating, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 import { HiXMark } from 'react-icons/hi2'
+import { useState } from 'react'
 
 export function DailyMoodNotification() {
+	const { data: user } = useGetUserProfile()
 	const queryClient = useQueryClient()
 		const { today } = useDate()
 	const { mutateAsync: upsertMoodLog } = useUpsertMoodLog()

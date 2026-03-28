@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Wallpaper } from '@/common/wallpaper.interface'
 import { WallpaperItem } from '../tab/gallery/components/wallpaper-item/wallpaper-item'
 
@@ -19,13 +20,14 @@ export function WallpaperGallery({
 	onSelectBackground,
 	onPreviewBackground,
 }: WallpaperGalleryProps) {
+	const { t } = useTranslation()
 	const galleryRef = useRef<HTMLDivElement>(null)
 
 	if (isLoading) {
 		return (
 			<div className="flex flex-col items-center justify-center h-full py-6">
 				<div className="w-8 h-8 rounded-full border-3 border-t-blue-500 border-blue-500/30 animate-spin"></div>
-				<p className={'mt-3 text-sm text-muted'}>در حال بارگذاری...</p>
+				<p className="mt-3 text-sm text-muted">{t('settings.wallpapers.loading')}</p>
 			</div>
 		)
 	}
@@ -56,7 +58,9 @@ export function WallpaperGallery({
 						/>
 					</svg>
 				</div>
-				<h4 className="text-base font-medium text-red-400">خطا در بارگذاری</h4>
+				<h4 className="text-base font-medium text-red-400">
+					{t('settings.wallpapers.loadError')}
+				</h4>
 			</div>
 		)
 	}

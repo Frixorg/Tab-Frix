@@ -319,7 +319,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
 				</div>
 
 				<div className="flex flex-row items-center gap-x-1">
-					<Tooltip
+					{/* <Tooltip
 						content={
 							currentTab === 'timer'
 								? 'جدول برترین کاربران'
@@ -337,7 +337,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
 						>
 							<TfiCup size={12} />
 						</Button>
-					</Tooltip>
+					</Tooltip> */}
 					<Tooltip content="تنظیمات">
 						<Button
 							size="sm"

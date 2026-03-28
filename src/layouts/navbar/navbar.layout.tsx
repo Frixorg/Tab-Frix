@@ -136,9 +136,9 @@ export function NavbarLayout(): JSX.Element {
 			{!isVisible && (
 				<button
 					onClick={() => onToggleNavbar()}
-					className="fixed z-50 bottom-0 left-1/2 -translate-x-1/2 px-10 py-2.5 bg-white/[0.05] backdrop-blur-[40px] backdrop-saturate-[180%] border-t border-x border-white/10 rounded-t-3xl shadow-[0_-0px_30px_rgba(0,0,0,0.3)] transition-all hover:bg-white/[0.08]"
+					className="fixed z-50 bottom-0 left-1/2 -translate-x-1/2 px-10 py-2.5 bg-white/[0.05] backdrop-blur-[40px] backdrop-saturate-[180%] border-t border-x border-white/10 rounded-t-2xl shadow-[0_-0px_30px_rgba(0,0,0,0.3)] transition-all hover:bg-white/[0.08]"
 				>
-					<div className="w-10 h-1 rounded-full bg-white/30" />
+					<div className="w-20 h-1 bg-white/30" />
 				</button>
 			)}
 
@@ -153,7 +153,7 @@ export function NavbarLayout(): JSX.Element {
 					className="absolute w-full h-10 bg-transparent -bottom-16"
 					id="chrome-footer"
 				></div>
-				<nav className="relative flex items-center gap-1 p-1.5 bg-white/[0.02] backdrop-blur-xs border border-white/[0.08] rounded-[2.5rem]">
+				<nav className="relative flex items-center gap-1 px-1.5 bg-white/[0.02] backdrop-blur-xs border border-white/[0.08] rounded-[2.5rem]">
 					<button
 						onClick={() => onToggleNavbar()}
 						className="relative z-10 p-2 transition-colors cursor-pointer nav-btn text-white/20 hover:text-white/40"
@@ -161,17 +161,11 @@ export function NavbarLayout(): JSX.Element {
 						<FiChevronDown size={18} />
 					</button>
 
-					<div className="relative z-10 w-[1px] h-6 bg-white/[0.08]" />
-
-
-					<div className="relative z-10 w-[1px] h-6 bg-white/[0.08]" />
 
 					<div className="relative z-10 flex items-center gap-0.5">
 
 						<SettingsDropdown setShowSettings={setShowSettings} />
 					</div>
-
-					<div className="relative z-10 w-[1px] h-6 bg-white/[0.08]" />
 
 				</nav>
 			</div>

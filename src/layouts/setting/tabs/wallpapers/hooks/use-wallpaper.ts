@@ -8,6 +8,7 @@ import { useChangeWallpaper } from '@/services/hooks/extension/updateSetting.hoo
 import { translateError } from '@/utils/translate-error'
 import Analytics from '../../../../../analytics'
 import { showToast } from '@/common/toast'
+import { isBundledGalleryWallpaper } from '../tab/gallery/data/gallery-wallpapers.const'
 
 export function useWallpaper(
 	fetchedWallpapers: Wallpaper[] | undefined
@@ -92,6 +93,13 @@ export function useWallpaper(
 				'برای انتخاب این تصویر تصویر زمینه باید وارد حساب کاربری شوید.',
 				'error'
 			)
+		}
+
+		/* Bundled gallery assets are not registered server-side; applying locally only. */
+		if (isBundledGalleryWallpaper(wallpaper)) {
+			setSelectedBackground(wallpaper)
+			Analytics.event('wallpaper_changed')
+			return
 		}
 
 		if (!wallpaper.coin || wallpaper.isOwned) setSelectedBackground(wallpaper)

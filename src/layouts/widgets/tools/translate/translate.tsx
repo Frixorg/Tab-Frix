@@ -6,6 +6,7 @@ import { TbLanguage } from 'react-icons/tb'
 import Analytics from '@/analytics'
 import { Button } from '@/components/button/button'
 import { SelectBox } from '@/components/selectbox/selectbox'
+import { useGetUserProfile } from '@/services/hooks/user/userService.hook'
 import {
 	getLanguageDisplayName,
 	type TranslateRequestInput,
@@ -20,7 +21,8 @@ import { validateTranslateRequest } from './shared'
 import { showToast } from '@/common/toast'
 
 export const TranslateComponent: React.FC = () => {
-		const [toLanguage, setToLanguage] = useState<string>('fa')
+	const { data: user } = useGetUserProfile()
+	const [toLanguage, setToLanguage] = useState<string>('fa')
 	const [inputText, setInputText] = useState<string>('')
 	const [translatedText, setTranslatedText] = useState<string>('')
 	const [validationError, setValidationError] = useState<string>('')

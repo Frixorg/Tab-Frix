@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FiEdit, FiUploadCloud } from 'react-icons/fi'
 import type { Wallpaper } from '@/common/wallpaper.interface'
 import { Button } from '@/components/button/button'
@@ -11,6 +12,7 @@ interface UploadAreaProps {
 }
 
 export function UploadArea({ customWallpaper, onWallpaperChange }: UploadAreaProps) {
+	const { t } = useTranslation()
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const { processFile } = useWallpaperUpload({ onWallpaperChange })
 
@@ -36,12 +38,13 @@ export function UploadArea({ customWallpaper, onWallpaperChange }: UploadAreaPro
 				}
 			>
 				<button
+					type="button"
 					className="flex items-center justify-center w-full gap-2 p-4 cursor-pointer"
 					onClick={handleFileSelect}
 				>
 					<FiUploadCloud size={18} className={'text-content'} />
 					<p className={'text-sm font-medium text-content'}>
-						برای آپلود از سیستم کلیک کنید
+						{t('settings.wallpapers.uploadPrompt')}
 					</p>
 				</button>
 				<input
@@ -67,21 +70,25 @@ export function UploadArea({ customWallpaper, onWallpaperChange }: UploadAreaPro
 					<div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30"></div>
 
 					<div className="absolute top-1 right-1 px-1.5 py-0.5 text-[10px] font-medium text-white rounded-sm backdrop-blur-md bg-blue-500/80">
-						{customWallpaper.type === 'IMAGE' ? 'تصویر' : 'ویدیو'}
+						{customWallpaper.type === 'IMAGE'
+							? t('settings.wallpapers.image')
+							: t('settings.wallpapers.video')}
 					</div>
 				</div>
 
 				<div className="flex-1 mx-3">
-					<p className={'text-sm font-medium text-content'}>تصویر زمینه فعال</p>
+					<p className={'text-sm font-medium text-content'}>
+						{t('settings.wallpapers.activeBackground')}
+					</p>
 					<p className={'text-xs text-muted truncate max-w-[200px]'}>
-						{customWallpaper.name || 'بدون نام'}
+						{customWallpaper.name || t('settings.wallpapers.unnamed')}
 					</p>
 				</div>
 
 				<div className="flex gap-2">
 					<Button onClick={() => handleFileSelect()} size="sm">
 						<FiEdit size={14} />
-						<span>تغییر</span>
+						<span>{t('settings.wallpapers.change')}</span>
 					</Button>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import type { JSX } from 'react'
+import { useMemo } from 'react'
 import { MdPets } from 'react-icons/md'
 import { TbApps, TbCalendarUser, TbCurrencyDollar, TbNews } from 'react-icons/tb'
 import { TiWeatherCloudy } from 'react-icons/ti'
@@ -14,61 +14,68 @@ import { WigiArzSetting } from '../widgets/wigiArz/wigiArz-setting'
 import { WigiPadSetting } from '../widgets/wigiPad/wigiPad-setting'
 import { WidgetTabKeys } from './constant/tab-keys'
 import { ManageWidgets } from './manage-widgets/manage-widgets'
+import { useTranslation } from 'react-i18next'
 
 interface WidgetSettingsModalProps {
 	isOpen: boolean
 	onClose: () => void
 	selectedTab: string | null
 }
-const tabs: TabItem[] = [
-	{
-		parentName: 'مدیریت ویجت‌ها',
-		children: [
-			{
-				label: 'مدیریت ویجت ها',
-				element: <ManageWidgets />,
-				value: WidgetTabKeys.widget_management,
-				icon: <TbApps size={20} />,
-			},
-			{
-				label: 'ویجی پد',
-				element: <WigiPadSetting />,
-				value: WidgetTabKeys.wigiPad,
-				icon: <TbCalendarUser size={20} />,
-			},
-			{
-				label: 'ویجی ارز',
-				element: <WigiArzSetting />,
-				value: WidgetTabKeys.wigiArz,
-				icon: <TbCurrencyDollar size={20} />,
-			},
-			{
-				label: 'ویجی نیوز',
-				element: <RssFeedSetting />,
-				value: WidgetTabKeys.news_settings,
-				icon: <TbNews size={20} />,
-			},
-			{
-				label: 'ویجت آب و هوا',
-				element: <WeatherSetting />,
-				value: WidgetTabKeys.weather_settings,
-				icon: <TiWeatherCloudy size={20} />,
-			},
-			{
-				label: 'حیوان خانگی',
-				value: WidgetTabKeys.Pet,
-				icon: <MdPets size={20} />,
-				element: <PetSettings />,
-			},
-		],
-	},
-]
 
 export function WidgetSettingsModal({
 	isOpen,
 	onClose,
 	selectedTab,
 }: WidgetSettingsModalProps) {
+	const { t } = useTranslation()
+
+	const tabs: TabItem[] = useMemo(
+		() => [
+			{
+				parentName: t('settings.groups.widgetify'),
+				children: [
+					{
+						label: 'Widget Management',
+						element: <ManageWidgets />,
+						value: WidgetTabKeys.widget_management,
+						icon: <TbApps size={20} />,
+					},
+					{
+						label: 'Time & Calendar',
+						element: <WigiPadSetting />,
+						value: WidgetTabKeys.wigiPad,
+						icon: <TbCalendarUser size={20} />,
+					},
+					{
+						label: 'Currency',
+						element: <WigiArzSetting />,
+						value: WidgetTabKeys.wigiArz,
+						icon: <TbCurrencyDollar size={20} />,
+					},
+					{
+						label: 'News',
+						element: <RssFeedSetting />,
+						value: WidgetTabKeys.news_settings,
+						icon: <TbNews size={20} />,
+					},
+					{
+						label: 'Weather',
+						element: <WeatherSetting />,
+						value: WidgetTabKeys.weather_settings,
+						icon: <TiWeatherCloudy size={20} />,
+					},
+					{
+						label: 'Pet',
+						value: WidgetTabKeys.Pet,
+						icon: <MdPets size={20} />,
+						element: <PetSettings />,
+					},
+				],
+			},
+		],
+		[t]
+	)
+
 	function onClickSettings() {
 		onClose()
 		callEvent('openSettings')

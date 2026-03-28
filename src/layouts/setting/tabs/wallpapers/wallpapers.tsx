@@ -1,9 +1,10 @@
 import { useState } from 'react'
-
+import { useTranslation } from 'react-i18next'
 import { GalleryTab } from './tab/gallery/gallery.tab'
 import { GradientTab } from './tab/gradient.tab'
 
 export function WallpaperSetting() {
+	const { t } = useTranslation()
 	const [activeTab, setActiveTab] = useState<'gallery' | 'gradient'>('gallery')
 
 	const getTabStyle = (isActive: boolean) => {
@@ -20,18 +21,20 @@ export function WallpaperSetting() {
 				<ul className="flex flex-wrap text-sm font-medium text-center">
 					<li className="mr-2">
 						<button
+							type="button"
 							onClick={() => setActiveTab('gallery')}
 							className={`inline-block cursor-pointer p-4 border-b-2 rounded-t-lg ${getTabStyle(activeTab === 'gallery')}`}
 						>
-							تصاویر
+							{t('settings.wallpapers.subTabs.gallery')}
 						</button>
 					</li>
 					<li className="mr-2">
 						<button
+							type="button"
 							onClick={() => setActiveTab('gradient')}
 							className={`inline-block cursor-pointer p-4 border-b-2 rounded-t-lg ${getTabStyle(activeTab === 'gradient')}`}
 						>
-							گرادیان
+							{t('settings.wallpapers.subTabs.gradient')}
 						</button>
 					</li>
 				</ul>

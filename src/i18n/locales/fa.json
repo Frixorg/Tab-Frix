@@ -1,0 +1,112 @@
+{
+	"settings": {
+		"title": "تنظیمات",
+		"Widgets": "ویجت‌ها",
+		"recentChanges": "تغییرات اخیر",
+		"groups": {
+			"account": "حساب کاربری",
+			"preferences": "تنظیمات",
+			"widgetify": "ویجتیفای"
+		},
+		"tabs": {
+			"platforms": "پلتفرم‌ها",
+			"general": "عمومی",
+			"access": "حریم خصوصی",
+			"appearance": "ظاهری",
+			"wallpapers": "تصویر زمینه‌ها",
+			"shortcuts": "میانبرها",
+			"about": "درباره ما"
+		},
+		"language": {
+			"title": "زبان",
+			"description": "زبان رابط کاربری را انتخاب کنید.",
+			"en": "English",
+			"fa": "فارسی",
+			"it": "Italiano"
+		},
+		"privacy": {
+			"title": "حریم خصوصی",
+			"analytics": {
+				"title": "ردیابی استفاده از افزونه (Analytics)",
+				"description": "با فعال کردن این گزینه، آمار استفاده از افزونه برای بهبود عملکرد جمع‌آوری می‌شود. هیچ اطلاعات شخصی ارسال نخواهد شد"
+			},
+			"bookmarks": {
+				"title": "دسترسی به بوکمارک‌های مرورگر",
+				"description": "با فعال‌سازی این گزینه، افزونه فقط برای نمایش بوکمارک‌های مرورگر شما دسترسی خواهد داشت. هیچ اطلاعاتی ذخیره یا ارسال نمی‌شود و بوکمارک‌ها صرفاً در محیط افزونه نمایش داده می‌شوند."
+			},
+			"tabs": {
+				"title": "دسترسی به تب‌ها",
+				"description": "با فعال کردن این گزینه، افزونه می‌تواند بوکمارک‌های داخل پوشه‌ها را به صورت گروهی باز و مدیریت کند. هیچ اطلاعات شخصی ذخیره یا ارسال نمی‌شود."
+			}
+		},
+		"shortcuts": {
+			"title": "کلیدهای میانبر",
+			"intro": "کلیدهای میانبر افزونه ویجتیفای برای استفاده راحت‌تر و سریع‌تر",
+			"categories": {
+				"bookmarks": "بوکمارک‌ها",
+				"appearance": "ظاهری"
+			},
+			"items": {
+				"open_bookmark_new_tab": "باز کردن بوکمارک در تب جدید",
+				"open_bookmark_middle_click": "باز کردن بوکمارک در تب جدید با دکمه اسکرول",
+				"open_all_bookmarks": "باز کردن همه بوکمارک‌های یک پوشه",
+				"toggle_theme": "تغییر تم",
+				"toggle_ui": "تغییر رابط کاربری"
+			}
+		},
+		"wallpapers": {
+			"subTabs": {
+				"gallery": "تصاویر",
+				"gradient": "گرادیان"
+			},
+			"gallerySectionTitle": "گالری تصاویر",
+			"customImageTitle": "تصویر دلخواه",
+			"customImagePreviewAlt": "پیش‌نمایش تصویر زمینه دلخواه",
+			"uploadPrompt": "برای آپلود از سیستم کلیک کنید",
+			"activeBackground": "تصویر زمینه فعال",
+			"change": "تغییر",
+			"image": "تصویر",
+			"video": "ویدیو",
+			"unnamed": "بدون نام",
+			"loading": "در حال بارگذاری…",
+			"loadError": "خطا در بارگذاری",
+			"emptyCategory": "بدون تصویر",
+			"categories": {
+				"cars": "ماشین",
+				"space": "فضایی",
+				"nature": "طبیعت",
+				"minimal": "مینیمال",
+				"night": "شب"
+			},
+			"names": {
+				"gallery-wp-bmw-m3-angel-eyes": "BMW M3 Angel Eyes",
+				"gallery-wp-novitec-ferrari": "Novitec Ferrari",
+				"gallery-wp-gargantua": "گارانتوا",
+				"gallery-wp-sagittarius-a": "Sagittarius A"
+			},
+			"gradientPresetsTitle": "گرادیان‌های پیش‌فرض",
+			"gradients": {
+				"softPink": "صورتی ملایم",
+				"skyBlue": "آبی آسمانی",
+				"springGreen": "سبز بهاری",
+				"autumnOrange": "نارنجی پاییزی",
+				"turquoise": "فیروزه‌ای",
+				"lightGray": "خاکستری روشن",
+				"blueToPink": "آبی به صورتی",
+				"softPurple": "بنفش ملایم"
+			},
+			"coin": {
+				"defaultWallpaperName": "تصویر زمینه",
+				"priceTitle": "قیمت این تصویر زمینه",
+				"unlockHint": "این تصویر زمینه زیبا را با ویج‌کوین باز کنید و برای همیشه استفاده کنید!",
+				"earnHint": "ویج‌کوین با انجام فعالیت‌ها و دعوت دوستان کسب می‌شود",
+				"cancel": "لغو",
+				"unlocking": "در حال باز کردن…",
+				"unlock": "باز کردن",
+				"login": "ورود به حساب کاربری",
+				"owned": "باز شده",
+				"unlockPrice": "قیمت باز کردن"
+			}
+		}
+	}
+}

@@ -33,7 +33,7 @@ export function MarketContainer() {
 	return (
 		<div className="flex flex-col gap-4 p-1">
 			{' '}
-			<div dir="rtl" className="flex flex-col gap-4 h-[80vh] overflow-hidden">
+			<div dir="rtl" className="flex flex-col gap-4 overflow-hidden">
 				<div className="flex flex-row items-center justify-between w-full ">
 					<TabNavigation
 						activeTab={activeTab}

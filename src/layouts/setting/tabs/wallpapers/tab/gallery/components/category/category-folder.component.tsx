@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { FiFolder } from 'react-icons/fi'
 
 interface CategoryFolderProps {
@@ -13,6 +14,8 @@ export function CategoryFolder({
 	previewImages,
 	onSelect,
 }: CategoryFolderProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div
 			onClick={() => onSelect(id)}
@@ -43,7 +46,9 @@ export function CategoryFolder({
 				) : (
 					<div className="flex flex-col items-center justify-center h-full rounded">
 						<FiFolder className="mb-2 text-content/40" size={32} />
-						<p className="text-xs text-gray-400">بدون تصویر</p>
+						<p className="text-xs text-gray-400">
+							{t('settings.wallpapers.emptyCategory')}
+						</p>
 					</div>
 				)}
 			</div>

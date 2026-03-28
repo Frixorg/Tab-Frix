@@ -41,6 +41,7 @@ export default defineConfig({
 		'@/layouts': './src/layouts',
 		'@/pages': './src/pages',
 		'@/assets': './src/assets',
+		'@/i18n': './src/i18n',
 	},
 	modules: [
 		'@wxt-dev/webextension-polyfill',

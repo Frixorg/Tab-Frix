@@ -1,0 +1,112 @@
+{
+	"settings": {
+		"title": "Settings",
+		"Widgets": "Widgets",
+		"recentChanges": "What's new",
+		"groups": {
+			"account": "Account",
+			"preferences": "Settings",
+			"widgetify": "Widgetify"
+		},
+		"tabs": {
+			"platforms": "Platforms",
+			"general": "General",
+			"access": "Privacy",
+			"appearance": "Appearance",
+			"wallpapers": "Wallpapers",
+			"shortcuts": "Shortcuts",
+			"about": "About us"
+		},
+		"language": {
+			"title": "Language",
+			"description": "Choose the interface language.",
+			"en": "English",
+			"fa": "Persian (فارسی)",
+			"it": "Italian"
+		},
+		"privacy": {
+			"title": "Privacy",
+			"analytics": {
+				"title": "Extension usage analytics",
+				"description": "When enabled, anonymous usage statistics are collected to help improve the extension. No personal information is sent."
+			},
+			"bookmarks": {
+				"title": "Access to browser bookmarks",
+				"description": "When enabled, the extension only accesses your browser bookmarks to display them inside Widgetify. Nothing is stored or transmitted; bookmarks are shown only in the extension."
+			},
+			"tabs": {
+				"title": "Access to tabs",
+				"description": "When enabled, the extension can open and manage bookmarks inside folders in bulk. No personal information is stored or transmitted."
+			}
+		},
+		"shortcuts": {
+			"title": "Keyboard shortcuts",
+			"intro": "Widgetify shortcuts for faster, more comfortable use.",
+			"categories": {
+				"bookmarks": "Bookmarks",
+				"appearance": "Appearance"
+			},
+			"items": {
+				"open_bookmark_new_tab": "Open a bookmark in a new tab",
+				"open_bookmark_middle_click": "Open a bookmark in a new tab with the middle mouse button",
+				"open_all_bookmarks": "Open all bookmarks in a folder",
+				"toggle_theme": "Switch theme",
+				"toggle_ui": "Switch UI mode"
+			}
+		},
+		"wallpapers": {
+			"subTabs": {
+				"gallery": "Gallery",
+				"gradient": "Gradient"
+			},
+			"gallerySectionTitle": "Image gallery",
+			"customImageTitle": "Custom image",
+			"customImagePreviewAlt": "Custom wallpaper preview",
+			"uploadPrompt": "Click to upload from your device",
+			"activeBackground": "Current background",
+			"change": "Change",
+			"image": "Image",
+			"video": "Video",
+			"unnamed": "Untitled",
+			"loading": "Loading…",
+			"loadError": "Failed to load",
+			"emptyCategory": "No preview",
+			"categories": {
+				"cars": "Cars",
+				"space": "Space",
+				"nature": "Nature",
+				"minimal": "Minimal",
+				"night": "Night"
+			},
+			"names": {
+				"gallery-wp-bmw-m3-angel-eyes": "BMW M3 Angel Eyes",
+				"gallery-wp-novitec-ferrari": "Novitec Ferrari",
+				"gallery-wp-gargantua": "Gargantua",
+				"gallery-wp-sagittarius-a": "Sagittarius A*"
+			},
+			"gradientPresetsTitle": "Preset gradients",
+			"gradients": {
+				"softPink": "Soft pink",
+				"skyBlue": "Sky blue",
+				"springGreen": "Spring green",
+				"autumnOrange": "Autumn orange",
+				"turquoise": "Turquoise",
+				"lightGray": "Light gray",
+				"blueToPink": "Blue to pink",
+				"softPurple": "Soft purple"
+			},
+			"coin": {
+				"defaultWallpaperName": "Wallpaper",
+				"priceTitle": "Price of this wallpaper",
+				"unlockHint": "Unlock this wallpaper with Widget Coins and keep it forever!",
+				"earnHint": "Earn Widget Coins by completing activities and inviting friends.",
+				"cancel": "Cancel",
+				"unlocking": "Unlocking…",
+				"unlock": "Unlock",
+				"login": "Log in",
+				"owned": "Owned",
+				"unlockPrice": "Unlock price"
+			}
+		}
+	}
+}

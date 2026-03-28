@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { LanguageSync } from './components/language-sync'
 import { AppearanceProvider } from './context/appearance.context'
 import { ThemeProvider } from './context/theme.context'
 import { HomePage } from './pages/home'
@@ -15,13 +16,14 @@ const queryClient = new QueryClient({
 function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-				<ThemeProvider>
-					<AppearanceProvider>
-						<PageProvider>
-							<HomePage />
-						</PageProvider>
-					</AppearanceProvider>
-				</ThemeProvider>
+			<LanguageSync />
+			<ThemeProvider>
+				<AppearanceProvider>
+					<PageProvider>
+						<HomePage />
+					</PageProvider>
+				</AppearanceProvider>
+			</ThemeProvider>
 		</QueryClientProvider>
 	)
 }

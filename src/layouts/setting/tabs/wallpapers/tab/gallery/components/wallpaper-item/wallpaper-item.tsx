@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FiCheck, FiHeart, FiShoppingBag } from 'react-icons/fi'
 import type { Wallpaper } from '@/common/wallpaper.interface'
+import { wallpaperLabel } from '@/i18n/wallpaper-labels'
 import { UserCoin } from '@/layouts/setting/tabs/account/components/user-coin'
 import { CoinPurchaseModal } from '@/layouts/setting/tabs/wallpapers/components/coin-purchase-modal'
 import { useLazyLoad } from '../../../../hooks/use-lazy-load'
@@ -17,12 +19,14 @@ function wallpaperItem({
 	selectedBackground,
 	setSelectedBackground,
 }: WallpaperItemProps) {
+	const { t } = useTranslation()
 	const [loaded, setLoaded] = useState(false)
 	const [error, setError] = useState(false)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const imgRef = useRef<HTMLImageElement>(null)
 	const videoRef = useRef<HTMLVideoElement>(null)
 	const isSelected = selectedBackground?.id === wallpaper.id
+	const displayName = wallpaperLabel(wallpaper, t)
 
 	const loadContent = () => {
 		if (wallpaper.type === 'IMAGE' && imgRef.current) {
@@ -89,7 +93,9 @@ function wallpaperItem({
 				{error && (
 					<div className="flex flex-col items-center justify-center w-full h-full bg-red-500/10">
 						<FiHeart className="text-red-400" />
-						<p className="mt-2 text-xs text-gray-400">خطا در بارگذاری</p>
+						<p className="mt-2 text-xs text-gray-400">
+							{t('settings.wallpapers.loadError')}
+						</p>
 					</div>
 				)}
 
@@ -98,7 +104,7 @@ function wallpaperItem({
 						ref={imgRef}
 						className="object-cover w-full h-full transition-opacity"
 						style={{ opacity: loaded && !error ? 1 : 0 }}
-						alt={wallpaper.name || 'Wallpaper'}
+						alt={displayName}
 						onLoad={handleLoad}
 						onError={handleError}
 					/>
@@ -120,9 +126,9 @@ function wallpaperItem({
 						<div
 							className={`absolute flex justify-between inset-x-0 bottom-0 p-2 transition-opacity duration-300 bg-gradient-to-t from-black/80 to-black/0 items-center`}
 						>
-							{wallpaper.name && (
+							{displayName && (
 								<div className="flex-1 text-xs font-medium text-white">
-									{wallpaper.name}
+									{displayName}
 								</div>
 							)}
 							<div className="flex items-center gap-1">
@@ -132,8 +138,8 @@ function wallpaperItem({
 											coins={wallpaper.coin}
 											title={
 												wallpaper.isOwned
-													? 'باز شده'
-													: 'قیمت باز کردن'
+													? t('settings.wallpapers.coin.owned')
+													: t('settings.wallpapers.coin.unlockPrice')
 											}
 										/>
 									</div>
@@ -150,7 +156,9 @@ function wallpaperItem({
 						{!isSelected && wallpaper.isOwned && (
 							<div className="absolute flex gap-0.5 px-1 rounded-full shadow-sm text-success bg-black/80 items-center top-2 right-2">
 								<FiShoppingBag size={10} />
-								<span className="!text-[10px] font-normal">باز شده</span>
+								<span className="!text-[10px] font-normal">
+									{t('settings.wallpapers.coin.owned')}
+								</span>
 							</div>
 						)}
 

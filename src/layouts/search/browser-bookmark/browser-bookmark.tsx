@@ -56,28 +56,10 @@ export function BrowserBookmark() {
 		Analytics.event('browser_bookmark_popover_toggled')
 	}
 
-	const onClickToExplorer = () => {
-		setPage('explorer')
-		Analytics.event('searchbox_explorer_page_opened')
-	}
-
+	
 	return (
 		<div className="relative flex flex-row items-center justify-start w-full gap-2 px-2 py-1">
 			<div className="flex flex-row items-center w-full gap-1 py-1 overflow-x-auto no-scrollbar scroll-smooth">
-				<div className="flex items-center shrink-0">
-					<div
-						className="flex items-center cursor-pointer group "
-						onClick={() => onClickToExplorer()}
-					>
-						<div className="relative flex items-center justify-center w-fit px-1 gap-1 h-6 p-0.5 rounded-lg bg-base-300 group-hover:scale-95 transition-transform">
-							<HiRectangleGroup
-								size={20}
-								className="text-base-content/60"
-							/>
-							<p className="font-medium text-base-content/60">کاوش</p>
-						</div>
-					</div>
-				</div>
 
 				<div ref={iconRef} className="flex items-center justify-center shrink-0">
 					<Tooltip content="بوکمارک‌های مرورگر">

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Wallpaper } from '@/common/wallpaper.interface'
 
 interface MediaPreviewProps {
@@ -5,11 +6,14 @@ interface MediaPreviewProps {
 }
 
 export function MediaPreview({ customWallpaper }: MediaPreviewProps) {
+	const { t } = useTranslation()
+	const alt = t('settings.wallpapers.customImagePreviewAlt')
+
 	if (customWallpaper.type === 'IMAGE') {
 		return (
 			<img
 				src={customWallpaper.src}
-				alt="Custom wallpaper"
+				alt={alt}
 				className="object-cover w-full h-full"
 			/>
 		)

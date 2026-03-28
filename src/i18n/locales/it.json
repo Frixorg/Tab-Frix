@@ -1,0 +1,112 @@
+{
+	"settings": {
+		"title": "Impostazioni",
+		"Widgets": "Widgets",
+		"recentChanges": "Novità",
+		"groups": {
+			"account": "Account",
+			"preferences": "Impostazioni",
+			"widgetify": "Widgetify"
+		},
+		"tabs": {
+			"platforms": "Piattaforme",
+			"general": "Generale",
+			"access": "Privacy",
+			"appearance": "Aspetto",
+			"wallpapers": "Sfondi",
+			"shortcuts": "Scorciatoie",
+			"about": "Chi siamo"
+		},
+		"language": {
+			"title": "Lingua",
+			"description": "Scegli la lingua dell'interfaccia.",
+			"en": "English",
+			"fa": "Persiano (فارسی)",
+			"it": "Italiano"
+		},
+		"privacy": {
+			"title": "Privacy",
+			"analytics": {
+				"title": "Analytics sull'uso dell'estensione",
+				"description": "Se attivata, vengono raccolte statistiche anonime sull'uso per migliorare l'estensione. Non vengono inviati dati personali."
+			},
+			"bookmarks": {
+				"title": "Accesso ai segnalibri del browser",
+				"description": "Se attivata, l'estensione accede ai segnalibri solo per mostrarli in Widgetify. Nulla viene salvato o trasmesso; i segnalibri compaiono solo nell'estensione."
+			},
+			"tabs": {
+				"title": "Accesso alle schede",
+				"description": "Se attivata, l'estensione può aprire e gestire in blocco i segnalibri nelle cartelle. Non vengono salvati né trasmessi dati personali."
+			}
+		},
+		"shortcuts": {
+			"title": "Scorciatoie da tastiera",
+			"intro": "Scorciatoie di Widgetify per un uso più rapido e comodo.",
+			"categories": {
+				"bookmarks": "Segnalibri",
+				"appearance": "Aspetto"
+			},
+			"items": {
+				"open_bookmark_new_tab": "Apri un segnalibro in una nuova scheda",
+				"open_bookmark_middle_click": "Apri un segnalibro in una nuova scheda con il pulsante centrale del mouse",
+				"open_all_bookmarks": "Apri tutti i segnalibri di una cartella",
+				"toggle_theme": "Cambia tema",
+				"toggle_ui": "Cambia interfaccia"
+			}
+		},
+		"wallpapers": {
+			"subTabs": {
+				"gallery": "Galleria",
+				"gradient": "Gradiente"
+			},
+			"gallerySectionTitle": "Galleria immagini",
+			"customImageTitle": "Immagine personalizzata",
+			"customImagePreviewAlt": "Anteprima sfondo personalizzato",
+			"uploadPrompt": "Clicca per caricare dal dispositivo",
+			"activeBackground": "Sfondo attuale",
+			"change": "Cambia",
+			"image": "Immagine",
+			"video": "Video",
+			"unnamed": "Senza titolo",
+			"loading": "Caricamento…",
+			"loadError": "Caricamento non riuscito",
+			"emptyCategory": "Nessuna anteprima",
+			"categories": {
+				"cars": "Auto",
+				"space": "Spazio",
+				"nature": "Natura",
+				"minimal": "Minimale",
+				"night": "Notte"
+			},
+			"names": {
+				"gallery-wp-bmw-m3-angel-eyes": "BMW M3 Angel Eyes",
+				"gallery-wp-novitec-ferrari": "Novitec Ferrari",
+				"gallery-wp-gargantua": "Gargantua",
+				"gallery-wp-sagittarius-a": "Sagittarius A*"
+			},
+			"gradientPresetsTitle": "Gradienti predefiniti",
+			"gradients": {
+				"softPink": "Rosa tenue",
+				"skyBlue": "Azzurro cielo",
+				"springGreen": "Verde primavera",
+				"autumnOrange": "Arancione autunno",
+				"turquoise": "Turchese",
+				"lightGray": "Grigio chiaro",
+				"blueToPink": "Da blu a rosa",
+				"softPurple": "Viola tenue"
+			},
+			"coin": {
+				"defaultWallpaperName": "Sfondo",
+				"priceTitle": "Prezzo di questo sfondo",
+				"unlockHint": "Sblocca questo sfondo con i Widget Coin e usalo per sempre!",
+				"earnHint": "Guadagna Widget Coin con le attività e invitando gli amici.",
+				"cancel": "Annulla",
+				"unlocking": "Sblocco…",
+				"unlock": "Sblocca",
+				"login": "Accedi",
+				"owned": "Acquistato",
+				"unlockPrice": "Prezzo di sblocco"
+			}
+		}
+	}
+}

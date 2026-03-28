@@ -52,7 +52,7 @@ export const widgetItems: WidgetItem[] = [
 	{
 		id: WidgetKeys.calendar,
 		emoji: '📅',
-		label: 'تقویم',
+		label: 'Calendar',
 		order: 0,
 		node: <CalendarLayout />,
 		canToggle: true,
@@ -61,7 +61,7 @@ export const widgetItems: WidgetItem[] = [
 	{
 		id: WidgetKeys.yadKar,
 		emoji: '📒',
-		label: 'یادکار (وظایف و یادداشت)',
+		label: 'Todo & Notes',
 		order: 0,
 		node: (
 			<TodoProvider>
@@ -73,8 +73,8 @@ export const widgetItems: WidgetItem[] = [
 	},
 	{
 		id: WidgetKeys.tools,
-		emoji: '🧰',
-		label: 'ابزارها',
+		emoji: '⌛',
+		label: 'Pomodoro Timer',
 		order: 1,
 		node: <ToolsLayout />,
 		canToggle: true,
@@ -83,15 +83,15 @@ export const widgetItems: WidgetItem[] = [
 	{
 		id: WidgetKeys.weather,
 		emoji: '🌤️',
-		label: 'آب و هوا',
+		label: 'Weather',
 		order: 3,
 		node: <WeatherLayout />,
 		canToggle: true,
 	},
 	{
 		id: WidgetKeys.comboWidget,
-		emoji: '🔗',
-		label: 'ویجت ترکیبی (ارز و اخبار)',
+		emoji: '💲',
+		label: 'Currency & News',
 		order: 4,
 		node: (
 			<CurrencyProvider>
@@ -101,46 +101,46 @@ export const widgetItems: WidgetItem[] = [
 		canToggle: true,
 		popular: true,
 	},
-	{
-		id: WidgetKeys.arzLive,
-		emoji: '💰',
-		label: 'ویجی ارز',
-		order: 5,
-		node: (
-			<CurrencyProvider>
-				<WigiArzLayout inComboWidget={false} />
-			</CurrencyProvider>
-		),
-		canToggle: true,
-	},
-	{
-		id: WidgetKeys.news,
-		emoji: '📰',
-		label: 'ویجی نیوز',
-		order: 6,
-		node: <NewsLayout inComboWidget={false} />,
-		canToggle: true,
-	},
+	// {
+	// 	id: WidgetKeys.arzLive,
+	// 	emoji: '💰',
+	// 	label: 'ویجی ارز',
+	// 	order: 5,
+	// 	node: (
+	// 		<CurrencyProvider>
+	// 			<WigiArzLayout inComboWidget={false} />
+	// 		</CurrencyProvider>
+	// 	),
+	// 	canToggle: true,
+	// },
+	// {
+	// 	id: WidgetKeys.news,
+	// 	emoji: '📰',
+	// 	label: 'ویجی نیوز',
+	// 	order: 6,
+	// 	node: <NewsLayout inComboWidget={false} />,
+	// 	canToggle: true,
+	// },
 
-	{
-		id: WidgetKeys.network,
-		emoji: '🌐',
-		label: 'شبکه',
-		order: 9,
-		node: <NetworkLayout inComboWidget={false} enableBackground={true} />,
-		canToggle: true,
-		isNew: false,
-	},
-	{
-		id: WidgetKeys.youtube,
-		emoji: '📺',
-		label: 'آمار یوتیوب',
-		order: 8,
-		node: <YouTubeLayout />,
-		canToggle: false,
-		disabled: true,
-		soon: true,
-	},
+	// {
+	// 	id: WidgetKeys.network,
+	// 	emoji: '🌐',
+	// 	label: 'شبکه',
+	// 	order: 9,
+	// 	node: <NetworkLayout inComboWidget={false} enableBackground={true} />,
+	// 	canToggle: true,
+	// 	isNew: false,
+	// },
+	// {
+	// 	id: WidgetKeys.youtube,
+	// 	emoji: '📺',
+	// 	label: 'آمار یوتیوب',
+	// 	order: 8,
+	// 	node: <YouTubeLayout />,
+	// 	canToggle: false,
+	// 	disabled: true,
+	// 	soon: true,
+	// },
 ]
 
 interface WidgetVisibilityContextType {

@@ -16,16 +16,16 @@ const tabs = [
 		label: 'پومودورو',
 		icon: <MdOutlineTimer size={14} />,
 	},
-	{
-		id: 'religious-time' as ToolsTabType,
-		label: 'اوقات شرعی',
-		icon: <MdOutlineMosque size={14} />,
-	},
-	{
-		id: 'currency-converter' as ToolsTabType,
-		label: 'تبدیل',
-		icon: <MdOutlineCurrencyExchange size={14} />,
-	},
+	// {
+	// 	id: 'religious-time' as ToolsTabType,
+	// 	label: 'اوقات شرعی',
+	// 	icon: <MdOutlineMosque size={14} />,
+	// },
+	// {
+	// 	id: 'currency-converter' as ToolsTabType,
+	// 	label: 'تبدیل',
+	// 	icon: <MdOutlineCurrencyExchange size={14} />,
+	// },
 ]
 
 const ReligiousTime = React.lazy(() =>

@@ -24,8 +24,10 @@ import type { UserProfile } from '@/services/hooks/user/userService.hook'
 import type { FetchedYouTubeProfile } from '@/services/hooks/youtube/getYouTubeProfile.hook'
 import type { StoredWallpaper, Wallpaper } from '../wallpaper.interface'
 import type { Todo } from '@/services/hooks/todo/todo.interface'
+import type { AppLanguage } from '@/i18n/types'
 
 export interface StorageKV {
+	language: AppLanguage
 	currencies: string[]
 	currencyColorMode: CurrencyColorMode
 	hasShownPwaModal: boolean

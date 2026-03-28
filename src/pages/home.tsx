@@ -13,7 +13,7 @@ import { WidgetVisibilityProvider } from '@/context/widget-visibility.context'
 import { NavbarLayout } from '@/layouts/navbar/navbar.layout'
 import type { WidgetTabKeys } from '@/layouts/widgets-settings/constant/tab-keys'
 import { WidgetSettingsModal } from '@/layouts/widgets-settings/widget-settings-modal'
-import { getRandomWallpaper } from '@/services/hooks/wallpapers/getWallpaperCategories.hook'
+import { getRandomBundledImageWallpaper } from '@/layouts/setting/tabs/wallpapers/tab/gallery/data/gallery-wallpapers.const'
 import { ContentSection } from './home/content-section'
 import { ExplorerContent } from '@/layouts/explorer/explorer'
 import { usePage } from '@/context/page.context'
@@ -119,16 +119,10 @@ export function HomePage() {
 			if (wallpaper) {
 				changeWallpaper(wallpaper)
 			} else {
-				const randomWallpaper = await getRandomWallpaper()
-				if (randomWallpaper) {
-					const defWallpaper: StoredWallpaper = {
-						id: randomWallpaper.id,
-						type: randomWallpaper.type,
-						src: randomWallpaper.src,
-						gradient: randomWallpaper.gradient,
-					}
-					changeWallpaper(defWallpaper)
-					setToStorage('wallpaper', defWallpaper)
+				const bundled = getRandomBundledImageWallpaper()
+				if (bundled) {
+					changeWallpaper(bundled)
+					setToStorage('wallpaper', bundled)
 				} else {
 					const defaultGradient: StoredWallpaper = {
 						id: 'gradient-a1c4fd-c2e9fb',

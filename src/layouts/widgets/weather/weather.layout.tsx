@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { listenEvent } from '@/common/utils/call-event'
+import { useGetUserProfile } from '@/services/hooks/user/userService.hook'
 import type {
 	FetchedForecast,
 	FetchedWeather,
@@ -13,7 +14,8 @@ import { useGetWeatherByLatLon } from '@/services/hooks/weather/getWeatherByLatL
 import { useGetForecastWeatherByLatLon } from '@/services/hooks/weather/getForecastWeatherByLatLon'
 
 export function WeatherLayout() {
-		const [weatherSettings, setWeatherSettings] = useState<WeatherSettings | null>(null)
+	const { data: user } = useGetUserProfile()
+	const [weatherSettings, setWeatherSettings] = useState<WeatherSettings | null>(null)
 	const [weatherState, setWeather] = useState<FetchedWeather | null>(null)
 	const [forecastWeather, setForecastWeather] = useState<FetchedForecast[] | null>(null)
 	const {

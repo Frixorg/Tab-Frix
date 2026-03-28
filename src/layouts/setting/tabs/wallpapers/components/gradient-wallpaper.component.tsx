@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { GradientColors, Wallpaper } from '@/common/wallpaper.interface'
 import { SectionPanel } from '@/components/section-panel'
 
@@ -7,22 +8,46 @@ interface GradientWallpaperProps {
 	selectedGradient?: Wallpaper
 }
 
-const predefinedGradients: { from: string; to: string; name: string }[] = [
-	{ from: '#ff9a9e', to: '#fad0c4', name: 'صورتی ملایم' },
-	{ from: '#a1c4fd', to: '#c2e9fb', name: 'آبی آسمانی' },
-	{ from: '#d4fc79', to: '#96e6a1', name: 'سبز بهاری' },
-	{ from: '#ffecd2', to: '#fcb69f', name: 'نارنجی پاییزی' },
-	{ from: '#84fab0', to: '#8fd3f4', name: 'فیروزه‌ای' },
-	{ from: '#cfd9df', to: '#e2ebf0', name: 'خاکستری روشن' },
-	{ from: '#a6c0fe', to: '#f68084', name: 'آبی به صورتی' },
-	{ from: '#fbc2eb', to: '#a6c1ee', name: 'بنفش ملایم' },
+type GradientPreset = {
+	from: string
+	to: string
+	nameKey:
+		| 'softPink'
+		| 'skyBlue'
+		| 'springGreen'
+		| 'autumnOrange'
+		| 'turquoise'
+		| 'lightGray'
+		| 'blueToPink'
+		| 'softPurple'
+}
+
+const PREDEFINED_GRADIENTS: GradientPreset[] = [
+	{ from: '#ff9a9e', to: '#fad0c4', nameKey: 'softPink' },
+	{ from: '#a1c4fd', to: '#c2e9fb', nameKey: 'skyBlue' },
+	{ from: '#d4fc79', to: '#96e6a1', nameKey: 'springGreen' },
+	{ from: '#ffecd2', to: '#fcb69f', nameKey: 'autumnOrange' },
+	{ from: '#84fab0', to: '#8fd3f4', nameKey: 'turquoise' },
+	{ from: '#cfd9df', to: '#e2ebf0', nameKey: 'lightGray' },
+	{ from: '#a6c0fe', to: '#f68084', nameKey: 'blueToPink' },
+	{ from: '#fbc2eb', to: '#a6c1ee', nameKey: 'softPurple' },
 ]
 
 export function GradientWallpaper({
 	onSelectGradient,
 	selectedGradient,
 }: GradientWallpaperProps) {
+	const { t } = useTranslation()
 	const [direction, setDirection] = useState<GradientColors['direction']>('to-r')
+
+	const predefinedGradients = useMemo(
+		() =>
+			PREDEFINED_GRADIENTS.map((g) => ({
+				...g,
+				name: t(`settings.wallpapers.gradients.${g.nameKey}`),
+			})),
+		[t]
+	)
 
 	useEffect(() => {
 		if (
@@ -84,7 +109,7 @@ export function GradientWallpaper({
 
 	return (
 		<div className="space-y-4">
-			<SectionPanel title="گرادیان‌های پیش‌فرض">
+			<SectionPanel title={t('settings.wallpapers.gradientPresetsTitle')}>
 				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
 					{predefinedGradients.map((gradient, index) => (
 						<div

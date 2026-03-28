@@ -68,7 +68,7 @@ export const TabManager = ({
 	const headClass =
 		tabPosition === 'top'
 			? 'flex-col gap-1 h-[80vh]'
-			: 'flex-col md:flex-row gap-4 h-[80vh]'
+			: 'flex-col md:flex-row gap-4 h-[50vh]'
 	const contentClass =
 		tabPosition === 'top'
 			? 'shrink-0 md:overflow-y-auto w-full'
@@ -85,7 +85,7 @@ export const TabManager = ({
 									{group.parentName && (
 										<div className="relative mx-4 my-2">
 											<div className="h-px bg-base-300" />
-											<span className="absolute right-0 px-2 text-xs font-medium -top-2 bg-base-100 text-muted">
+											<span className={`absolute ${direction === 'rtl' ? 'right-0 pl-2' : 'left-0 pr-2'}  text-xs font-medium -top-2 bg-base-100 text-muted`}>
 												{group.parentName}
 											</span>
 										</div>

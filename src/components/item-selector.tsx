@@ -34,7 +34,7 @@ export function ItemSelector({
 			}`}
 			style={style}
 		>
-			<div className="flex items-center justify-center gap-0.5 mb-1">
+			<div className={`flex items-center justify-center gap-0.5 ${description ? 'mb-1' : 'mb-0'}`}>
 				<div
 					className={`w-4 h-4 rounded-full text-white border ${getRadioBorderStyle(isActive)}`}
 				>

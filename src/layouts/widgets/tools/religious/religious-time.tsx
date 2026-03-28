@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { FiClock, FiMoon, FiSun, FiSunrise, FiSunset } from 'react-icons/fi'
 import { useReligiousTime } from '@/services/hooks/date/getReligiousTime.hook'
+import { useGetUserProfile } from '@/services/hooks/user/userService.hook'
 import { Button } from '@/components/button/button'
 import { callEvent } from '@/common/utils/call-event'
 import Analytics from '@/analytics'
@@ -28,7 +29,8 @@ const DAILY_ZIKRS = [
 ]
 
 export function ReligiousTime({ currentDate }: { currentDate: any }) {
-		const day = currentDate.jDate()
+	const { data: user } = useGetUserProfile()
+	const day = currentDate.jDate()
 	const month = currentDate.jMonth() + 1
 	const weekDay = currentDate.format('dddd')
 
@@ -47,10 +49,10 @@ export function ReligiousTime({ currentDate }: { currentDate: any }) {
 	)
 
 	useEffect(() => {
-		if (true && user?.city?.id) {
+		if (user?.city?.id) {
 			refetch()
 		}
-	}, [user?.city?.id, true, refetch])
+	}, [user?.city?.id, refetch])
 
 	const dailyZikr = DAILY_ZIKRS.find((item) => item.day === weekDay)
 
