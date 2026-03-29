@@ -136,7 +136,7 @@ export function SelectCity({ size, onSave }: Prop) {
 							ref={searchInputRef}
 							onChange={(value) => setSearchTerm(value)}
 						/>
-						<CiLocationOn className="absolute w-5 h-5 transform -translate-y-1/2 top-1/2 start-3 text-base-content/40" />
+						<CiLocationOn className={`absolute w-5 h-5 transform -translate-y-1/2 top-1/2 end-3 text-base-content/40`} />
 					</div>
 
 					<div className="overflow-y-auto min-h-52 max-h-52 custom-scrollbar">
@@ -158,10 +158,14 @@ export function SelectCity({ size, onSave }: Prop) {
 										}
 									}}
 									onClick={() => handleSelectCity(city)}
-									className="flex items-center w-full p-3 text-end transition-all duration-200 border-b cursor-pointer border-base-200/30 last:border-b-0 group rounded-2xl hover:bg-primary/20 hover:text-primary"
+									className="flex flex-row-reverse items-center w-full p-3 text-end transition-all duration-200 border-b cursor-pointer border-base-200/30 last:border-b-0 group rounded-2xl hover:bg-primary/20 hover:text-primary"
 								>
 									<CiLocationOn className="flex-shrink-0 w-5 h-5 me-3 transition-transform text-primary group-hover:scale-110" />
-									<span className="flex-1 font-medium">{city.city}</span>
+									<span
+										className={`flex-1 font-medium ${modalDir === 'rtl' ? 'text-right' : 'text-left'}`}
+									>
+										{city.city}
+									</span>
 								</div>
 							))
 						) : searchTerm ? (
