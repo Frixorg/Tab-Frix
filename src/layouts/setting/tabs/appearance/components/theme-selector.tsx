@@ -123,14 +123,14 @@ export function ThemeSelector({ fetched_themes }: Props) {
 							description={renderThemePreview(item)}
 						/>
 					))}
-					<button
+					{/* <button
 						type="button"
 						className="flex items-center justify-center w-full h-20 text-xs border border-content border-muted gap-0.5 text-muted hover:!text-primary cursor-pointer hover:!border-primary transition-all duration-200 rounded-xl"
 						onClick={() => handleMoreClick()}
 					>
 						<FiShoppingBag size={18} />
 						<span>{t('settings.appearance.theme.market')}</span>
-					</button>
+					</button> */}
 				</div>
 			</div>
 		</SectionPanel>

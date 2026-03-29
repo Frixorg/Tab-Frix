@@ -28,7 +28,7 @@ interface AppearanceContextContextType extends AppearanceData {
 }
 
 const DEFAULT_SETTINGS: AppearanceData = {
-	contentAlignment: 'top',
+	contentAlignment: 'center',
 	fontFamily: 'Vazir',
 	ui: 'ADVANCED',
 }
