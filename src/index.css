@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @plugin "daisyui";
 @import "./styles/theme-colors.css";
+@import "./styles/tabfrix-glitch.css";
 
 html {
   font-size: 16px !important;

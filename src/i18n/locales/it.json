@@ -9,7 +9,7 @@
 		"groups": {
 			"account": "Account",
 			"preferences": "Impostazioni",
-			"widgetify": "Widgetify"
+			"tabfrix": "TabFrix"
 		},
 		"tabs": {
 			"platforms": "Piattaforme",
@@ -57,7 +57,7 @@
 			},
 			"bookmarks": {
 				"title": "Accesso ai segnalibri del browser",
-				"description": "Se attivata, l'estensione accede ai segnalibri solo per mostrarli in Widgetify. Nulla viene salvato o trasmesso; i segnalibri compaiono solo nell'estensione."
+				"description": "Se attivata, l'estensione accede ai segnalibri solo per mostrarli in TabFrix. Nulla viene salvato o trasmesso; i segnalibri compaiono solo nell'estensione."
 			},
 			"tabs": {
 				"title": "Accesso alle schede",
@@ -66,7 +66,7 @@
 		},
 		"shortcuts": {
 			"title": "Scorciatoie da tastiera",
-			"intro": "Scorciatoie di Widgetify per un uso più rapido e comodo.",
+			"intro": "Scorciatoie di TabFrix per un uso più rapido e comodo.",
 			"categories": {
 				"bookmarks": "Segnalibri",
 				"appearance": "Aspetto"
@@ -149,7 +149,7 @@
 			},
 			"theme": {
 				"title": "Tema",
-				"intro": "Scegli il tema visivo di Widgetify.",
+				"intro": "Scegli il tema visivo di TabFrix.",
 				"market": "Negozio",
 				"themes": {
 					"glass": {
@@ -207,6 +207,18 @@
 				"top": "In alto",
 				"topDesc": "Il contenuto è posizionato verso l’alto della pagina."
 			}
+		},
+		"about": {
+			"productName": "TabFrix",
+			"versionLabel": "Versione \"{{version}}\"",
+			"description": "<brand /> è un'estensione open source per il browser che trasforma la nuova scheda in uno spazio produttivo e personalizzato, con strumenti utili e un aspetto curato.",
+			"linksTitle": "Collegamenti",
+			"githubTitle": "GitHub",
+			"githubSubtitle": "Vedi il codice sorgente",
+			"websiteTitle": "Sito web",
+			"websiteSubtitle": "Sito dello sviluppatore",
+			"madeWith": "Realizzato con",
+			"copyright": "© <brand /> — Tutti i diritti riservati"
 		}
 	}
 }

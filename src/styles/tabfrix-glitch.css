@@ -1,0 +1,148 @@
+:root {
+	--bf-gradient-start: #1d4ed8;
+	--bf-gradient-mid: #4f46e5;
+	--bf-gradient-end: #7c3aed;
+}
+
+.text-gradient {
+	background: linear-gradient(
+		135deg,
+		var(--bf-gradient-start),
+		var(--bf-gradient-mid),
+		var(--bf-gradient-end)
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.glitch-frix {
+	display: inline-block;
+	position: relative;
+	background: linear-gradient(
+		135deg,
+		var(--bf-gradient-start),
+		var(--bf-gradient-mid),
+		var(--bf-gradient-end)
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.glitch-frix.is-glitching {
+	animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.glitch-frix::before,
+.glitch-frix::after {
+	content: attr(data-text);
+	position: absolute;
+	top: 0;
+	inset-inline-start: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(
+		135deg,
+		var(--bf-gradient-start),
+		var(--bf-gradient-mid),
+		var(--bf-gradient-end)
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	opacity: 0;
+	z-index: -1;
+	pointer-events: none;
+}
+
+.glitch-frix.is-glitching::before {
+	animation: glitch-anim-1 0.3s linear both;
+	clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+	filter: hue-rotate(90deg);
+}
+
+.glitch-frix.is-glitching::after {
+	animation: glitch-anim-2 0.3s linear both;
+	clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+	filter: hue-rotate(-90deg);
+}
+
+@keyframes glitch-skew {
+	0% {
+		transform: skew(0deg) translate(0);
+	}
+
+	20% {
+		transform: skew(10deg) translate(-1px);
+	}
+
+	40% {
+		transform: skew(-10deg) translate(1px);
+	}
+
+	60% {
+		transform: skew(5deg) translate(-1px);
+	}
+
+	80%,
+	100% {
+		transform: skew(0deg) translate(0);
+	}
+}
+
+@keyframes glitch-anim-1 {
+	0% {
+		transform: translate(0, 0);
+		opacity: 0;
+	}
+
+	20% {
+		transform: translate(-3px, 1px);
+		opacity: 0.8;
+	}
+
+	40% {
+		transform: translate(2px, -1px);
+		opacity: 0.8;
+	}
+
+	60% {
+		transform: translate(-1px, 1px);
+		opacity: 0.8;
+	}
+
+	80%,
+	100% {
+		transform: translate(0, 0);
+		opacity: 0;
+	}
+}
+
+@keyframes glitch-anim-2 {
+	0% {
+		transform: translate(0, 0);
+		opacity: 0;
+	}
+
+	20% {
+		transform: translate(3px, -1px);
+		opacity: 0.8;
+	}
+
+	40% {
+		transform: translate(-2px, 1px);
+		opacity: 0.8;
+	}
+
+	60% {
+		transform: translate(1px, -1px);
+		opacity: 0.8;
+	}
+
+	80%,
+	100% {
+		transform: translate(0, 0);
+		opacity: 0;
+	}
+}

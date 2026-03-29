@@ -13,6 +13,7 @@ import {
 import Analytics from '@/analytics'
 import { callEvent } from '@/common/utils/call-event'
 import Modal from '@/components/modal'
+import { TabFrixBrand } from '@/components/tabfrix-brand'
 import { type TabItem, TabManager } from '@/components/tab-manager'
 import { UpdateReleaseNotesModal } from '@/components/UpdateReleaseNotesModal'
 import { AboutUsTab } from './tabs/about-us/about-us'
@@ -85,7 +86,7 @@ export const SettingModal = ({ isOpen, onClose, selectedTab }: SettingModalProps
 				],
 			},
 			{
-				parentName: t('settings.groups.widgetify'),
+				parentName: <TabFrixBrand variant="sidebar" />,
 				children: [
 					{
 						label: t('settings.tabs.about'),

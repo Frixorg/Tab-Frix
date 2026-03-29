@@ -9,7 +9,7 @@
 		"groups": {
 			"account": "Account",
 			"preferences": "Settings",
-			"widgetify": "Widgetify"
+			"tabfrix": "TabFrix"
 		},
 		"tabs": {
 			"platforms": "Platforms",
@@ -57,7 +57,7 @@
 			},
 			"bookmarks": {
 				"title": "Access to browser bookmarks",
-				"description": "When enabled, the extension only accesses your browser bookmarks to display them inside Widgetify. Nothing is stored or transmitted; bookmarks are shown only in the extension."
+				"description": "When enabled, the extension only accesses your browser bookmarks to display them inside TabFrix. Nothing is stored or transmitted; bookmarks are shown only in the extension."
 			},
 			"tabs": {
 				"title": "Access to tabs",
@@ -66,7 +66,7 @@
 		},
 		"shortcuts": {
 			"title": "Keyboard shortcuts",
-			"intro": "Widgetify shortcuts for faster, more comfortable use.",
+			"intro": "TabFrix shortcuts for faster, more comfortable use.",
 			"categories": {
 				"bookmarks": "Bookmarks",
 				"appearance": "Appearance"
@@ -149,7 +149,7 @@
 			},
 			"theme": {
 				"title": "Theme",
-				"intro": "Choose Widgetify’s appearance theme.",
+				"intro": "Choose TabFrix’s appearance theme.",
 				"market": "Store",
 				"themes": {
 					"glass": {
@@ -207,6 +207,18 @@
 				"top": "Top",
 				"topDesc": "Content is placed toward the top of the page."
 			}
+		},
+		"about": {
+			"productName": "TabFrix",
+			"versionLabel": "Version \"{{version}}\"",
+			"description": "<brand /> is an open-source browser extension that turns your new tab into a productive, personalized space with useful tools and a polished look.",
+			"linksTitle": "Links",
+			"githubTitle": "GitHub",
+			"githubSubtitle": "View the source code",
+			"websiteTitle": "Website",
+			"websiteSubtitle": "Developer site",
+			"madeWith": "Made with",
+			"copyright": "© <brand /> — All rights reserved"
 		}
 	}
 }

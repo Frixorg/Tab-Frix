@@ -14,7 +14,7 @@ import { WigiArzSetting } from '../widgets/wigiArz/wigiArz-setting'
 import { WigiPadSetting } from '../widgets/wigiPad/wigiPad-setting'
 import { WidgetTabKeys } from './constant/tab-keys'
 import { ManageWidgets } from './manage-widgets/manage-widgets'
-import { useTranslation } from 'react-i18next'
+import { TabFrixBrand } from '@/components/tabfrix-brand'
 
 interface WidgetSettingsModalProps {
 	isOpen: boolean
@@ -27,12 +27,10 @@ export function WidgetSettingsModal({
 	onClose,
 	selectedTab,
 }: WidgetSettingsModalProps) {
-	const { t } = useTranslation()
-
 	const tabs: TabItem[] = useMemo(
 		() => [
 			{
-				parentName: t('settings.groups.widgetify'),
+				parentName: <TabFrixBrand variant="sidebar" />,
 				children: [
 					{
 						label: 'Widget Management',
@@ -73,7 +71,7 @@ export function WidgetSettingsModal({
 				],
 			},
 		],
-		[t]
+		[]
 	)
 
 	function onClickSettings() {
