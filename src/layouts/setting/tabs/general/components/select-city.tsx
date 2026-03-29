@@ -1,7 +1,8 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CiLocationOn } from 'react-icons/ci'
 import Analytics from '@/analytics'
+import { getFromStorage } from '@/common/storage'
 import { IconLoading } from '@/components/loading/icon-loading'
 import Modal from '@/components/modal'
 import { SectionPanel } from '@/components/section-panel'
@@ -26,10 +27,16 @@ export function SelectCity({ size, onSave }: Prop) {
 
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [selectedCity, setSelectedCity] = useState<{ id: string; name: string } | null>(null)
 	const searchInputRef = useRef<HTMLInputElement>(null)
 	const { data: cities, isLoading, error } = useGetCitiesList(true)
 	const { mutateAsync: setCityToServer, isPending: isSettingCity } = useSetCity()
-	console.log('aaaaaaaaaaaaaaaaaaaaaaaa', cities)
+
+	useEffect(() => {
+		getFromStorage('selected_city').then((stored) => {
+			if (stored) setSelectedCity(stored)
+		})
+	}, [])
 	const normalizedCities = useMemo(
 		() =>
 			(cities || []).map((item) => ({
@@ -75,6 +82,7 @@ export function SelectCity({ size, onSave }: Prop) {
 			Analytics.event('city_selected')
 
 			await setCityToServer({ cityId: city.cityId, city: city.city })
+			setSelectedCity({ id: city.cityId, name: city.city })
 			onSave?.()
 		} catch (error) {
 			showToast(translateError(error) as any, 'error')
@@ -100,8 +108,10 @@ export function SelectCity({ size, onSave }: Prop) {
 				>
 					{isLoading ? (
 						<IconLoading className="mx-auto text-center" />
+					) : selectedCity ? (
+						<span className="font-medium text-content">{selectedCity.name}</span>
 					) : (
-						t('settings.general.city.choosePlaceholder')
+						<span className="text-base-content/50">{t('settings.general.city.choosePlaceholder')}</span>
 					)}
 					{isSettingCity ? (
 						<IconLoading />

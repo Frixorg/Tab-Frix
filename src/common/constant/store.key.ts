@@ -98,4 +98,5 @@ export interface StorageKV {
 	[key: `removed_notification_${string}`]: string
 
 	widget_tab: string
+	selected_city: { id: string; name: string } | null
 }

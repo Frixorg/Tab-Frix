@@ -152,38 +152,41 @@ export function useSendVerificationEmail() {
 	})
 }
 
-interface SetCityLocalInput {
+export interface SelectedCityInput {
 	cityId: string
 	city: string
 }
 
-async function setCityToLocalProfile({
+async function saveSelectedCity({
 	cityId,
 	city,
-}: SetCityLocalInput): Promise<UserProfile | null> {
-	const cachedProfile = await getFromStorage('profile')
-	if (!cachedProfile) return null
+}: SelectedCityInput): Promise<{ city: SelectedCityInput; profile: UserProfile | null }> {
+	// Always persist to dedicated key so it works with and without auth.
+	await setToStorage('selected_city', { id: cityId, name: city })
 
-	const updatedProfile: UserProfile = {
-		...cachedProfile,
-		city: {
-			id: cityId,
-			name: city,
-		},
-		inCache: true,
+	// Also update cached profile city if the user is logged in.
+	const cachedProfile = await getFromStorage('profile')
+	if (cachedProfile) {
+		const updatedProfile: UserProfile = {
+			...cachedProfile,
+			city: { id: cityId, name: city },
+			inCache: true,
+		}
+		await setToStorage('profile', updatedProfile)
+		return { city: { cityId, city }, profile: updatedProfile }
 	}
-	await setToStorage('profile', updatedProfile)
-	return updatedProfile
+
+	return { city: { cityId, city }, profile: null }
 }
 
 export function useSetCity() {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: (input: SetCityLocalInput) => setCityToLocalProfile(input),
-		onSuccess: (updatedProfile) => {
-			if (updatedProfile) {
-				queryClient.setQueryData(['userProfile'], updatedProfile)
+		mutationFn: (input: SelectedCityInput) => saveSelectedCity(input),
+		onSuccess: ({ profile }) => {
+			if (profile) {
+				queryClient.setQueryData(['userProfile'], profile)
 			}
 		},
 	})
