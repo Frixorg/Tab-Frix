@@ -6,6 +6,57 @@
 		"title": "Settings",
 		"Widgets": "Widgets",
 		"recentChanges": "What's new",
+		"widgets": {
+			"modalTitle": "Widget settings",
+			"tabs": {
+				"widgetManagement": "Widget Management",
+				"timeCalendar": "Time & Calendar",
+				"currency": "Currency",
+				"news": "News",
+				"weather": "Weather",
+				"pet": "Pet"
+			},
+			"timeCalendar": {
+				"dateSectionTitle": "Date settings",
+				"clockSectionTitle": "Clock settings",
+				"clockType": {
+					"title": "Choose clock type:",
+					"digital": {
+						"label": "Digital clock",
+						"description": "Show time in numeric format"
+					},
+					"analog": {
+						"label": "Analog clock",
+						"description": "Show time with hands"
+					}
+				},
+				"toggles": {
+					"showSeconds": {
+						"title": "Show seconds",
+						"description": "Display seconds in digital clock"
+					},
+					"showTimeZone": {
+						"title": "Show time zone",
+						"description": "Display time zone name under the clock"
+					},
+					"useSelectedFont": {
+						"title": "Use selected font",
+						"description": "Use the selected extension font for clock display"
+					}
+				},
+				"calendarType": {
+					"title": "Choose calendar type:",
+					"gregorian": {
+						"label": "European (Gregorian)",
+						"description": "Display date in Gregorian format"
+					},
+					"jalali": {
+						"label": "Jalali (Solar Hijri)",
+						"description": "Display date in Jalali format"
+					}
+				}
+			}
+		},
 		"groups": {
 			"account": "Account",
 			"preferences": "Settings",

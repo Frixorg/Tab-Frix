@@ -6,6 +6,57 @@
 		"title": "Impostazioni",
 		"Widgets": "Widgets",
 		"recentChanges": "Novità",
+		"widgets": {
+			"modalTitle": "Impostazioni widget",
+			"tabs": {
+				"widgetManagement": "Gestione widget",
+				"timeCalendar": "Ora e calendario",
+				"currency": "Valuta",
+				"news": "Notizie",
+				"weather": "Meteo",
+				"pet": "Pet"
+			},
+			"timeCalendar": {
+				"dateSectionTitle": "Impostazioni data",
+				"clockSectionTitle": "Impostazioni orologio",
+				"clockType": {
+					"title": "Scegli il tipo di orologio:",
+					"digital": {
+						"label": "Orologio digitale",
+						"description": "Mostra l'ora in formato numerico"
+					},
+					"analog": {
+						"label": "Orologio analogico",
+						"description": "Mostra l'ora con le lancette"
+					}
+				},
+				"toggles": {
+					"showSeconds": {
+						"title": "Mostra secondi",
+						"description": "Mostra i secondi nell'orologio digitale"
+					},
+					"showTimeZone": {
+						"title": "Mostra fuso orario",
+						"description": "Mostra il nome del fuso orario sotto l'orologio"
+					},
+					"useSelectedFont": {
+						"title": "Usa font selezionato",
+						"description": "Usa il font selezionato nelle impostazioni per l'orologio"
+					}
+				},
+				"calendarType": {
+					"title": "Scegli il tipo di calendario:",
+					"gregorian": {
+						"label": "Europeo (Gregoriano)",
+						"description": "Mostra la data in formato gregoriano"
+					},
+					"jalali": {
+						"label": "Jalali (Solare Hijri)",
+						"description": "Mostra la data in formato Jalali"
+					}
+				}
+			}
+		},
 		"groups": {
 			"account": "Account",
 			"preferences": "Impostazioni",

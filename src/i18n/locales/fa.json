@@ -6,6 +6,57 @@
 		"title": "تنظیمات",
 		"Widgets": "ویجت‌ها",
 		"recentChanges": "تغییرات اخیر",
+		"widgets": {
+			"modalTitle": "تنظیمات ویجت‌ها",
+			"tabs": {
+				"widgetManagement": "مدیریت ویجت‌ها",
+				"timeCalendar": "زمان و تقویم",
+				"currency": "ارز",
+				"news": "خبر",
+				"weather": "آب‌وهوا",
+				"pet": "پت"
+			},
+			"timeCalendar": {
+				"dateSectionTitle": "تنظیمات تاریخ",
+				"clockSectionTitle": "تنظیمات ساعت",
+				"clockType": {
+					"title": "نوع نمایش ساعت را انتخاب کنید:",
+					"digital": {
+						"label": "ساعت دیجیتال",
+						"description": "نمایش ساعت به صورت عددی"
+					},
+					"analog": {
+						"label": "ساعت آنالوگ",
+						"description": "نمایش ساعت به صورت عقربه‌ای"
+					}
+				},
+				"toggles": {
+					"showSeconds": {
+						"title": "نمایش ثانیه",
+						"description": "نمایش ثانیه در ساعت دیجیتال"
+					},
+					"showTimeZone": {
+						"title": "نمایش منطقه زمانی",
+						"description": "نمایش نام منطقه زمانی زیر ساعت"
+					},
+					"useSelectedFont": {
+						"title": "استفاده از فونت انتخابی",
+						"description": "استفاده از فونت انتخابی در تنظیمات برای نمایش ساعت"
+					}
+				},
+				"calendarType": {
+					"title": "نوع نمایش تاریخ را انتخاب کنید:",
+					"gregorian": {
+						"label": "تقویم میلادی (اروپایی)",
+						"description": "نمایش تاریخ به صورت میلادی"
+					},
+					"jalali": {
+						"label": "هجری شمسی",
+						"description": "نمایش تاریخ به صورت هجری شمسی"
+					}
+				}
+			}
+		},
 		"groups": {
 			"account": "حساب کاربری",
 			"preferences": "تنظیمات",

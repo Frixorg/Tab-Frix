@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import Analytics from '@/analytics'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
@@ -6,28 +8,31 @@ import { CheckBoxWithDescription } from '@/components/checkbox-description.compo
 import { ItemSelector } from '@/components/item-selector'
 import { type ClockSettings, ClockType } from './clock-setting.interface'
 
-const CLOCK_OPTIONS = [
-	{
-		key: 'digital',
-		label: 'ساعت دیجیتال',
-		description: 'نمایش ساعت به صورت عددی',
-		value: ClockType.Digital as const,
-	},
-	{
-		key: 'analog',
-		label: 'ساعت آنالوگ',
-		description: 'نمایش ساعت به صورت عقربه‌ای',
-		value: ClockType.Analog as const,
-	},
-]
-
 export function ClockSetting() {
+	const { t } = useTranslation()
 	const [clockSettings, setClockSettings] = useState<ClockSettings>({
 		clockType: ClockType.Digital,
 		showSeconds: true,
 		showTimeZone: true,
 		useSelectedFont: true,
 	})
+	const clockOptions = useMemo(
+		() => [
+			{
+				key: 'digital',
+				label: t('settings.widgets.timeCalendar.clockType.digital.label'),
+				description: t('settings.widgets.timeCalendar.clockType.digital.description'),
+				value: ClockType.Digital as const,
+			},
+			{
+				key: 'analog',
+				label: t('settings.widgets.timeCalendar.clockType.analog.label'),
+				description: t('settings.widgets.timeCalendar.clockType.analog.description'),
+				value: ClockType.Analog as const,
+			},
+		],
+		[t]
+	)
 
 	useEffect(() => {
 		async function loadClock() {
@@ -82,9 +87,11 @@ export function ClockSetting() {
 	return (
 		<div className="space-y-3">
 			<div>
-				<p className="mb-3 text-sm text-muted">نوع نمایش ساعت را انتخاب کنید:</p>
+				<p className="mb-3 text-sm text-muted">
+					{t('settings.widgets.timeCalendar.clockType.title')}
+				</p>
 				<div className="flex gap-2">
-					{CLOCK_OPTIONS.map((option) => (
+					{clockOptions.map((option) => (
 						<ItemSelector
 							key={option.key}
 							isActive={clockSettings.clockType === option.value}
@@ -101,22 +108,28 @@ export function ClockSetting() {
 				<CheckBoxWithDescription
 					isEnabled={clockSettings.showSeconds}
 					onToggle={onToggleSeconds}
-					title="نمایش ثانیه"
-					description="نمایش ثانیه در ساعت دیجیتال"
+					title={t('settings.widgets.timeCalendar.toggles.showSeconds.title')}
+					description={t(
+						'settings.widgets.timeCalendar.toggles.showSeconds.description'
+					)}
 				/>
 
 				<CheckBoxWithDescription
 					isEnabled={clockSettings.showTimeZone}
 					onToggle={onToggleTimeZone}
-					title="نمایش منطقه زمانی"
-					description="نمایش نام منطقه زمانی زیر ساعت"
+					title={t('settings.widgets.timeCalendar.toggles.showTimeZone.title')}
+					description={t(
+						'settings.widgets.timeCalendar.toggles.showTimeZone.description'
+					)}
 				/>
 
 				<CheckBoxWithDescription
 					isEnabled={clockSettings.useSelectedFont ?? false}
 					onToggle={onToggleUseSelectedFont}
-					title="استفاده از فونت انتخابی"
-					description="استفاده از فونت انتخابی در تنظیمات برای نمایش ساعت"
+					title={t('settings.widgets.timeCalendar.toggles.useSelectedFont.title')}
+					description={t(
+						'settings.widgets.timeCalendar.toggles.useSelectedFont.description'
+					)}
 				/>
 			</div>
 		</div>

@@ -17,7 +17,7 @@ export function DateDisplay() {
 				setWigiPadDateSettings(wigiPadDateFromStore)
 			} else {
 				setWigiPadDateSettings({
-					dateType: WigiPadDateType.Jalali,
+					dateType: WigiPadDateType.Gregorian,
 				})
 			}
 		}

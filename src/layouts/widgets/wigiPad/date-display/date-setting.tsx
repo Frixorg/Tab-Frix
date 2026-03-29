@@ -1,27 +1,33 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Analytics from '@/analytics'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
 import { ItemSelector } from '@/components/item-selector'
 import { WigiPadDateType } from './date-setting.interface'
 
-const DateOptions = [
-	{
-		key: 'jalali',
-		label: 'هجری شمسی',
-		description: 'نمایش تاریخ به صورت هجری شمسی',
-		value: WigiPadDateType.Jalali as const,
-	},
-	{
-		key: 'gregorian',
-		label: 'تقویم میلادی',
-		description: 'نمایش تاریخ به صورت میلادی',
-		value: WigiPadDateType.Gregorian as const,
-	},
-]
-
 export function WigiPadDateSettingsModal() {
+	const { t } = useTranslation()
 	const [selectedType, setSelectedType] = useState<WigiPadDateType | null>()
+	const dateOptions = useMemo(
+		() => [
+			{
+				key: 'gregorian',
+				label: t('settings.widgets.timeCalendar.calendarType.gregorian.label'),
+				description: t(
+					'settings.widgets.timeCalendar.calendarType.gregorian.description'
+				),
+				value: WigiPadDateType.Gregorian as const,
+			},
+			{
+				key: 'jalali',
+				label: t('settings.widgets.timeCalendar.calendarType.jalali.label'),
+				description: t('settings.widgets.timeCalendar.calendarType.jalali.description'),
+				value: WigiPadDateType.Jalali as const,
+			},
+		],
+		[t]
+	)
 
 	useEffect(() => {
 		async function load() {
@@ -29,7 +35,8 @@ export function WigiPadDateSettingsModal() {
 			if (wigiPadDateFromStore) {
 				setSelectedType(wigiPadDateFromStore.dateType)
 			} else {
-				setSelectedType(WigiPadDateType.Jalali)
+				// Default to European calendar.
+				setSelectedType(WigiPadDateType.Gregorian)
 			}
 		}
 
@@ -46,10 +53,12 @@ export function WigiPadDateSettingsModal() {
 	return (
 		<div className="space-y-3">
 			<div>
-				<p className="mb-3 text-sm text-muted">نوع نمایش تاریخ را انتخاب کنید:</p>
+				<p className="mb-3 text-sm text-muted">
+					{t('settings.widgets.timeCalendar.calendarType.title')}
+				</p>
 
 				<div className="flex gap-2">
-					{DateOptions.map((option) => (
+					{dateOptions.map((option) => (
 						<ItemSelector
 							key={option.key}
 							isActive={selectedType === option.value}

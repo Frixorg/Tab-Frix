@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { MdPets } from 'react-icons/md'
 import { TbApps, TbCalendarUser, TbCurrencyDollar, TbNews } from 'react-icons/tb'
 import { TiWeatherCloudy } from 'react-icons/ti'
@@ -27,43 +28,45 @@ export function WidgetSettingsModal({
 	onClose,
 	selectedTab,
 }: WidgetSettingsModalProps) {
+	const { t, i18n } = useTranslation()
+	const isRtl = i18n.language.startsWith('fa')
 	const tabs: TabItem[] = useMemo(
 		() => [
 			{
 				parentName: <TabFrixBrand variant="sidebar" />,
 				children: [
 					{
-						label: 'Widget Management',
+						label: t('settings.widgets.tabs.widgetManagement'),
 						element: <ManageWidgets />,
 						value: WidgetTabKeys.widget_management,
 						icon: <TbApps size={20} />,
 					},
 					{
-						label: 'Time & Calendar',
+						label: t('settings.widgets.tabs.timeCalendar'),
 						element: <WigiPadSetting />,
 						value: WidgetTabKeys.wigiPad,
 						icon: <TbCalendarUser size={20} />,
 					},
 					{
-						label: 'Currency',
+						label: t('settings.widgets.tabs.currency'),
 						element: <WigiArzSetting />,
 						value: WidgetTabKeys.wigiArz,
 						icon: <TbCurrencyDollar size={20} />,
 					},
 					{
-						label: 'News',
+						label: t('settings.widgets.tabs.news'),
 						element: <RssFeedSetting />,
 						value: WidgetTabKeys.news_settings,
 						icon: <TbNews size={20} />,
 					},
 					{
-						label: 'Weather',
+						label: t('settings.widgets.tabs.weather'),
 						element: <WeatherSetting />,
 						value: WidgetTabKeys.weather_settings,
 						icon: <TiWeatherCloudy size={20} />,
 					},
 					{
-						label: 'Pet',
+						label: t('settings.widgets.tabs.pet'),
 						value: WidgetTabKeys.Pet,
 						icon: <MdPets size={20} />,
 						element: <PetSettings />,
@@ -71,7 +74,7 @@ export function WidgetSettingsModal({
 				],
 			},
 		],
-		[]
+		[t]
 	)
 
 	function onClickSettings() {
@@ -84,16 +87,16 @@ export function WidgetSettingsModal({
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title="تنظیمات ویجت ها"
+			title={t('settings.widgets.modalTitle')}
 			size="xl"
-			direction="rtl"
+			direction={isRtl ? 'rtl' : 'ltr'}
 			closeOnBackdropClick={true}
 		>
 			<TabManager
 				tabs={tabs}
 				tabOwner="widgets-settings"
 				defaultTab={selectedTab || WidgetTabKeys.widget_management}
-				direction="rtl"
+				direction={isRtl ? 'rtl' : 'ltr'}
 			>
 				<button
 					className={`relative  items-center flex gap-3 px-4 py-3 rounded-full transition-all duration-200 ease-in-out justify-start cursor-pointer whitespace-nowrap active:scale-[0.98] text-muted hover:bg-base-300 w-42`}
@@ -102,7 +105,7 @@ export function WidgetSettingsModal({
 					}}
 				>
 					<VscSettings size={20} className="text-muted" />
-					<span className="text-sm font-light">تنظیمات</span>
+					<span className="text-sm font-light">{t('settings.title')}</span>
 				</button>
 			</TabManager>
 		</Modal>
