@@ -70,6 +70,7 @@ export default defineConfig({
 			},
 		},
 		host_permissions: [
+			'http://ip-api.com/*',
 			'https://github.com/*',
 			'https://raw.githubusercontent.com/*',
 			'https://api.github.com/*',

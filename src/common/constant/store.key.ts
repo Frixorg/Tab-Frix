@@ -27,6 +27,10 @@ import type { Todo } from '@/services/hooks/todo/todo.interface'
 import type { AppLanguage } from '@/i18n/types'
 
 export interface StorageKV {
+	/** Set after first successful IP-based timezone/city default (see geo defaults flow) */
+	geo_defaults_applied: boolean
+	/** Versioned marker to re-run geo defaults when flow changes. */
+	geo_defaults_applied_v2: boolean
 	language: AppLanguage
 	currencies: string[]
 	currencyColorMode: CurrencyColorMode

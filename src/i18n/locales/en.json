@@ -49,6 +49,47 @@
 				"feedbackLink": "Let us know"
 			}
 		},
+		"platforms": {
+			"sectionTitle": "Manage platforms",
+			"intro": "Connect external platforms to TabFrix to enable related features. You can disconnect anytime.",
+			"toastVerifyAccount": "Please verify your account first.",
+			"toastPlatformUnavailable": "This platform is currently unavailable.",
+			"toastPlatformNotReady": "This platform isn’t ready yet.",
+			"toastDisconnected": "Disconnected from {{name}}.",
+			"toastConnectionError": "Couldn’t reach {{name}}. Please try again.",
+			"statusConnected": "Connected",
+			"statusDisconnected": "Not connected",
+			"actionDisconnect": "Disconnect",
+			"actionConnect": "Connect",
+			"modalTitle": "Manage connected platforms",
+			"headingConnect": "Connect to {{name}}",
+			"headingDisconnect": "Disconnect from {{name}}",
+			"disconnectConfirm": "Are you sure you want to disconnect from {{name}}?",
+			"disconnectWarning": "⚠️ Disconnecting will remove access to data and features for this platform.",
+			"featuresLabel": "Features",
+			"permissionsLabel": "Permissions required",
+			"cancel": "Cancel",
+			"processing": "Processing…",
+			"confirmDisconnect": "Disconnect",
+			"confirmConnect": "Confirm and connect",
+			"providers": {
+				"google": {
+					"name": "Google Calendar",
+					"description": "Connect your Google account to access your calendar and Google Meet meetings.",
+					"features": [
+						"Direct access to Google Calendar",
+						"Smart display and reminders for upcoming events and meetings"
+					],
+					"permissions": ["View calendar (Google Calendar)"]
+				},
+				"github": {
+					"name": "GitHub",
+					"description": "Connect to GitHub to view repositories, commits, and project activity.",
+					"features": [],
+					"permissions": []
+				}
+			}
+		},
 		"privacy": {
 			"title": "Privacy",
 			"analytics": {

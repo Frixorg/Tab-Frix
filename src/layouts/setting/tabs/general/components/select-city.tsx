@@ -29,24 +29,42 @@ export function SelectCity({ size, onSave }: Prop) {
 	const searchInputRef = useRef<HTMLInputElement>(null)
 	const { data: cities, isLoading, error } = useGetCitiesList(true)
 	const { mutateAsync: setCityToServer, isPending: isSettingCity } = useSetCity()
+	console.log('aaaaaaaaaaaaaaaaaaaaaaaa', cities)
+	const normalizedCities = useMemo(
+		() =>
+			(cities || []).map((item) => ({
+				...item,
+				searchKey: item.city.toLowerCase(),
+			})),
+		[cities]
+	)
 
 	const filteredCities = useMemo(() => {
-		if (!cities || !searchTerm) return cities || []
+		if (!normalizedCities.length) return []
 
-		const lowerSearchTerm = searchTerm.toLowerCase()
+		const q = searchTerm.trim().toLowerCase()
+		if (!q) return normalizedCities.slice(0, 10)
 
-		const prefixMatches = cities.filter((city) =>
-			city.city.toLowerCase().startsWith(lowerSearchTerm)
-		)
+		const prefix: SelectedCity[] = []
+		const contains: SelectedCity[] = []
 
-		const remainingCities = cities.filter(
-			(city) =>
-				!city.city.toLowerCase().startsWith(lowerSearchTerm) &&
-				city.city.toLowerCase().includes(lowerSearchTerm)
-		)
+		// Two lightweight passes with early stop keep search responsive for large datasets.
+		for (const city of normalizedCities) {
+			if (city.searchKey.startsWith(q)) {
+				prefix.push(city)
+				if (prefix.length >= 10) return prefix
+			}
+		}
 
-		return [...prefixMatches, ...remainingCities]
-	}, [cities, searchTerm])
+		for (const city of normalizedCities) {
+			if (!city.searchKey.startsWith(q) && city.searchKey.includes(q)) {
+				contains.push(city)
+				if (prefix.length + contains.length >= 10) break
+			}
+		}
+
+		return [...prefix, ...contains]
+	}, [normalizedCities, searchTerm])
 
 	const handleSelectCity = async (city: SelectedCity) => {
 		if (!city.cityId) return
@@ -56,7 +74,7 @@ export function SelectCity({ size, onSave }: Prop) {
 
 			Analytics.event('city_selected')
 
-			await setCityToServer(city.cityId)
+			await setCityToServer({ cityId: city.cityId, city: city.city })
 			onSave?.()
 		} catch (error) {
 			showToast(translateError(error) as any, 'error')

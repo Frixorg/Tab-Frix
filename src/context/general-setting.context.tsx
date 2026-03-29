@@ -2,11 +2,9 @@ import type React from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import Analytics from '@/analytics'
 import { getFromStorage, setToStorage } from '@/common/storage'
+import { resolveGeoDefaults, type GeoDefaultsResult } from '@/services/geo/resolve-geo-defaults'
 import { useUpdateExtensionSettings } from '@/services/hooks/extension/updateSetting.hook'
-import {
-	type FetchedTimezone,
-	getTimezones,
-} from '@/services/hooks/timezone/getTimezones.hook'
+import type { FetchedTimezone } from '@/services/hooks/timezone/getTimezones.hook'
 
 export interface GeneralData {
 	blurMode: boolean
@@ -35,6 +33,8 @@ const DEFAULT_SETTINGS: GeneralData = {
 	browserBookmarksEnabled: false,
 	browserTabsEnabled: false,
 }
+
+const GEO_DEFAULTS_APPLIED_KEY = 'geo_defaults_applied_v2'
 
 export const GeneralSettingContext = createContext<GeneralSettingContextType | null>(null)
 
@@ -73,10 +73,65 @@ export function GeneralSettingProvider({ children }: { children: React.ReactNode
 	}, [])
 
 	useEffect(() => {
-		async function getTimeZone() {
-			// Auth removed: no user timezone sync needed
+		if (!isInitialized) return
+
+		let cancelled = false
+
+		void (async () => {
+			const applied = await getFromStorage(GEO_DEFAULTS_APPLIED_KEY)
+			const storedSettings = await getFromStorage('generalSettings')
+			const storedTimezone = storedSettings?.selected_timezone
+			const hasValidStoredTimezone =
+				typeof storedTimezone === 'object' &&
+				typeof storedTimezone?.value === 'string' &&
+				storedTimezone.value.length > 0
+			const shouldApplyGeoDefaults =
+				!applied ||
+				!hasValidStoredTimezone ||
+				storedTimezone.value === DEFAULT_SETTINGS.selected_timezone.value
+			if (!shouldApplyGeoDefaults || cancelled) return
+
+			let result: GeoDefaultsResult | null = null
+			try {
+				result = await resolveGeoDefaults()
+			} catch {
+				return
+			}
+
+			if (cancelled || !result) return
+
+			const { timezone, cityId, cityName } = result
+
+			setSettings((prev) => {
+				const next: GeneralData = { ...prev, selected_timezone: timezone }
+				void setToStorage('generalSettings', next)
+				return next
+			})
+
+			try {
+				await mutateAsync({ timeZone: timezone.value })
+			} catch {
+				// offline / unauthenticated extension sync
+			}
+
+			if (cityId && cityName) {
+				const profile = await getFromStorage('profile')
+				if (profile) {
+					await setToStorage('profile', {
+						...profile,
+						city: { id: cityId, name: cityName },
+						inCache: true,
+					})
+				}
+			}
+
+			await setToStorage(GEO_DEFAULTS_APPLIED_KEY, true)
+		})()
+
+		return () => {
+			cancelled = true
 		}
-	}, [])
+	}, [isInitialized, mutateAsync])
 
 	async function browserHasPermission(
 		permissions: Browser.runtime.ManifestPermissions[]

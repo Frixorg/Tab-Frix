@@ -49,6 +49,47 @@
 				"feedbackLink": "Segnalacelo"
 			}
 		},
+		"platforms": {
+			"sectionTitle": "Gestisci piattaforme",
+			"intro": "Collega piattaforme esterne a TabFrix per attivare le funzioni correlate. Puoi disconnetterti in qualsiasi momento.",
+			"toastVerifyAccount": "Verifica prima il tuo account.",
+			"toastPlatformUnavailable": "Questa piattaforma non è al momento disponibile.",
+			"toastPlatformNotReady": "Questa piattaforma non è ancora pronta.",
+			"toastDisconnected": "Disconnesso da {{name}}.",
+			"toastConnectionError": "Impossibile contattare {{name}}. Riprova.",
+			"statusConnected": "Connesso",
+			"statusDisconnected": "Non connesso",
+			"actionDisconnect": "Disconnetti",
+			"actionConnect": "Connetti",
+			"modalTitle": "Gestisci piattaforme connesse",
+			"headingConnect": "Connetti a {{name}}",
+			"headingDisconnect": "Disconnetti da {{name}}",
+			"disconnectConfirm": "Vuoi davvero disconnetterti da {{name}}?",
+			"disconnectWarning": "⚠️ Disconnettendo perderai l’accesso ai dati e alle funzioni di questa piattaforma.",
+			"featuresLabel": "Funzioni",
+			"permissionsLabel": "Autorizzazioni richieste",
+			"cancel": "Annulla",
+			"processing": "Elaborazione…",
+			"confirmDisconnect": "Disconnetti",
+			"confirmConnect": "Conferma e connetti",
+			"providers": {
+				"google": {
+					"name": "Google Calendar",
+					"description": "Collega il tuo account Google per accedere al calendario e a Google Meet.",
+					"features": [
+						"Accesso diretto a Google Calendar",
+						"Visualizzazione e promemoria intelligenti per eventi e riunioni"
+					],
+					"permissions": ["Visualizza calendario (Google Calendar)"]
+				},
+				"github": {
+					"name": "GitHub",
+					"description": "Collega GitHub per vedere repository, commit e attività del progetto.",
+					"features": [],
+					"permissions": []
+				}
+			}
+		},
 		"privacy": {
 			"title": "Privacy",
 			"analytics": {

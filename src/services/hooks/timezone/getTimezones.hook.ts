@@ -6,39 +6,45 @@ export interface FetchedTimezone {
 	offset: string
 }
 
-export async function getTimezones(): Promise<FetchedTimezone[]> {
+/** Best-effort offset label for display (e.g. +01:00) */
+export function getOffsetLabelForIana(iana: string): string {
 	try {
-		// Use IANA timezone database via GitHub (always available, no auth needed)
-		const response = await fetch(
-			'https://raw.githubusercontent.com/moment-timezone/moment-timezone/develop/data/packed/latest.json'
-		)
-		if (response.ok) {
-			const data = await response.json()
-			if (data.zones && Array.isArray(data.zones)) {
-				// Parse IANA timezones
-				return data.zones.map((zone: string) => ({
-					label: zone.replace(/_/g, ' '),
-					value: zone,
-					offset: '±00:00', // Offset would require additional timezone data
-				}))
+		const d = new Date()
+		const parts = new Intl.DateTimeFormat('en-US', {
+			timeZone: iana,
+			timeZoneName: 'shortOffset',
+		} as Intl.DateTimeFormatOptions).formatToParts(d)
+		const raw = parts.find((p) => p.type === 'timeZoneName')?.value
+		if (raw) {
+			const match = raw.match(/([+-])(\d{1,2})(?::(\d{2}))?/)
+			if (match) {
+				const h = match[2].padStart(2, '0')
+				const m = (match[3] ?? '00').padStart(2, '0')
+				return `${match[1]}${h}:${m}`
 			}
 		}
-	} catch (error) {
-		console.warn('Failed to fetch timezones from IANA database, trying alternative source', error)
+	} catch {
+		// ignore
 	}
+	return '±00:00'
+}
 
-	// Fallback: use Intl API to get browser's available timezones
+function mapZonesWithOffsets(zones: string[]): FetchedTimezone[] {
+	return zones.map((tz) => ({
+		label: tz.replace(/_/g, ' '),
+		value: tz,
+		offset: getOffsetLabelForIana(tz),
+	}))
+}
+
+export async function getTimezones(): Promise<FetchedTimezone[]> {
 	try {
 		const timeZones = Intl.supportedValuesOf('timeZone')
-		if (timeZones && Array.isArray(timeZones)) {
-			return timeZones.map((tz) => ({
-				label: tz.replace(/_/g, ' '),
-				value: tz,
-				offset: '±00:00',
-			}))
+		if (timeZones?.length) {
+			return mapZonesWithOffsets(timeZones)
 		}
 	} catch (error) {
-		console.warn('Intl API not available', error)
+		console.warn('Intl.supportedValuesOf("timeZone") not available', error)
 	}
 
 	// Final fallback: minimal timezone list
@@ -50,6 +56,7 @@ export async function getTimezones(): Promise<FetchedTimezone[]> {
 		{ label: 'America Los Angeles', value: 'America/Los_Angeles', offset: '-08:00' },
 		{ label: 'Europe London', value: 'Europe/London', offset: '+00:00' },
 		{ label: 'Europe Paris', value: 'Europe/Paris', offset: '+01:00' },
+		{ label: 'Europe Rome', value: 'Europe/Rome', offset: '+01:00' },
 		{ label: 'Europe Moscow', value: 'Europe/Moscow', offset: '+03:00' },
 		{ label: 'Asia Dubai', value: 'Asia/Dubai', offset: '+04:00' },
 		{ label: 'Asia Tehran', value: 'Asia/Tehran', offset: '+03:30' },

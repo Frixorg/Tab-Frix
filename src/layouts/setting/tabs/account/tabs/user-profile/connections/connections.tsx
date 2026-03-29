@@ -1,51 +1,76 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import type { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 import Analytics from '@/analytics'
+import { showToast } from '@/common/toast'
 import { getMainClient } from '@/services/api'
 import { useGetUserProfile } from '@/services/hooks/user/userService.hook'
 import { ConnectionModal } from './components/connection-modal'
-import type { Platform } from './components/platform-config.js'
-import { PLATFORM_CONFIGS } from './components/platform-data'
-import { showToast } from '@/common/toast'
+import type { Platform } from './components/platform-config'
+import { PLATFORM_STATIC_CONFIGS } from './components/platform-data'
+
+function asStringArray(value: unknown): string[] {
+	if (!Array.isArray(value)) return []
+	return value.filter((x): x is string => typeof x === 'string')
+}
+
+function buildPlatforms(t: TFunction): Omit<Platform, 'connected' | 'isLoading'>[] {
+	return PLATFORM_STATIC_CONFIGS.map((config) => {
+		const prefix = `settings.platforms.providers.${config.localeKey}` as const
+		const featuresRaw = t(`${prefix}.features`, { returnObjects: true })
+		const permissionsRaw = t(`${prefix}.permissions`, { returnObjects: true })
+		return {
+			id: config.id,
+			name: t(`${prefix}.name`),
+			description: t(`${prefix}.description`),
+			bgColor: config.bgColor,
+			isActive: config.isActive,
+			icon: config.icon,
+			features: asStringArray(featuresRaw),
+			permissions: asStringArray(permissionsRaw),
+			isOptionalPermissions: config.isOptionalPermissions,
+		}
+	})
+}
 
 export function Connections() {
+	const { t, i18n } = useTranslation()
 	const { data: profile } = useGetUserProfile()
+
+	const basePlatforms = useMemo(
+		() => buildPlatforms(t),
+		[t, i18n.language]
+	)
 
 	const [platforms, setPlatforms] = useState<Platform[]>([])
 	const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 
 	useEffect(() => {
-		const initialPlatforms = PLATFORM_CONFIGS.map((config) => ({
-			...config,
-			connected: false,
-			isLoading: false,
-		}))
-		setPlatforms(initialPlatforms)
-	}, [])
-
-	useEffect(() => {
-		if (profile?.connections) {
-			setPlatforms((prevPlatforms) =>
-				prevPlatforms.map((platform) => ({
-					...platform,
-					connected: profile.connections.includes(platform.id),
-				}))
-			)
-		}
-	}, [profile?.connections])
+		setPlatforms((prev) =>
+			basePlatforms.map((p) => {
+				const prevP = prev.find((x) => x.id === p.id)
+				return {
+					...p,
+					connected: profile?.connections?.includes(p.id) ?? false,
+					isLoading: prevP?.isLoading ?? false,
+				}
+			})
+		)
+	}, [basePlatforms, profile?.connections])
 
 	const handleConnectionClick = (platformId: string) => {
 		if (!profile?.verified) {
-			return showToast('لطفا اول حساب کاربری خود را تأیید کنید.', 'error')
+			return showToast(t('settings.platforms.toastVerifyAccount'), 'error')
 		}
 
 		const platform = platforms.find((p) => p.id === platformId)
 		if (!platform) {
-			return showToast('این پلتفرم در حال حاضر غیرفعال است.', 'error')
+			return showToast(t('settings.platforms.toastPlatformUnavailable'), 'error')
 		}
 
 		if (!platform.isActive && !platform.connected) {
-			return showToast('این پلتفرم هنوز آماده نیست.', 'error')
+			return showToast(t('settings.platforms.toastPlatformNotReady'), 'error')
 		}
 
 		setSelectedPlatform(platform)
@@ -73,7 +98,10 @@ export function Connections() {
 					)
 				)
 
-				showToast(`اتصال به ${selectedPlatform.name} قطع شد.`, 'success')
+				showToast(
+					t('settings.platforms.toastDisconnected', { name: selectedPlatform.name }),
+					'success'
+				)
 			} else {
 				const api = await getMainClient()
 				const response = await api.post(`/${selectedPlatform.id}/connect`)
@@ -88,7 +116,7 @@ export function Connections() {
 			)
 
 			showToast(
-				`خطا در ارتباط با ${selectedPlatform.name}. لطفا دوباره تلاش کنید.`,
+				t('settings.platforms.toastConnectionError', { name: selectedPlatform.name }),
 				'error'
 			)
 		}
@@ -108,6 +136,16 @@ export function Connections() {
 				{platforms.map((platform) => (
 					<div
 						key={platform.id}
+						role="button"
+						tabIndex={0}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter' || e.key === ' ') {
+								e.preventDefault()
+								if ((platform.isActive || platform.connected) && platform.id) {
+									handleConnectionClick(platform.id)
+								}
+							}
+						}}
 						onClick={() =>
 							(platform.isActive || platform.connected) &&
 							handleConnectionClick(platform.id)
@@ -131,7 +169,9 @@ export function Connections() {
 									<p
 										className={`text-[10px]  font-medium truncate ${platform.connected ? 'text-success' : 'text-muted'}`}
 									>
-										{platform.connected ? 'متصل شده' : 'عدم اتصال'}
+										{platform.connected
+											? t('settings.platforms.statusConnected')
+											: t('settings.platforms.statusDisconnected')}
 									</p>
 								</div>
 							</div>
@@ -147,9 +187,9 @@ export function Connections() {
 								{platform.isLoading ? (
 									<div className="w-3 h-3 border-2 border-current rounded-full animate-spin border-t-transparent" />
 								) : platform.connected ? (
-									'قطع'
+									t('settings.platforms.actionDisconnect')
 								) : (
-									'اتصال'
+									t('settings.platforms.actionConnect')
 								)}
 							</div>
 						</div>

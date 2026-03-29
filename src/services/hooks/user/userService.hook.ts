@@ -152,18 +152,39 @@ export function useSendVerificationEmail() {
 	})
 }
 
-async function setCityToServer(cityId: string): Promise<void> {
-	const client = await getMainClient()
-	await client.put('/users/@me/city', { cityId })
+interface SetCityLocalInput {
+	cityId: string
+	city: string
+}
+
+async function setCityToLocalProfile({
+	cityId,
+	city,
+}: SetCityLocalInput): Promise<UserProfile | null> {
+	const cachedProfile = await getFromStorage('profile')
+	if (!cachedProfile) return null
+
+	const updatedProfile: UserProfile = {
+		...cachedProfile,
+		city: {
+			id: cityId,
+			name: city,
+		},
+		inCache: true,
+	}
+	await setToStorage('profile', updatedProfile)
+	return updatedProfile
 }
 
 export function useSetCity() {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: (cityId: string) => setCityToServer(cityId),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['userProfile'] })
+		mutationFn: (input: SetCityLocalInput) => setCityToLocalProfile(input),
+		onSuccess: (updatedProfile) => {
+			if (updatedProfile) {
+				queryClient.setQueryData(['userProfile'], updatedProfile)
+			}
 		},
 	})
 }

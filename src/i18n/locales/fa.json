@@ -49,6 +49,47 @@
 				"feedbackLink": "اطلاع دهید"
 			}
 		},
+		"platforms": {
+			"sectionTitle": "مدیریت پلتفرم‌ها",
+			"intro": "اینجا می‌توانید پلتفرم‌های مختلف را به TabFrix وصل کنید و امکانات مرتبط را فعال کنید. هر زمان خواستید، اتصال را قطع کنید.",
+			"toastVerifyAccount": "لطفاً ابتدا حساب کاربری خود را تأیید کنید.",
+			"toastPlatformUnavailable": "این پلتفرم در حال حاضر غیرفعال است.",
+			"toastPlatformNotReady": "این پلتفرم هنوز آماده نیست.",
+			"toastDisconnected": "اتصال به {{name}} قطع شد.",
+			"toastConnectionError": "خطا در ارتباط با {{name}}. لطفاً دوباره تلاش کنید.",
+			"statusConnected": "متصل شده",
+			"statusDisconnected": "عدم اتصال",
+			"actionDisconnect": "قطع",
+			"actionConnect": "اتصال",
+			"modalTitle": "مدیریت پلتفرم‌های متصل",
+			"headingConnect": "اتصال به {{name}}",
+			"headingDisconnect": "قطع اتصال از {{name}}",
+			"disconnectConfirm": "آیا مطمئن هستید که می‌خواهید اتصال به {{name}} را قطع کنید؟",
+			"disconnectWarning": "⚠️ با قطع اتصال، دسترسی به داده‌ها و ویژگی‌های مربوط به این پلتفرم از دست خواهد رفت.",
+			"featuresLabel": "امکانات:",
+			"permissionsLabel": "مجوزهای مورد نیاز:",
+			"cancel": "لغو",
+			"processing": "در حال پردازش",
+			"confirmDisconnect": "قطع اتصال",
+			"confirmConnect": "تایید و شروع اتصال",
+			"providers": {
+				"google": {
+					"name": "گوگل کلندر",
+					"description": "اتصال به خدمات گوگل برای دسترسی به تقویم و جلسات گوگل میت",
+					"features": [
+						"دسترسی مستقیم به تقویم گوگل",
+						"نمایش و یادآوری هوشمند رویدادها و جلسات آینده"
+					],
+					"permissions": ["مشاهده تقویم (سرویس گوگل کلندر)"]
+				},
+				"github": {
+					"name": "گیت‌هاب",
+					"description": "اتصال به گیت‌هاب برای مشاهده مخازن، کامیت‌ها و فعالیت‌های پروژه",
+					"features": [],
+					"permissions": []
+				}
+			}
+		},
 		"privacy": {
 			"title": "حریم خصوصی",
 			"analytics": {
