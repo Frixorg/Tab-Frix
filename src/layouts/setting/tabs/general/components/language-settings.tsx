@@ -6,12 +6,6 @@ import { applyDocumentLang } from '@/i18n/document'
 import type { AppLanguage } from '@/i18n/types'
 import { APP_LANGUAGES } from '@/i18n/types'
 
-const LANG_CODES: Record<AppLanguage, string> = {
-	en: 'EN',
-	fa: 'FA',
-	it: 'IT',
-}
-
 export function LanguageSettings() {
 	const { t, i18n } = useTranslation()
 

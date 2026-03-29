@@ -27,6 +27,28 @@
 			"fa": "Persiano (فارسی)",
 			"it": "Italiano"
 		},
+		"general": {
+			"timezone": {
+				"title": "Fuso orario",
+				"description": "Scegli il fuso orario",
+				"errorLoad": "Impossibile caricare i fusi orari",
+				"placeholder": "Seleziona un fuso orario…"
+			},
+			"city": {
+				"title": "Città",
+				"choosePlaceholder": "Scegli la città…",
+				"errorTitle": "Impossibile caricare i dati",
+				"errorHint": "Controlla la connessione e riprova",
+				"modalTitle": "Scegli la città",
+				"searchPlaceholder": "Cerca città…",
+				"loading": "Caricamento…",
+				"noResults": "Nessun risultato",
+				"noCitiesAvailable": "Nessuna città disponibile",
+				"searchPrompt": "Cerca la tua città",
+				"footerQuestion": "La tua città non c’è o hai riscontrato un problema?",
+				"feedbackLink": "Segnalacelo"
+			}
+		},
 		"privacy": {
 			"title": "Privacy",
 			"analytics": {

@@ -27,6 +27,28 @@
 			"fa": "فارسی",
 			"it": "Italiano"
 		},
+		"general": {
+			"timezone": {
+				"title": "منطقهٔ زمانی",
+				"description": "منطقهٔ زمانی مورد نظر خود را انتخاب کنید",
+				"errorLoad": "خطا در دریافت مناطق زمانی",
+				"placeholder": "انتخاب منطقهٔ زمانی…"
+			},
+			"city": {
+				"title": "انتخاب شهر",
+				"choosePlaceholder": "انتخاب شهر…",
+				"errorTitle": "خطا در دریافت اطلاعات",
+				"errorHint": "لطفاً اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید",
+				"modalTitle": "انتخاب شهر",
+				"searchPlaceholder": "جستجوی شهر…",
+				"loading": "در حال بارگذاری…",
+				"noResults": "نتیجه‌ای یافت نشد",
+				"noCitiesAvailable": "هیچ شهری موجود نیست",
+				"searchPrompt": "شهر مورد نظر خود را جستجو کنید",
+				"footerQuestion": "شهر شما در لیست نیست یا مشکلی می‌بینید؟",
+				"feedbackLink": "اطلاع دهید"
+			}
+		},
 		"privacy": {
 			"title": "حریم خصوصی",
 			"analytics": {

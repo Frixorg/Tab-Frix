@@ -27,6 +27,28 @@
 			"fa": "Persian (فارسی)",
 			"it": "Italian"
 		},
+		"general": {
+			"timezone": {
+				"title": "Time zone",
+				"description": "Choose your time zone",
+				"errorLoad": "Couldn’t load time zones",
+				"placeholder": "Select a time zone…"
+			},
+			"city": {
+				"title": "City",
+				"choosePlaceholder": "Choose city…",
+				"errorTitle": "Couldn’t load data",
+				"errorHint": "Check your internet connection and try again",
+				"modalTitle": "Choose city",
+				"searchPlaceholder": "Search cities…",
+				"loading": "Loading…",
+				"noResults": "No results found",
+				"noCitiesAvailable": "No cities available",
+				"searchPrompt": "Search for your city",
+				"footerQuestion": "Your city isn’t listed or you see a problem?",
+				"feedbackLink": "Let us know"
+			}
+		},
 		"privacy": {
 			"title": "Privacy",
 			"analytics": {
