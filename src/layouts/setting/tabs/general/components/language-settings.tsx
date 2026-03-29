@@ -35,7 +35,7 @@ export function LanguageSettings() {
 						isActive={current === 'en'}
 						onClick={() => void selectLang('en')}
 						label={
-							<div className="flex items-center ml-1">
+							<div className="flex items-center ms-1">
 								<span className="mb-[-2px]">{t('settings.language.en')}</span>
 							</div>
 						}
@@ -44,8 +44,8 @@ export function LanguageSettings() {
 						isActive={current === 'fa'}
 						onClick={() => void selectLang('fa')}
 						label={
-							<div className="flex items-center ml-1">
-								<span >{t('settings.language.fa')}</span>
+							<div className="flex items-center ms-1">
+								<span>{t('settings.language.fa')}</span>
 							</div>
 						}
 					/>
@@ -53,7 +53,7 @@ export function LanguageSettings() {
 						isActive={current === 'it'}
 						onClick={() => void selectLang('it')}
 						label={
-							<div className="flex items-center ml-1">
+							<div className="flex items-center ms-1">
 								<span className="mb-[-2px]">{t('settings.language.it')}</span>
 							</div>
 						}

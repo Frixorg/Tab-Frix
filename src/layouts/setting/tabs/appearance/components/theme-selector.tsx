@@ -1,5 +1,6 @@
 import type React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FiShoppingBag } from 'react-icons/fi'
 import { IoMdMoon, IoMdStar, IoMdSunny } from 'react-icons/io'
 import { MdOutlineBlurOn } from 'react-icons/md'
@@ -18,72 +19,74 @@ interface ThemeItem {
 	description?: string
 }
 
-const defaultThemes: ThemeItem[] = [
-	{
-		id: 'glass',
-		name: 'شیشه‌ای',
-		icon: <MdOutlineBlurOn size={14} />,
-		description: 'تم شفاف با افکت شیشه‌ای',
-	},
-	{
-		id: 'icy',
-		name: 'یخی',
-		icon: <MdOutlineBlurOn size={14} />,
-		description: 'تم سفید شفاف با حالت یخی',
-	},
-	{
-		id: 'light',
-		name: 'روشن',
-		icon: <IoMdSunny size={14} />,
-		description: 'تم کلاسیک روشن',
-	},
-	{
-		id: 'dark',
-		name: 'تیره',
-		icon: <IoMdMoon size={14} />,
-		description: 'تم کلاسیک تیره',
-	},
-	{
-		id: 'zarna',
-		name: 'زرنا',
-		icon: <IoMdStar size={14} />,
-		description: 'تم زرنا با رنگ‌های گرم',
-	},
-]
-
 interface Props {
 	fetched_themes: UserInventoryItem[]
 }
 
 export function ThemeSelector({ fetched_themes }: Props) {
+	const { t } = useTranslation()
 	const { setTheme, theme } = useTheme()
-	const [themes, setThemes] = useState<ThemeItem[]>(defaultThemes)
+	const [themes, setThemes] = useState<ThemeItem[]>([])
 	const [selected, setSelected] = useState<ThemeItem | null>(null)
+
+	const defaultThemes = useMemo((): ThemeItem[] => {
+		const tk = (id: string) => `settings.appearance.theme.themes.${id}` as const
+		return [
+			{
+				id: 'glass',
+				name: t(`${tk('glass')}.name`),
+				icon: <MdOutlineBlurOn size={14} />,
+				description: t(`${tk('glass')}.description`),
+			},
+			{
+				id: 'icy',
+				name: t(`${tk('icy')}.name`),
+				icon: <MdOutlineBlurOn size={14} />,
+				description: t(`${tk('icy')}.description`),
+			},
+			{
+				id: 'light',
+				name: t(`${tk('light')}.name`),
+				icon: <IoMdSunny size={14} />,
+				description: t(`${tk('light')}.description`),
+			},
+			{
+				id: 'dark',
+				name: t(`${tk('dark')}.name`),
+				icon: <IoMdMoon size={14} />,
+				description: t(`${tk('dark')}.description`),
+			},
+			{
+				id: 'zarna',
+				name: t(`${tk('zarna')}.name`),
+				icon: <IoMdStar size={14} />,
+				description: t(`${tk('zarna')}.description`),
+			},
+		]
+	}, [t])
+
+	useEffect(() => {
+		const mapped: ThemeItem[] = (fetched_themes ?? []).map((item) => ({
+			id: item.value,
+			name: item.name ?? t('settings.appearance.theme.unnamed'),
+			icon: <IoMdStar size={14} />,
+			description: item?.description || t('settings.appearance.theme.purchasedThemeFallback'),
+		}))
+		setThemes([...defaultThemes, ...mapped])
+	}, [fetched_themes, defaultThemes, t])
+
+	useEffect(() => {
+		const currentTheme = themes.find((th) => th.id === theme)
+		if (currentTheme) {
+			setSelected(currentTheme)
+		}
+	}, [themes, theme])
 
 	function onClick(item: ThemeItem) {
 		setTheme(item.id)
 		setSelected(item)
 		Analytics.event('theme_selected')
 	}
-
-	useEffect(() => {
-		const currentTheme = themes.find((t) => t.id === theme)
-		if (currentTheme) {
-			setSelected(currentTheme)
-		}
-	}, [themes])
-
-	useEffect(() => {
-		if (fetched_themes.length) {
-			const mapped: ThemeItem[] = fetched_themes.map((item) => ({
-				id: item.value,
-				name: item.name ?? 'بدون نام',
-				icon: <IoMdStar size={14} />,
-				description: item?.description || 'تم خریداری شده',
-			}))
-			setThemes([...defaultThemes, ...mapped])
-		}
-	}, [fetched_themes])
 
 	const handleMoreClick = () => {
 		Analytics.event('theme_market_opened')
@@ -105,9 +108,9 @@ export function ThemeSelector({ fetched_themes }: Props) {
 	)
 
 	return (
-		<SectionPanel title="انتخاب تم" delay={0.2} size="sm">
+		<SectionPanel title={t('settings.appearance.theme.title')} delay={0.2} size="sm">
 			<div className="space-y-3">
-				<p className="text-sm text-muted">تم ظاهری ویجتیفای را انتخاب کنید.</p>
+				<p className="text-sm text-muted">{t('settings.appearance.theme.intro')}</p>
 
 				<div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
 					{themes.map((item) => (
@@ -120,13 +123,14 @@ export function ThemeSelector({ fetched_themes }: Props) {
 							description={renderThemePreview(item)}
 						/>
 					))}
-					<div
+					<button
+						type="button"
 						className="flex items-center justify-center w-full h-20 text-xs border border-content border-muted gap-0.5 text-muted hover:!text-primary cursor-pointer hover:!border-primary transition-all duration-200 rounded-xl"
 						onClick={() => handleMoreClick()}
 					>
 						<FiShoppingBag size={18} />
-						<span>فروشگاه</span>
-					</div>
+						<span>{t('settings.appearance.theme.market')}</span>
+					</button>
 				</div>
 			</div>
 		</SectionPanel>

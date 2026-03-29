@@ -1,4 +1,7 @@
 {
+	"common": {
+		"back": "Back"
+	},
 	"settings": {
 		"title": "Settings",
 		"Widgets": "Widgets",
@@ -106,6 +109,81 @@
 				"login": "Log in",
 				"owned": "Owned",
 				"unlockPrice": "Unlock price"
+			}
+		},
+		"appearance": {
+			"ui": {
+				"title": "User interface",
+				"badgeNew": "New",
+				"intro": "Customize how the extension looks to match your needs.",
+				"advanced": {
+					"label": "Default",
+					"description": "Everything in view: tools, widgets, and full freedom to arrange your layout."
+				},
+				"simple": {
+					"label": "Simple & calm",
+					"description": "Minimal, fast, and easy on the eyes—when focus matters."
+				}
+			},
+			"theme": {
+				"title": "Theme",
+				"intro": "Choose Widgetify’s appearance theme.",
+				"market": "Store",
+				"themes": {
+					"glass": {
+						"name": "Glass",
+						"description": "Transparent glass-style theme"
+					},
+					"icy": {
+						"name": "Icy",
+						"description": "Frosted white translucent look"
+					},
+					"light": {
+						"name": "Light",
+						"description": "Classic light theme"
+					},
+					"dark": {
+						"name": "Dark",
+						"description": "Classic dark theme"
+					},
+					"zarna": {
+						"name": "Zarna",
+						"description": "Warm Zarna palette"
+					}
+				},
+				"purchasedThemeFallback": "Purchased theme",
+				"unnamed": "Untitled"
+			},
+			"font": {
+				"title": "Extension font",
+				"intro": "Choose the font used across the extension:",
+				"market": "Store",
+				"previewSample": "A lake of calm",
+				"defaultFontDesc": "A friendly font for everyday reading.",
+				"purchasedFallback": "Purchased font",
+				"unnamed": "Untitled",
+				"names": {
+					"vazir": "Vazir",
+					"samim": "Samim",
+					"pofak": "Pofak",
+					"rooyin": "Rooyin"
+				}
+			},
+			"browserTitle": {
+				"title": "Browser title",
+				"intro": "Change the tab title so you can find it easier whenever you’re on this tab.",
+				"market": "Store",
+				"defaultName": "Default",
+				"defaultTemplate": "✨ New Tab",
+				"unnamed": "Untitled"
+			},
+			"alignment": {
+				"title": "Layout",
+				"verticalLabel": "Vertical content position",
+				"center": "Center",
+				"centerDesc": "Content is placed in the middle of the page.",
+				"top": "Top",
+				"topDesc": "Content is placed toward the top of the page."
 			}
 		}
 	}

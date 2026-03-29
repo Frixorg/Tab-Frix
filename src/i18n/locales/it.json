@@ -1,4 +1,7 @@
 {
+	"common": {
+		"back": "Indietro"
+	},
 	"settings": {
 		"title": "Impostazioni",
 		"Widgets": "Widgets",
@@ -106,6 +109,81 @@
 				"login": "Accedi",
 				"owned": "Acquistato",
 				"unlockPrice": "Prezzo di sblocco"
+			}
+		},
+		"appearance": {
+			"ui": {
+				"title": "Interfaccia",
+				"badgeNew": "Novità",
+				"intro": "Personalizza l’aspetto dell’estensione in base alle tue esigenze.",
+				"advanced": {
+					"label": "Predefinita",
+					"description": "Tutto in vista: strumenti, widget e massima libertà di disposizione."
+				},
+				"simple": {
+					"label": "Semplice e pulita",
+					"description": "Minimale, veloce e riposante per quando serve concentrazione."
+				}
+			},
+			"theme": {
+				"title": "Tema",
+				"intro": "Scegli il tema visivo di Widgetify.",
+				"market": "Negozio",
+				"themes": {
+					"glass": {
+						"name": "Vetro",
+						"description": "Tema trasparente effetto vetro"
+					},
+					"icy": {
+						"name": "Ghiaccio",
+						"description": "Bianco smerigliato e traslucido"
+					},
+					"light": {
+						"name": "Chiaro",
+						"description": "Tema chiaro classico"
+					},
+					"dark": {
+						"name": "Scuro",
+						"description": "Tema scuro classico"
+					},
+					"zarna": {
+						"name": "Zarna",
+						"description": "Palette calda Zarna"
+					}
+				},
+				"purchasedThemeFallback": "Tema acquistato",
+				"unnamed": "Senza nome"
+			},
+			"font": {
+				"title": "Font dell’estensione",
+				"intro": "Scegli il font usato in tutta l’estensione:",
+				"market": "Negozio",
+				"previewSample": "Un lago di calma",
+				"defaultFontDesc": "Un font piacevole per la lettura quotidiana.",
+				"purchasedFallback": "Font acquistato",
+				"unnamed": "Senza nome",
+				"names": {
+					"vazir": "Vazir",
+					"samim": "Samim",
+					"pofak": "Pofak",
+					"rooyin": "Rooyin"
+				}
+			},
+			"browserTitle": {
+				"title": "Titolo del browser",
+				"intro": "Modifica il titolo della scheda per ritrovarla più facilmente quando è attiva.",
+				"market": "Negozio",
+				"defaultName": "Predefinito",
+				"defaultTemplate": "✨ Nuova scheda",
+				"unnamed": "Senza nome"
+			},
+			"alignment": {
+				"title": "Layout",
+				"verticalLabel": "Posizione verticale del contenuto",
+				"center": "Centro",
+				"centerDesc": "Il contenuto è posizionato al centro della pagina.",
+				"top": "In alto",
+				"topDesc": "Il contenuto è posizionato verso l’alto della pagina."
 			}
 		}
 	}

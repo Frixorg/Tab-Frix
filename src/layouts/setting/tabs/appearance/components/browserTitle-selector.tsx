@@ -1,7 +1,9 @@
 import type { AxiosError } from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { FiShoppingBag } from 'react-icons/fi'
 import Analytics from '@/analytics'
+import { showToast } from '@/common/toast'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
 import { ItemSelector } from '@/components/item-selector'
@@ -11,28 +13,33 @@ import { safeAwait } from '@/services/api'
 import { useChangeBrowserTitle } from '@/services/hooks/extension/updateSetting.hook'
 import type { UserInventoryItem } from '@/services/hooks/market/market.interface'
 import { translateError } from '@/utils/translate-error'
-import { showToast } from '@/common/toast'
 
 interface BrowserTitle {
 	id: string
 	name: string
 	template: string
 }
-const defaultBrowserTitles: BrowserTitle[] = [
-	{
-		id: 'default',
-		name: 'پیشفرض',
-		template: '✨ New Tab',
-	},
-]
 
 interface Prop {
 	fetched_browserTitles: UserInventoryItem[]
 }
+
 export function BrowserTitleSelector({ fetched_browserTitles }: Prop) {
-	const [browserTitles, setBrowserTitles] =
-		useState<BrowserTitle[]>(defaultBrowserTitles)
+	const { t, i18n } = useTranslation()
+	const titlePreviewDirection = i18n.language.startsWith('fa') ? 'rtl' : 'ltr'
+	const [browserTitles, setBrowserTitles] = useState<BrowserTitle[]>([])
 	const [selected, setSelected] = useState<BrowserTitle | null>(null)
+
+	const defaultBrowserTitles = useMemo(
+		(): BrowserTitle[] => [
+			{
+				id: 'default',
+				name: t('settings.appearance.browserTitle.defaultName'),
+				template: t('settings.appearance.browserTitle.defaultTemplate'),
+			},
+		],
+		[t]
+	)
 
 	const { mutateAsync } = useChangeBrowserTitle()
 
@@ -57,36 +64,24 @@ export function BrowserTitleSelector({ fetched_browserTitles }: Prop) {
 	}
 
 	useEffect(() => {
-		async function init() {
-			const title = await getFromStorage('browserTitle')
-			if (!title) return setSelected(defaultBrowserTitles[0])
-			setSelected(title)
-		}
-
-		init()
-	}, [])
+		const mapped: BrowserTitle[] = (fetched_browserTitles ?? []).map((item) => ({
+			name: item.name || t('settings.appearance.browserTitle.unnamed'),
+			id: item.id,
+			template: item.value,
+		}))
+		setBrowserTitles([...defaultBrowserTitles, ...mapped])
+	}, [fetched_browserTitles, defaultBrowserTitles, t])
 
 	useEffect(() => {
-		const updateAndCheck = async () => {
-			const mapped: BrowserTitle[] = fetched_browserTitles.map((item) => ({
-				name: item.name || 'بدون نام',
-				id: item.id,
-				template: item.value,
-			}))
-			const updated = [...defaultBrowserTitles, ...mapped]
-			setBrowserTitles(updated)
-
-			const value = await getFromStorage('browserTitle')
-
-			const selectedBrowserTitle = updated.find((item) => item.id === value?.id)
-			if (selectedBrowserTitle) {
-				setSelected(selectedBrowserTitle)
-			}
-		}
-		if (fetched_browserTitles?.length) {
-			updateAndCheck()
-		}
-	}, [fetched_browserTitles])
+		if (browserTitles.length === 0) return
+		void (async () => {
+			const stored = await getFromStorage('browserTitle')
+			const match = stored
+				? browserTitles.find((b) => b.id === stored.id)
+				: browserTitles[0]
+			setSelected(match ?? browserTitles[0])
+		})()
+	}, [browserTitles])
 
 	const handleMoreClick = () => {
 		Analytics.event('browser_title_market_opened')
@@ -94,12 +89,9 @@ export function BrowserTitleSelector({ fetched_browserTitles }: Prop) {
 	}
 
 	return (
-		<SectionPanel title="عنوان مرورگر" size="sm">
+		<SectionPanel title={t('settings.appearance.browserTitle.title')} size="sm">
 			<div className="space-y-3">
-				<p className={'text-xs text-muted'}>
-					عنوان تب مرورگر خود را همین‌جا تغییر دهید تا هر وقت روی تب بودید،
-					راحت‌تر پیدایش کنید.
-				</p>
+				<p className="text-xs text-muted">{t('settings.appearance.browserTitle.intro')}</p>
 				<div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
 					{browserTitles?.map((item) => (
 						<ItemSelector
@@ -108,16 +100,19 @@ export function BrowserTitleSelector({ fetched_browserTitles }: Prop) {
 							key={item.template}
 							className="w-full h-20"
 							label={item.name}
-							description={renderBrowserTitlePreview(item)}
+							description={renderBrowserTitlePreview({
+								template: item.template,
+							})}
 						/>
 					))}
-					<div
+					<button
+						type="button"
 						className="flex items-center justify-center w-full h-20 text-xs border border-content border-muted gap-0.5  text-muted hover:!text-primary cursor-pointer hover:!border-primary transition-all duration-200  rounded-xl"
 						onClick={() => handleMoreClick()}
 					>
 						<FiShoppingBag size={18} />
-						<span>فروشگاه</span>
-					</div>
+						<span>{t('settings.appearance.browserTitle.market')}</span>
+					</button>
 				</div>
 			</div>
 		</SectionPanel>

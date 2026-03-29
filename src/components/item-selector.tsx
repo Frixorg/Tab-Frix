@@ -1,5 +1,5 @@
 import type React from 'react'
-
+import { useTranslation } from 'react-i18next'
 interface Props {
 	isActive: boolean
 	onClick: () => void
@@ -16,6 +16,8 @@ export function ItemSelector({
 	className,
 	style,
 }: Props) {
+	const { i18n } = useTranslation()
+	const direction = i18n.language.startsWith('fa') ? 'rtl' : 'ltr'
 	const getRadioBorderStyle = (isSelected: boolean) => {
 		if (isSelected) {
 			return 'border-primary bg-primary'
@@ -34,14 +36,14 @@ export function ItemSelector({
 			}`}
 			style={style}
 		>
-			<div className={`flex items-center justify-center gap-0.5 ${description ? 'mb-1' : 'mb-0'}`}>
+			<div className={`flex items-center justify-center gap-0.5 ${description ? 'mb-2' : 'mb-0'}`}>
 				<div
 					className={`w-4 h-4 rounded-full text-white border ${getRadioBorderStyle(isActive)}`}
 				>
 					{isActive && (
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							className="w-full h-full p-0.5"
+							className={`w-full h-full p-0.5 ${direction === 'rtl' ? 'mt-[-2px]' : ''}`}
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -55,10 +57,10 @@ export function ItemSelector({
 						</svg>
 					)}
 				</div>
-				<span className={'mr-1.5 text-sm font-medium text-content'}>{label}</span>
+				<span className={`text-sm font-medium text-content ${direction === 'rtl' ? 'mr-1.5' : 'ml-1.5 mb-[-3px]'}`}>{label}</span>
 			</div>
 			{description && (
-				<div className={'text-xs text-muted text-right'}>{description}</div>
+				<div className={`text-xs text-muted ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>{description}</div>
 			)}
 		</div>
 	)

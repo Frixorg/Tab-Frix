@@ -3,6 +3,7 @@ import { renderBrowserTitlePreview } from '@/components/market/title/title-rende
 import Tooltip from '@/components/toolTip'
 import type { MarketItem } from '@/services/hooks/market/market.interface'
 import { FiEye, FiShoppingBag } from 'react-icons/fi'
+import { useTranslation } from 'react-i18next'
 
 interface RenderPreviewProps {
 	item: MarketItem
@@ -18,6 +19,9 @@ function IsOwnedBadge() {
 }
 
 export function RenderPreview({ item, handlePreviewClick }: RenderPreviewProps) {
+	const { i18n } = useTranslation()
+	const titlePreviewDirection = i18n.language.startsWith('fa') ? 'rtl' : 'ltr'
+
 	if (item.previewUrl) {
 		return (
 			<div className="relative flex items-center flex-1 p-2 border bg-base-300 rounded-xl border-base-200">

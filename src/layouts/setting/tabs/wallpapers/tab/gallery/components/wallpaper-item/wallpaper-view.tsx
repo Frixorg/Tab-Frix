@@ -73,7 +73,7 @@ export function WallpaperView({
 
 	return (
 		<div className="relative flex flex-col justify-between gap-2 overflow-y-auto h-96">
-			<div className="absolute right-0 flex justify-center p-1 mt-1 -top-3 bg-content rounded-t-2xl">
+			<div className="absolute start-0 flex justify-center p-1 mt-1 -top-3 bg-content rounded-t-2xl">
 				<FolderPath
 					folderPath={[
 						{
@@ -81,7 +81,7 @@ export function WallpaperView({
 							title: folderTitle,
 						},
 					]}
-					onNavigate={onBackToCategories}
+					onNavigate={() => onBackToCategories()}
 				/>
 			</div>
 			<div className="mt-5">

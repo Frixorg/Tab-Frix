@@ -1,21 +1,23 @@
+import { useTranslation } from 'react-i18next'
+import { LuLayers, LuLayoutTemplate } from 'react-icons/lu'
 import { ItemSelector } from '@/components/item-selector'
 import { SectionPanel } from '@/components/section-panel'
-import { LuLayers, LuLayoutTemplate } from 'react-icons/lu'
 import { useAppearanceSetting } from '@/context/appearance.context'
 
 export function UISelector() {
+	const { t } = useTranslation()
 	const { setUI, ui } = useAppearanceSetting()
 	function onClick(item: string) {
-		setUI(item as any)
+		setUI(item as 'ADVANCED' | 'SIMPLE')
 	}
 
 	return (
 		<SectionPanel
 			title={
-				<div className="flex items-center">
-					<p>رابط کاربری</p>
-					<span className="mr-1 text-white badge badge-error badge-xs outline-2 outline-error/20">
-						جدید
+				<div className="flex items-center gap-1">
+					<p>{t('settings.appearance.ui.title')}</p>
+					<span className="text-white badge badge-error badge-xs outline-2 outline-error/20 ms-1">
+						{t('settings.appearance.ui.badgeNew')}
 					</span>
 				</div>
 			}
@@ -23,9 +25,7 @@ export function UISelector() {
 		>
 			<div className="space-y-4">
 				<div className="flex flex-col gap-1">
-					<p className="text-xs text-muted">
-						ظاهر محیط افزونه خود را بر اساس نیازتان شخصی‌سازی کنید.
-					</p>
+					<p className="text-xs text-muted">{t('settings.appearance.ui.intro')}</p>
 				</div>
 
 				<div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -35,10 +35,10 @@ export function UISelector() {
 						label={
 							<div className="flex items-center gap-2">
 								<LuLayers size={16} className="text-primary/80" />
-								<span> پیشفرض</span>
+								<span>{t('settings.appearance.ui.advanced.label')}</span>
 							</div>
 						}
-						description="همه‌چیز جلوی چشمته؛ ابزارها، ویجت‌ها و آزادی کامل برای چیدمان."
+						description={t('settings.appearance.ui.advanced.description')}
 					/>
 					<ItemSelector
 						isActive={ui === 'SIMPLE'}
@@ -46,10 +46,10 @@ export function UISelector() {
 						label={
 							<div className="flex items-center gap-2">
 								<LuLayoutTemplate size={16} className="text-primary/80" />
-								<span>ساده و خلوت</span>
+								<span>{t('settings.appearance.ui.simple.label')}</span>
 							</div>
 						}
-						description="خلوت، سریع و چشم‌نواز؛ برای وقتی که تمرکز مهمه."
+						description={t('settings.appearance.ui.simple.description')}
 					/>
 				</div>
 			</div>
