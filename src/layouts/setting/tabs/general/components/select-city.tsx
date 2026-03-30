@@ -7,6 +7,7 @@ import { IconLoading } from '@/components/loading/icon-loading'
 import Modal from '@/components/modal'
 import { SectionPanel } from '@/components/section-panel'
 import { useGetCitiesList } from '@/services/hooks/cities/getCitiesList'
+import { useGeocoding, type GeocodingCity } from '@/services/hooks/cities/useGeocoding'
 import { useSetCity } from '@/services/hooks/user/userService.hook'
 import { TextInput } from '@/components/text-input'
 import { showToast } from '@/common/toast'
@@ -27,9 +28,15 @@ export function SelectCity({ size, onSave }: Prop) {
 
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [selectedCity, setSelectedCity] = useState<{ id: string; name: string } | null>(null)
+	const [selectedCity, setSelectedCity] = useState<{
+		id: string
+		name: string
+		lat?: number
+		lon?: number
+	} | null>(null)
 	const searchInputRef = useRef<HTMLInputElement>(null)
-	const { data: cities, isLoading, error } = useGetCitiesList(true)
+	const { data: builtinCities, isLoading: isLoadingBuiltin, error: errorBuiltin } = useGetCitiesList(true)
+	const { data: geocodedCities, isLoading: isLoadingGeocoding, error: errorGeocoding } = useGeocoding(searchTerm)
 	const { mutateAsync: setCityToServer, isPending: isSettingCity } = useSetCity()
 
 	useEffect(() => {
@@ -39,41 +46,31 @@ export function SelectCity({ size, onSave }: Prop) {
 	}, [])
 	const normalizedCities = useMemo(
 		() =>
-			(cities || []).map((item) => ({
+			(builtinCities || []).map((item) => ({
 				...item,
 				searchKey: item.city.toLowerCase(),
 			})),
-		[cities]
+		[builtinCities]
 	)
 
 	const filteredCities = useMemo(() => {
+		if (searchTerm.trim().length >= 2) {
+			return (geocodedCities || []).map((c) => ({
+				cityId: String(c.id),
+				city: `${c.name}, ${c.country}${c.admin1 ? `, ${c.admin1}` : ''}`,
+				lat: c.latitude,
+				lon: c.longitude,
+			}))
+		}
+
 		if (!normalizedCities.length) return []
-
 		const q = searchTerm.trim().toLowerCase()
-		if (!q) return normalizedCities.slice(0, 10)
+		if (!q) return normalizedCities.slice(0, 10).map((c) => ({ ...c, lat: 35.696111, lon: 51.423056 })) // Default Tehran coordinates for builtin
+		// ...rest of local filter logic would go here but we prefer geocoding if searchTerm is present
+		return normalizedCities.filter(c => c.searchKey.includes(q)).slice(0, 10)
+	}, [normalizedCities, searchTerm, geocodedCities])
 
-		const prefix: SelectedCity[] = []
-		const contains: SelectedCity[] = []
-
-		// Two lightweight passes with early stop keep search responsive for large datasets.
-		for (const city of normalizedCities) {
-			if (city.searchKey.startsWith(q)) {
-				prefix.push(city)
-				if (prefix.length >= 10) return prefix
-			}
-		}
-
-		for (const city of normalizedCities) {
-			if (!city.searchKey.startsWith(q) && city.searchKey.includes(q)) {
-				contains.push(city)
-				if (prefix.length + contains.length >= 10) break
-			}
-		}
-
-		return [...prefix, ...contains]
-	}, [normalizedCities, searchTerm])
-
-	const handleSelectCity = async (city: SelectedCity) => {
+	const handleSelectCity = async (city: any) => {
 		if (!city.cityId) return
 		try {
 			setIsModalOpen(false)
@@ -81,8 +78,13 @@ export function SelectCity({ size, onSave }: Prop) {
 
 			Analytics.event('city_selected')
 
-			await setCityToServer({ cityId: city.cityId, city: city.city })
-			setSelectedCity({ id: city.cityId, name: city.city })
+			await setCityToServer({
+				cityId: city.cityId,
+				city: city.city,
+				lat: city.lat,
+				lon: city.lon,
+			})
+			setSelectedCity({ id: city.cityId, name: city.city, lat: city.lat, lon: city.lon })
 			onSave?.()
 		} catch (error) {
 			showToast(translateError(error) as any, 'error')
@@ -106,7 +108,7 @@ export function SelectCity({ size, onSave }: Prop) {
 					disabled={isSettingCity}
 					className="flex items-center justify-between w-full p-3 text-end transition-colors border cursor-pointer rounded-2xl bg-base-100 border-base-300 hover:bg-base-200 disabled:opacity-50 disabled:cursor-not-allowed"
 				>
-					{isLoading ? (
+					{isLoadingBuiltin || (searchTerm.length >= 2 && isLoadingGeocoding) ? (
 						<IconLoading className="mx-auto text-center" />
 					) : selectedCity ? (
 						<span className="font-medium text-content">{selectedCity.name}</span>
@@ -120,7 +122,7 @@ export function SelectCity({ size, onSave }: Prop) {
 					)}
 				</button>
 
-				{error && (
+				{(errorBuiltin || (searchTerm.length >= 2 && errorGeocoding)) && (
 					<div className="p-3 text-sm text-end duration-300 border rounded-lg border-error/20 bg-error/10 backdrop-blur-sm animate-in fade-in-0">
 						<div className="font-medium text-error">{t('settings.general.city.errorTitle')}</div>
 						<div className="mt-1 text-error/80">{t('settings.general.city.errorHint')}</div>
@@ -150,7 +152,7 @@ export function SelectCity({ size, onSave }: Prop) {
 					</div>
 
 					<div className="overflow-y-auto min-h-52 max-h-52 custom-scrollbar">
-						{isLoading ? (
+						{isLoadingBuiltin || (searchTerm.length >= 2 && isLoadingGeocoding) ? (
 							<div className="flex items-center justify-center gap-2 p-4 text-center text-primary">
 								<IconLoading />
 								{t('settings.general.city.loading')}
@@ -182,7 +184,7 @@ export function SelectCity({ size, onSave }: Prop) {
 							<div className="p-4 text-center text-base-content/60">
 								{t('settings.general.city.noResults')}
 							</div>
-						) : cities && cities.length === 0 ? (
+						) : builtinCities && builtinCities.length === 0 ? (
 							<div className="p-4 text-center text-base-content/60">
 								{t('settings.general.city.noCitiesAvailable')}
 							</div>

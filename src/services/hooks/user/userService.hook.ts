@@ -33,6 +33,8 @@ interface FetchedProfile {
 	city?: {
 		id: string
 		name: string
+		lat?: number
+		lon?: number
 	}
 
 	occupation: {
@@ -155,28 +157,32 @@ export function useSendVerificationEmail() {
 export interface SelectedCityInput {
 	cityId: string
 	city: string
+	lat?: number
+	lon?: number
 }
 
 async function saveSelectedCity({
 	cityId,
 	city,
+	lat,
+	lon,
 }: SelectedCityInput): Promise<{ city: SelectedCityInput; profile: UserProfile | null }> {
 	// Always persist to dedicated key so it works with and without auth.
-	await setToStorage('selected_city', { id: cityId, name: city })
+	await setToStorage('selected_city', { id: cityId, name: city, lat, lon })
 
 	// Also update cached profile city if the user is logged in.
 	const cachedProfile = await getFromStorage('profile')
 	if (cachedProfile) {
 		const updatedProfile: UserProfile = {
 			...cachedProfile,
-			city: { id: cityId, name: city },
+			city: { id: cityId, name: city, lat, lon } as any,
 			inCache: true,
 		}
 		await setToStorage('profile', updatedProfile)
-		return { city: { cityId, city }, profile: updatedProfile }
+		return { city: { cityId, city, lat, lon }, profile: updatedProfile }
 	}
 
-	return { city: { cityId, city }, profile: null }
+	return { city: { cityId, city, lat, lon }, profile: null }
 }
 
 export function useSetCity() {

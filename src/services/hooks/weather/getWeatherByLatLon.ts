@@ -1,25 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
 import ms from 'ms'
-import { getMainClient } from '@/services/api'
+import { fetchOpenMeteoWeather } from '@/services/api/open-meteo'
 import type { FetchedWeather } from '../../../layouts/widgets/weather/weather.interface'
 
-type units = 'standard' | 'metric' | 'imperial'
 async function fetchWeatherByLatLon(op: GetWeatherByLatLon): Promise<FetchedWeather> {
-	const client = await getMainClient()
-
-	const response = await client.get<FetchedWeather>('/weather/current', {
-		params: {
-			lat: op.lat,
-			lon: op.lon,
-			units: op.units,
-			useAI: op.useAI,
-		},
-	})
-	return response.data
+	const lat = op.lat ?? 35.696111
+	const lon = op.lon ?? 51.423056
+	return fetchOpenMeteoWeather(lat, lon, op.units === 'imperial' ? 'imperial' : 'metric')
 }
 
 type GetWeatherByLatLon = {
-	units?: units
+	units?: 'standard' | 'metric' | 'imperial'
 	useAI?: boolean
 	refetchInterval: number | null
 	enabled: boolean

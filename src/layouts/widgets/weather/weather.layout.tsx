@@ -11,13 +11,19 @@ import { WidgetContainer } from '../widget-container'
 import { Forecast } from './forecast/forecast'
 import { CurrentWeatherBox } from './current/current-box.weather'
 import { useGetWeatherByLatLon } from '@/services/hooks/weather/getWeatherByLatLon'
-import { useGetForecastWeatherByLatLon } from '@/services/hooks/weather/getForecastWeatherByLatLon'
+import { useGeolocation } from '@/services/hooks/geo/useGeolocation'
 
 export function WeatherLayout() {
 	const { data: user } = useGetUserProfile()
+	const { latitude, longitude, loading: geoLoading } = useGeolocation()
 	const [weatherSettings, setWeatherSettings] = useState<WeatherSettings | null>(null)
 	const [weatherState, setWeather] = useState<FetchedWeather | null>(null)
 	const [forecastWeather, setForecastWeather] = useState<FetchedForecast[] | null>(null)
+
+	// Determine final coordinates: Priority is Current Location > Selected City > Default (Tehran)
+	const finalLat = latitude ?? user?.city?.lat ?? 35.696111
+	const finalLon = longitude ?? user?.city?.lon ?? 51.423056
+
 	const {
 		data,
 		dataUpdatedAt,
@@ -26,22 +32,9 @@ export function WeatherLayout() {
 		refetchInterval: 0,
 		units: weatherSettings?.temperatureUnit,
 		useAI: weatherSettings?.useAI,
-		lat: user?.city?.id ? undefined : 35.696111,
-		lon: user?.city?.id ? undefined : 51.423056,
-		enabled: true,
-	})
-
-	const {
-		data: forecastData,
-		dataUpdatedAt: forecastDataUpdatedAt,
-		refetch: refetchForecast,
-	} = useGetForecastWeatherByLatLon({
-		count: 6,
-		units: weatherSettings?.temperatureUnit,
-		enabled: true,
-		refetchInterval: 0,
-		lat: user?.city?.id ? undefined : 35.696111,
-		lon: user?.city?.id ? undefined : 51.423056,
+		lat: finalLat,
+		lon: finalLon,
+		enabled: !geoLoading, // Wait for geolocation if it's still loading
 	})
 
 	useEffect(() => {
@@ -89,23 +82,18 @@ export function WeatherLayout() {
 	useEffect(() => {
 		if (data) {
 			setToStorage('currentWeather', data)
+			setToStorage('forecastWeather', data.forecast)
 			setWeather(data)
+			setForecastWeather(data.forecast)
 		}
 	}, [data, dataUpdatedAt])
 
-	useEffect(() => {
-		if (forecastData) {
-			setToStorage('forecastWeather', forecastData)
-			setForecastWeather(forecastData)
-		}
-	}, [forecastDataUpdatedAt])
 
 	useEffect(() => {
-		if (user?.city?.id) {
+		if (latitude !== null || user?.city?.lat) {
 			refetchWeather()
-			refetchForecast()
 		}
-	}, [user?.city?.id, refetchWeather, refetchForecast])
+	}, [latitude, longitude, user?.city?.lat, user?.city?.lon, refetchWeather])
 
 	if (!weatherSettings) return null
 
