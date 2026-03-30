@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import { getFromStorage } from '@/common/storage'
+import { callEvent } from '@/common/utils/call-event'
+import { Button } from '@/components/button/button'
+import { WidgetTabKeys } from '@/layouts/widgets-settings/constant/tab-keys'
+import { FaCog } from 'react-icons/fa'
 import { useGetWeatherByLatLon } from '@/services/hooks/weather/getWeatherByLatLon'
 import { useGetUserProfile } from '@/services/hooks/user/userService.hook'
 import { TbWind } from 'react-icons/tb'
@@ -35,13 +39,27 @@ export function InfoWeather() {
 		enabled: !geoLoading,
 		refetchInterval: 0,
 	})
+ 
+	const onClickSettings = () => {
+		callEvent('openWidgetsSettings', { tab: WidgetTabKeys.wigiPad })
+	}
 
 	if (!weather) return <div className="h-24 animate-pulse bg-base-300/20 rounded-xl" />
 
 	const hasBanner = !!weather.weather?.statusBanner
 
 	return (
-		<div className="flex flex-col w-full h-full ">
+		<div className="relative flex flex-col w-full h-full group">
+			<div className="absolute inset-0 z-20">
+				<Button
+					onClick={onClickSettings}
+					size="xs"
+					className="m-1.5 h-5 w-5 p-0 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 !border-none !shadow-none transition-all duration-300 delay-200"
+				>
+					<FaCog size={12} className="text-content" />
+				</Button>
+			</div>
+			<div className="flex flex-col w-full h-full ">
 			<div className="relative flex flex-col justify-between overflow-hidden rounded-xl group">
 				{hasBanner && (
 					<div
@@ -81,7 +99,7 @@ export function InfoWeather() {
 								className={`text-xs font-bold ${hasBanner ? 'text-white/70' : 'opacity-40'
 									}`}
 							>
-								{unitsFlag[(weatherSettings?.temperatureUnit as any) || 'metric']}
+								{unitsFlag[(weatherSettings?.temperatureUnit as keyof typeof unitsFlag) || 'metric']}
 							</span>
 						</div>
 					</div>
@@ -163,6 +181,7 @@ export function InfoWeather() {
 						</div>
 					</div>
 				))}
+			</div>
 			</div>
 		</div>
 	)

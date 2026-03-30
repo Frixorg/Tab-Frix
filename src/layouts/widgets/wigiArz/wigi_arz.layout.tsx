@@ -12,6 +12,7 @@ import {
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { FiDollarSign } from 'react-icons/fi'
+import { FaCog } from 'react-icons/fa'
 import Analytics from '@/analytics'
 import { callEvent } from '@/common/utils/call-event'
 import { Button } from '@/components/button/button'
@@ -129,8 +130,17 @@ export function WigiArzLayout({
 			) : (
 				<WidgetContainer
 					background={enableBackground}
-					className={'flex flex-col gap-1'}
+					className={'relative flex flex-col gap-1 group'}
 				>
+					<div className="absolute inset-0 z-20">
+						<Button
+							size="xs"
+							className="m-1.5 h-5 w-5 p-0 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 !border-none !shadow-none transition-all duration-300 delay-200"
+							onClick={onSettingClick}
+						>
+							<FaCog size={12} className="text-content" />
+						</Button>
+					</div>
 					<ArzHeader
 						title="ویجی‌ ارز"
 						onSettingsClick={() => onSettingClick()}

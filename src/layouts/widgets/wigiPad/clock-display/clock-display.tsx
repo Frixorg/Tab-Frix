@@ -54,7 +54,7 @@ export function ClockDisplay() {
 
 	return (
 		<div className="relative flex flex-col items-center justify-center p-1 overflow-hidden">
-			{/* <div className="absolute inset-0 z-20 group">
+			<div className="absolute inset-0 z-20 group">
 				<Button
 					size="xs"
 					className="m-1.5 h-5 w-5 p-0 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 !border-none !shadow-none transition-all duration-300 delay-200"
@@ -62,8 +62,7 @@ export function ClockDisplay() {
 				>
 					<FaCog size={12} className="text-content" />
 				</Button>
-			</div> */}
-
+			</div>
 			<div className="flex flex-col items-center justify-center flex-grow">
 				{clockSettings.clockType === 'analog' ? (
 					<AnalogClock timezone={timezone} setting={clockSettings} />

@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { getFromStorage, setToStorage } from '@/common/storage'
-import { listenEvent } from '@/common/utils/call-event'
+import { callEvent, listenEvent } from '@/common/utils/call-event'
+import { Button } from '@/components/button/button'
+import { WidgetTabKeys } from '@/layouts/widgets-settings/constant/tab-keys'
+import { FaCog } from 'react-icons/fa'
 import { useGetUserProfile } from '@/services/hooks/user/userService.hook'
 import type {
 	FetchedForecast,
@@ -97,8 +100,21 @@ export function WeatherLayout() {
 
 	if (!weatherSettings) return null
 
+	const onClickSettings = () => {
+		callEvent('openWidgetsSettings', { tab: WidgetTabKeys.weather_settings })
+	}
+
 	return (
-		<WidgetContainer>
+		<WidgetContainer className="relative group">
+			<div className="absolute inset-0 z-20">
+				<Button
+					size="xs"
+					className="m-1.5 h-5 w-5 p-0 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 !border-none !shadow-none transition-all duration-300 delay-200"
+					onClick={onClickSettings}
+				>
+					<FaCog size={12} className="text-content" />
+				</Button>
+			</div>
 			<div className="flex flex-col w-full h-full gap-2 py-1">
 				<CurrentWeatherBox
 					fetchedWeather={weatherState || null}

@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { getFromStorage } from '@/common/storage'
 import { callEvent, listenEvent } from '@/common/utils/call-event'
 import { WidgetTabKeys } from '@/layouts/widgets-settings/constant/tab-keys'
+import { FaCog } from 'react-icons/fa'
+import { Button } from '@/components/button/button'
 import { WidgetContainer } from '../widget-container'
 import { NewsContainer } from './components/news-container'
 import { NewsHeader } from './components/news-header'
@@ -59,11 +61,24 @@ export const NewsLayout: React.FC<NewsLayoutProps> = ({
 			) : (
 				<WidgetContainer
 					background={enableBackground}
-					className={'flex flex-col gap-1 px-2 py-2 overflow-y-auto'}
+					className={'relative flex flex-col gap-1 px-2 py-2 overflow-y-auto group'}
 					style={{
 						scrollbarWidth: 'none',
 					}}
 				>
+					<div className="absolute inset-0 z-20">
+						<Button
+							size="xs"
+							className="m-1.5 h-5 w-5 p-0 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 !border-none !shadow-none transition-all duration-300 delay-200"
+							onClick={() =>
+								callEvent('openWidgetsSettings', {
+									tab: WidgetTabKeys.news_settings,
+								})
+							}
+						>
+							<FaCog size={12} className="text-content" />
+						</Button>
+					</div>
 					<NewsHeader
 						title="ویجی نیوز"
 						onSettingsClick={() =>
