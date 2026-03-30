@@ -106,7 +106,7 @@ export function WeatherLayout() {
 
 	return (
 		<WidgetContainer className="relative group" isCustomHeight={!weatherSettings.showForecast || !weatherSettings.showWindHumidity ? true : false}>
-			<div className="absolute inset-0 z-20">
+			<div className="absolute h-full w-full inset-0 z-20">
 				<Button
 					size="xs"
 					className="m-1.5 h-5 w-5 p-0 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 !border-none !shadow-none transition-all duration-300 delay-200"

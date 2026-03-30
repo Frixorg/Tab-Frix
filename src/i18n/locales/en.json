@@ -5,6 +5,19 @@
 	"navbar": {
 		"reorderModeHint": "Reorder mode is active, move your widgets"
 	},
+	"search": {
+		"googlePlaceholder": "Search Google…",
+		"voiceSearchTooltip": "Voice search",
+		"imageSearchTooltip": "Search by image",
+		"browserBookmarksTooltip": "Browser bookmarks",
+		"bookmarkPopover": {
+			"defaultRootTitle": "My bookmarks",
+			"permissionTitle": "Bookmark access",
+			"permissionDescription": "To show your browser bookmarks in this section, we need your permission.",
+			"enableAccess": "Enable access",
+			"emptyFolder": "This folder is empty"
+		}
+	},
 	"settings": {
 		"title": "Settings",
 		"Widgets": "Widgets",
@@ -12,12 +25,13 @@
 		"widgets": {
 			"modalTitle": "Widget settings",
 			"tabs": {
-				"widgetManagement": "Widget Management",
+				"widgetManagement": "Management",
 				"timeCalendar": "Time & Date",
 				"currency": "Currency",
 				"news": "News",
 				"weather": "Weather",
-				"pet": "Pet"
+				"pet": "Pet",
+				"searchAndBookmarks": "Search & Bookmarks"
 			},
 			"weather": {
 				"currentLocation": "Current Location",
@@ -67,6 +81,16 @@
 						"description": "Display date in Jalali format"
 					}
 				}
+			}
+			,
+			"searchAndBookmarks": {
+				"title": "Search & Bookmarks",
+				"showBookmarksList": "Show Bookmarks List",
+				"showBrowserBookmark": "Show Browser Bookmark bar",
+				"positionLabel": "Search bar position (when list is hidden)",
+				"positionTop": "Top",
+				"positionCenter": "Center",
+				"positionBottom": "Bottom"
 			}
 		},
 		"groups": {

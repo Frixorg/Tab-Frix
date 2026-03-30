@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdPets } from 'react-icons/md'
-import { TbApps, TbCalendarUser, TbCurrencyDollar, TbNews } from 'react-icons/tb'
+import { TbApps, TbCalendarUser, TbCurrencyDollar, TbNews, TbSearch } from 'react-icons/tb'
 import { TiWeatherCloudy } from 'react-icons/ti'
 import { VscSettings } from 'react-icons/vsc'
 import Analytics from '@/analytics'
@@ -16,6 +16,7 @@ import { TimeAndDateSetting } from '../widgets/timeAndDate/TimeandDateWidget-set
 import { WidgetTabKeys } from './constant/tab-keys'
 import { ManageWidgets } from './manage-widgets/manage-widgets'
 import { TabFrixBrand } from '@/components/tabfrix-brand'
+import { SearchAndBookmarksSetting } from './search-and-bookmarks/search-and-bookmarks-setting'
 
 interface WidgetSettingsModalProps {
 	isOpen: boolean
@@ -70,6 +71,12 @@ export function WidgetSettingsModal({
 						value: WidgetTabKeys.Pet,
 						icon: <MdPets size={20} />,
 						element: <PetSettings />,
+					},
+					{
+						label: t('settings.widgets.tabs.searchAndBookmarks'),
+						value: WidgetTabKeys.searchAndBookmarks_settings,
+						icon: <TbSearch size={20} />,
+						element: <SearchAndBookmarksSetting />,
 					},
 				],
 			},

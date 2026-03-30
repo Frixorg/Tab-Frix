@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { MdOutlineClear } from 'react-icons/md'
 import Analytics from '@/analytics'
 import { BrowserBookmark } from './browser-bookmark/browser-bookmark'
@@ -7,8 +8,12 @@ import { FcGoogle } from 'react-icons/fc'
 import { ImageSearchPortal } from './image/image-search.portal'
 import { VoiceSearchPortal } from './voice/voice-search.portal'
 import { ImageSearchButton } from './image/image-search.button'
+import { useSearchAndBookmarksSettings } from '@/context/search-and-bookmarks.context'
 
 export function SearchLayout() {
+	const { t, i18n } = useTranslation()
+	const { settings } = useSearchAndBookmarksSettings()
+	const isRtl = i18n.language.startsWith('fa')
 	const [searchQuery, setSearchQuery] = useState('')
 	const [isInputFocused, setIsInputFocused] = useState(false)
 	const searchRef = useRef<HTMLDivElement>(null)
@@ -67,7 +72,11 @@ export function SearchLayout() {
 
 	return (
 		<div className="relative z-50 flex flex-col items-center justify-start h-24">
-			<div ref={searchRef} className="w-full bg-content bg-glass rounded-2xl">
+			<div
+				ref={searchRef}
+				className="w-full bg-content bg-glass rounded-2xl"
+				dir={isRtl ? 'rtl' : 'ltr'}
+			>
 				{activePortal === 'voice' && (
 					<VoiceSearchPortal
 						onClose={() => setActivePortal(null)}
@@ -104,9 +113,9 @@ export function SearchLayout() {
 							onChange={handleSearchInputChange}
 							onFocus={() => onFocusInput()}
 							className={
-								'w-full py-1.5 text-base  font-light text-right focus:outline-none text-content placeholder:text-base-content/60 placeholder:font-medium focus:placeholder:opacity-50 bg-transparent'
+								'w-full py-1.5 text-base font-light text-start focus:outline-none text-content placeholder:text-base-content/60 placeholder:font-medium focus:placeholder:opacity-50 bg-transparent'
 							}
-							placeholder="جستجو در گوگل..."
+							placeholder={t('search.googlePlaceholder')}
 							autoComplete="off"
 						/>
 						<button
@@ -116,7 +125,7 @@ export function SearchLayout() {
 						>
 							<MdOutlineClear size={20} className="opacity-50" />
 						</button>
-						<div className="flex items-center gap-0.5 ml-1">
+						<div className="flex items-center gap-0.5 ms-1">
 							<VoiceSearchButton onClick={() => setActivePortal('voice')} />
 							<ImageSearchButton onClick={() => setActivePortal('image')} />
 						</div>
@@ -127,7 +136,7 @@ export function SearchLayout() {
 						/>
 					</div>
 				</form>
-				<BrowserBookmark />
+				{settings.showBrowserBookmark && <BrowserBookmark />}
 			</div>
 		</div>
 	)

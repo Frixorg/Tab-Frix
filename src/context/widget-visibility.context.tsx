@@ -20,10 +20,11 @@ import { CurrencyProvider } from './currency.context'
 import { showToast } from '@/common/toast'
 import { YadkarWidget } from '@/layouts/widgets/yadkar/yadkar'
 import { TodoProvider } from './todo.context'
-import { BookmarksList } from '@/layouts/bookmark/bookmarks'
-import { SearchLayout } from '@/layouts/search/search'
+import { SearchAndBookmarksWidget } from '@/layouts/search/search-and-bookmarks.widget'
 import { TimeAndDateLayout } from '@/layouts/widgets/timeAndDate/TimeandDateWidget.layout'
-import { BookmarkProvider } from '@/layouts/bookmark/context/bookmark.context'
+import {
+	SearchAndBookmarksSettingsProvider,
+} from './search-and-bookmarks.context'
 
 export enum WidgetKeys {
 	comboWidget = 'comboWidget',
@@ -62,12 +63,7 @@ export const widgetItems: WidgetItem[] = [
 		order: -2,
 		gridSpan: 'md:col-span-2',
 		node: (
-			<div className="space-y-2">
-				<SearchLayout />
-				<BookmarkProvider>
-					<BookmarksList />
-				</BookmarkProvider>
-			</div>
+			<SearchAndBookmarksWidget />
 		),
 		canToggle: false,
 	},
@@ -346,17 +342,19 @@ export function WidgetVisibilityProvider({ children }: { children: ReactNode }) 
 			.sort((a, b) => a.order - b.order)
 	}
 	return (
-		<WidgetVisibilityContext.Provider
-		value={{
-			visibility,
-			toggleWidget,
-			reorderWidgets,
-			setWidgetOrder,
-			getSortedWidgets,
-		}}
-		>
-			{children}
-		</WidgetVisibilityContext.Provider>
+		<SearchAndBookmarksSettingsProvider>
+			<WidgetVisibilityContext.Provider
+				value={{
+					visibility,
+					toggleWidget,
+					reorderWidgets,
+					setWidgetOrder,
+					getSortedWidgets,
+				}}
+			>
+				{children}
+			</WidgetVisibilityContext.Provider>
+		</SearchAndBookmarksSettingsProvider>
 	)
 }
 

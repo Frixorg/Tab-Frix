@@ -22,6 +22,9 @@ import type { FetchedCurrency } from '@/services/hooks/currency/getCurrencyByCod
 import type { RecommendedSite, TrendItem } from '@/services/hooks/trends/getTrends'
 import type { UserProfile } from '@/services/hooks/user/userService.hook'
 import type { FetchedYouTubeProfile } from '@/services/hooks/youtube/getYouTubeProfile.hook'
+import type {
+	SearchAndBookmarksSettings,
+} from '@/context/search-and-bookmarks.context'
 import type { StoredWallpaper, Wallpaper } from '../wallpaper.interface'
 import type { Todo } from '@/services/hooks/todo/todo.interface'
 import type { AppLanguage } from '@/i18n/types'
@@ -99,4 +102,5 @@ export interface StorageKV {
 
 	widget_tab: string
 	selected_city: { id: string; name: string } | null
+	searchAndBookmarksSettings: SearchAndBookmarksSettings
 }

@@ -1,13 +1,15 @@
+import { useTranslation } from 'react-i18next'
 import Analytics from '@/analytics'
 import Tooltip from '@/components/toolTip'
 
 export function VoiceSearchButton({ onClick }: { onClick: () => void }) {
+	const { t } = useTranslation()
 	const onClickHandle = () => {
 		Analytics.event('searchbox_open_voice_search')
 		onClick()
 	}
 	return (
-		<Tooltip content="جستجوی گفتاری">
+		<Tooltip content={t('search.voiceSearchTooltip')}>
 			<div
 				onClick={() => onClickHandle()}
 				className="flex items-center justify-center transition-all duration-300 rounded-full cursor-pointer h-9 w-9 shrink-0 hover:bg-base-300 group"

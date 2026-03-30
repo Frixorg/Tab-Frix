@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGetTrends } from '@/services/hooks/trends/getTrends'
 import { getFaviconFromUrl } from '@/common/utils/icon'
 import Tooltip from '@/components/toolTip'
@@ -10,6 +11,7 @@ import Analytics from '@/analytics'
 import { NewBadge } from '@/components/badges/new.badge'
 
 export function BrowserBookmark() {
+	const { t } = useTranslation()
 	const { data } = useGetTrends({ enabled: true })
 	const { setPage } = usePage()
 
@@ -62,7 +64,7 @@ export function BrowserBookmark() {
 			<div className="flex flex-row items-center w-full gap-1 py-1 overflow-x-auto no-scrollbar scroll-smooth">
 
 				<div ref={iconRef} className="flex items-center justify-center shrink-0">
-					<Tooltip content="بوکمارک‌های مرورگر">
+					<Tooltip content={t('search.browserBookmarksTooltip')}>
 						<div
 							className="flex items-center cursor-pointer group"
 							onClick={handleTogglePopover}

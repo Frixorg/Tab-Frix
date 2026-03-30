@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
 import { FiChevronRight, FiFolder, FiExternalLink, FiLock } from 'react-icons/fi'
 import { getFaviconFromUrl } from '@/common/utils/icon'
 import { useGeneralSetting } from '@/context/general-setting.context'
@@ -9,7 +10,7 @@ import {
 } from '@/layouts/bookmark/utils/browser-bookmarks.util'
 import Analytics from '@/analytics'
 import { Button } from '@/components/button/button'
-import { HiChevronRight } from 'react-icons/hi2'
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2'
 
 interface BookmarkPopoverProps {
 	isOpen: boolean
@@ -18,6 +19,8 @@ interface BookmarkPopoverProps {
 }
 
 export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProps) {
+	const { t, i18n } = useTranslation()
+	const popoverDir = i18n.language.startsWith('fa') ? 'rtl' : 'ltr'
 	const { browserBookmarksEnabled, setBrowserBookmarksEnabled } = useGeneralSetting()
 	const [fetchedBookmarks, setFetchedBookmarks] = useState<FetchedBrowserBookmark[]>([])
 	const [currentFolderId, setCurrentFolderId] = useState<string | null>(null)
@@ -73,15 +76,16 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 	}
 
 	const c =
-		fetchedBookmarks.find((b) => b.id === currentFolderId)?.title || 'بوکمارک‌های من'
+		fetchedBookmarks.find((b) => b.id === currentFolderId)?.title ||
+		t('search.bookmarkPopover.defaultRootTitle')
 
 	return createPortal(
 		<div
 			className="bookmark-popover fixed z-[9999] w-72  border border-base-content/10 shadow-2xl rounded-2xl overflow-hidden animate-in fade-in zoom-in duration-200 origin-top-left bg-content bg-glass"
+			dir={popoverDir}
 			style={{
 				top: coords.top,
 				left: coords.left,
-				direction: 'rtl',
 			}}
 		>
 			{!browserBookmarksEnabled ? (
@@ -89,10 +93,11 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 					<div className="flex items-center justify-center w-8 h-8 mx-auto mb-3 rounded-full bg-primary/10">
 						<FiLock className="text-primary" size={18} />
 					</div>
-					<p className="mb-1 text-sm font-bold">دسترسی به بوکمارک‌ها</p>
+					<p className="mb-1 text-sm font-bold">
+						{t('search.bookmarkPopover.permissionTitle')}
+					</p>
 					<p className="mb-4 text-xs leading-relaxed text-muted">
-						برای مشاهده بوکمارک‌های مرورگر در این بخش، نیاز به دسترسی شما
-						داریم.
+						{t('search.bookmarkPopover.permissionDescription')}
 					</p>
 					<Button
 						size="sm"
@@ -100,7 +105,7 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 						className="w-full rounded-2xl"
 						isPrimary
 					>
-						فعال‌سازی دسترسی
+						{t('search.bookmarkPopover.enableAccess')}
 					</Button>
 				</div>
 			) : (
@@ -113,8 +118,17 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 								onClick={handleGoBack}
 								className="text-[10px] btn-ghost text-muted rounded-xl flex items-center gap-1!"
 							>
-								<HiChevronRight />
-								بازگشت
+								{popoverDir === 'rtl' ? (
+									<>
+										{t('common.back')}
+										<HiChevronRight className="shrink-0" size={14} />
+									</>
+								) : (
+									<>
+										<HiChevronLeft className="shrink-0" size={14} />
+										{t('common.back')}
+									</>
+								)}
 							</Button>
 						)}
 					</div>
@@ -157,7 +171,7 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 							))
 						) : (
 							<div className="py-8 text-xs text-center text-muted">
-								پوشه خالی است
+								{t('search.bookmarkPopover.emptyFolder')}
 							</div>
 						)}
 					</div>

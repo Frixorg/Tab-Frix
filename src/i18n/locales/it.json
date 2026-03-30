@@ -5,6 +5,19 @@
 	"navbar": {
 		"reorderModeHint": "La modalità riordino è attiva, sposta i tuoi widget"
 	},
+	"search": {
+		"googlePlaceholder": "Cerca su Google…",
+		"voiceSearchTooltip": "Ricerca vocale",
+		"imageSearchTooltip": "Cerca con immagine",
+		"browserBookmarksTooltip": "Segnalibri del browser",
+		"bookmarkPopover": {
+			"defaultRootTitle": "I miei segnalibri",
+			"permissionTitle": "Accesso ai segnalibri",
+			"permissionDescription": "Per mostrare i segnalibri del browser in questa sezione, abbiamo bisogno della tua autorizzazione.",
+			"enableAccess": "Consenti accesso",
+			"emptyFolder": "Questa cartella è vuota"
+		}
+	},
 	"settings": {
 		"title": "Impostazioni",
 		"Widgets": "Widgets",
@@ -12,12 +25,13 @@
 		"widgets": {
 			"modalTitle": "Impostazioni widget",
 			"tabs": {
-				"widgetManagement": "Gestione widget",
+				"widgetManagement": "Gestione",
 				"timeCalendar": "Ora e data",
 				"currency": "Valuta",
 				"news": "Notizie",
 				"weather": "Meteo",
-				"pet": "Pet"
+				"pet": "Pet",
+				"searchAndBookmarks": "Cerca e segnalibri"
 			},
 			"weather": {
 				"currentLocation": "Posizione attuale",
@@ -67,6 +81,16 @@
 						"description": "Mostra la data in formato Jalali"
 					}
 				}
+			}
+			,
+			"searchAndBookmarks": {
+				"title": "Cerca e segnalibri",
+				"showBookmarksList": "Mostra la lista dei segnalibri",
+				"showBrowserBookmark": "Mostra la barra dei segnalibri del browser",
+				"positionLabel": "Posizione della barra di ricerca (quando la lista è nascosta)",
+				"positionTop": "In alto",
+				"positionCenter": "Al centro",
+				"positionBottom": "In basso"
 			}
 		},
 		"groups": {

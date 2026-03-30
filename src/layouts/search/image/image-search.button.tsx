@@ -1,14 +1,16 @@
+import { useTranslation } from 'react-i18next'
 import Analytics from '@/analytics'
 import Tooltip from '@/components/toolTip'
 
 export function ImageSearchButton({ onClick }: { onClick: () => void }) {
+	const { t } = useTranslation()
 	const onClickHandle = () => {
 		Analytics.event('searchbox_open_image_search')
 		onClick()
 	}
 
 	return (
-		<Tooltip content="جستجوی با تصویر">
+		<Tooltip content={t('search.imageSearchTooltip')}>
 			<button
 				type="button"
 				onClick={() => onClickHandle()}

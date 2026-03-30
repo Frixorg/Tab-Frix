@@ -23,12 +23,12 @@ export function EmptyBookmarkSlot({
 	return (
 		<button
 			onClick={canAdd ? onClick : undefined}
-			className={`relative flex flex-col items-center shadow-sm justify-center p-4 transition-all duration-300 border cursor-pointer group rounded-2xl w-full h-20 md:h-[5.5rem] ${getEmptySlotStyle()} ${canAdd ? 'transition-transform ease-in-out group-hover:scale-102' : ''}`}
+			className={`relative flex flex-col items-center shadow-sm justify-center p-4 transition-all duration-300 border cursor-pointer group rounded-2xl w-full h-20 md:h-[6.5rem] ${getEmptySlotStyle()} ${canAdd ? 'transition-transform ease-in-out group-hover:scale-102' : ''}`}
 		>
 			<div className="relative flex items-center justify-center w-14 h-14">
 				{canAdd ? (
 					<div className="flex items-center justify-center ">
-						<TbBookmarkPlus size={38} className="opacity-50" />
+						<TbBookmarkPlus size={38} className="opacity-50 stroke-1" />
 					</div>
 				) : (
 					<div className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-500/20"></div>
