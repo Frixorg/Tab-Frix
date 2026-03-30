@@ -10,7 +10,7 @@
 			"modalTitle": "Widget settings",
 			"tabs": {
 				"widgetManagement": "Widget Management",
-				"timeCalendar": "Time & Calendar",
+				"timeCalendar": "Time & Date",
 				"currency": "Currency",
 				"news": "News",
 				"weather": "Weather",
@@ -131,7 +131,9 @@
 						"Direct access to Google Calendar",
 						"Smart display and reminders for upcoming events and meetings"
 					],
-					"permissions": ["View calendar (Google Calendar)"]
+					"permissions": [
+						"View calendar (Google Calendar)"
+					]
 				},
 				"github": {
 					"name": "GitHub",
@@ -280,7 +282,10 @@
 					"vazir": "Vazir",
 					"samim": "Samim",
 					"pofak": "Pofak",
-					"rooyin": "Rooyin"
+					"rooyin": "Rooyin",
+					"inter": "Inter",
+					"roboto": "Roboto",
+					"outfit": "Outfit"
 				}
 			},
 			"browserTitle": {
@@ -311,6 +316,33 @@
 			"websiteSubtitle": "Developer site",
 			"madeWith": "Made with",
 			"copyright": "© <brand /> — All rights reserved"
+		},
+		"dropdown": {
+			"simpleUiWarning": "In simple UI mode, widgets cannot be changed or moved!",
+			"manageWidgets": "Manage Widgets",
+			"disableReorder": "Disable Reorder Mode",
+			"enableReorder": "Enable Reorder Mode"
 		}
+	},
+	"releaseNotes": {
+		"modalTitle": "🥳 New version is ready!",
+		"subtitle": "New update for TabFrix",
+		"videoCaption": "Tutorial: Changing the UI",
+		"newUiTitle": "New UI has arrived!",
+		"newUiDescriptionPart1": "We've added a ",
+		"newUiDescriptionBold": "fresh look and layout",
+		"newUiDescriptionPart2": " to TabFrix! The previous interface is still there; now you can switch between two different styles and choose the one that works best for you.",
+		"features": {
+			"0": "New Language Added: English & Italian",
+			"1": "Update Logic to API less structure",
+			"2": "Redesign some widgets",
+			"3": "New UI widget arrangement"
+		},
+		"activatedText": "New UI is active!",
+		"activateAction": "Try it now",
+		"thanks": "Thanks for being with us",
+		"feedbackLink": "Suggestion or report an issue",
+		"waitButton": "Wait a few moments ({{counter}})",
+		"gotIt": "Got it"
 	}
 }

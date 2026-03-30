@@ -1,5 +1,6 @@
 import { useCallback, useState, useRef } from 'react'
 import { HiCog, HiViewGridAdd } from 'react-icons/hi'
+import { useTranslation } from 'react-i18next'
 import { callEvent } from '@/common/utils/call-event'
 import { ClickableTooltip } from '@/components/clickableTooltip'
 import { useAppearanceSetting } from '@/context/appearance.context'
@@ -10,6 +11,7 @@ interface SettingsProps {
 	setShowSettings: (value: boolean) => void
 }
 export const SettingsDropdown = ({ setShowSettings }: SettingsProps) => {
+	const { t, i18n } = useTranslation()
 	const { canReOrderWidget, toggleCanReOrderWidget, ui } = useAppearanceSetting()
 	const [isOpen, setIsOpen] = useState(false)
 	const triggerRef = useRef<HTMLDivElement>(null)
@@ -28,7 +30,7 @@ export const SettingsDropdown = ({ setShowSettings }: SettingsProps) => {
 
 	const onClick = () => {
 		if (ui === 'SIMPLE') {
-			showToast('در حالت ظاهری ساده، امکان تغییر و جابجایی ویجت ها نیست!', 'error')
+			showToast(t('settings.dropdown.simpleUiWarning'), 'error')
 			return
 		}
 		toggleCanReOrderWidget()
@@ -41,24 +43,24 @@ export const SettingsDropdown = ({ setShowSettings }: SettingsProps) => {
 				onClick={(_e) => {
 					handleSettingsClick()
 				}}
-				className="flex items-center w-full gap-3 px-3 py-2 text-sm text-right transition-colors rounded-none cursor-pointer group hover:bg-primary/10 hover:text-primary"
+				className={`flex ${i18n.dir() === 'rtl' ? 'flex-row' : 'flex-row-reverse'} items-center w-full gap-3 px-3 py-2 text-sm text-right transition-colors rounded-none cursor-pointer group hover:bg-primary/10 hover:text-primary`}
 			>
 				<HiCog size={16} className="text-muted group-hover:!text-primary" />
-				<span>تنظیمات</span>
+				<span>{t('settings.title')}</span>
 			</button>
 
 			<button
 				onClick={(_e) => {
 					handleWidgetSettingsClick()
 				}}
-				className="flex items-center justify-between w-full px-3 py-2 text-sm text-right transition-colors rounded-none cursor-pointer group hover:bg-primary/10 hover:text-primary"
+				className={`flex ${i18n.dir() === 'rtl' ? 'flex-row' : 'flex-row-reverse'} items-center justify-between w-full px-3 py-2 text-sm text-right transition-colors rounded-none cursor-pointer group hover:bg-primary/10 hover:text-primary`}
 			>
-				<div className="flex items-center gap-3">
+				<div className={`flex ${i18n.dir() === 'rtl' ? 'flex-row' : 'flex-row-reverse'} items-center gap-3`}>
 					<HiViewGridAdd
 						size={16}
 						className="text-muted group-hover:!text-primary"
 					/>
-					<span>مدیریت ویجت‌ها</span>
+					<span>{t('settings.dropdown.manageWidgets')}</span>
 				</div>
 			</button>
 
@@ -66,15 +68,15 @@ export const SettingsDropdown = ({ setShowSettings }: SettingsProps) => {
 				className="relative px-3 py-2 border-t cursor-pointer border-base-300 group hover:bg-primary/10 hover:text-primary"
 				onClick={() => onClick()}
 			>
-				<div className="flex items-center gap-3">
+				<div className={`flex ${i18n.dir() === 'rtl' ? 'flex-row' : 'flex-row-reverse'} items-center gap-3`}>
 					<AiOutlineDrag
 						size={16}
 						className="text-muted group-hover:!text-primary"
 					/>
 					{canReOrderWidget ? (
-						<span>غیرفعال‌سازی حالت جابجایی</span>
+						<span>{t('settings.dropdown.disableReorder')}</span>
 					) : (
-						<span>حالت جابجایی ویجت ها</span>
+						<span>{t('settings.dropdown.enableReorder')}</span>
 					)}
 				</div>
 			</div>

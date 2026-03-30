@@ -2,7 +2,7 @@ import type React from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import Analytics from '@/analytics'
 import { getFromStorage, setToStorage } from '@/common/storage'
-import { useChangeFont, useChangeUI } from '@/services/hooks/extension/updateSetting.hook'
+import { useChangeUI } from '@/services/hooks/extension/updateSetting.hook'
 import { safeAwait } from '@/services/api'
 import { showToast } from '@/common/toast'
 import { translateError } from '@/utils/translate-error'
@@ -39,7 +39,6 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
 	const [settings, setSettings] = useState<AppearanceData>(DEFAULT_SETTINGS)
 	const [isInitialized, setIsInitialized] = useState(false)
 	const [canReOrderWidget, setCanReOrderWidget] = useState(false)
-	const { mutateAsync: changeFontAsync } = useChangeFont()
 	const { mutateAsync: changeUIAsync } = useChangeUI()
 
 	useEffect(() => {
@@ -111,14 +110,8 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
 	}
 
 	const setFontFamily = async (value: string) => {
-		const currentFont = settings.fontFamily
 		updateSetting('fontFamily', value)
 		Analytics.event(`set_font_${value}`)
-		const [err] = await safeAwait(changeFontAsync({ font: value }))
-		if (err) {
-			updateSetting('fontFamily', currentFont)
-			return showToast(translateError(err) as any, 'error')
-		}
 	}
 
 	const setUI = async (ui: UI) => {

@@ -10,7 +10,7 @@
 			"modalTitle": "Impostazioni widget",
 			"tabs": {
 				"widgetManagement": "Gestione widget",
-				"timeCalendar": "Ora e calendario",
+				"timeCalendar": "Ora e data",
 				"currency": "Valuta",
 				"news": "Notizie",
 				"weather": "Meteo",
@@ -131,7 +131,9 @@
 						"Accesso diretto a Google Calendar",
 						"Visualizzazione e promemoria intelligenti per eventi e riunioni"
 					],
-					"permissions": ["Visualizza calendario (Google Calendar)"]
+					"permissions": [
+						"Visualizza calendario (Google Calendar)"
+					]
 				},
 				"github": {
 					"name": "GitHub",
@@ -280,7 +282,10 @@
 					"vazir": "Vazir",
 					"samim": "Samim",
 					"pofak": "Pofak",
-					"rooyin": "Rooyin"
+					"rooyin": "Rooyin",
+					"inter": "Inter",
+					"roboto": "Roboto",
+					"outfit": "Outfit"
 				}
 			},
 			"browserTitle": {
@@ -311,6 +316,33 @@
 			"websiteSubtitle": "Sito dello sviluppatore",
 			"madeWith": "Realizzato con",
 			"copyright": "© <brand /> — Tutti i diritti riservati"
+		},
+		"dropdown": {
+			"simpleUiWarning": "In modalità UI semplice, i widget non possono essere modificati o spostati!",
+			"manageWidgets": "Gestisci i widget",
+			"disableReorder": "Disabilita modalità riordino",
+			"enableReorder": "Abilita modalità riordino"
 		}
+	},
+	"releaseNotes": {
+		"modalTitle": "🥳 La nuova versione è pronta!",
+		"subtitle": "Nuovo aggiornamento per TabFrix",
+		"videoCaption": "Tutorial: Cambio interfaccia",
+		"newUiTitle": "La nuova interfaccia è arrivata!",
+		"newUiDescriptionPart1": "Abbiamo aggiunto un ",
+		"newUiDescriptionBold": "nuovo look e layout",
+		"newUiDescriptionPart2": " a TabFrix! La vecchia interfaccia è ancora lì; ora puoi passare tra due stili diversi e scegliere quello che preferisci.",
+		"features": {
+			"0": "Nuova lingua aggiunta: Inglese e Italiano",
+			"1": "Aggiorna la logica per una struttura senza API",
+			"2": "Riprogettazione di alcuni widget",
+			"3": "Nuovo layout dei widget"
+		},
+		"activatedText": "La nuova interfaccia è attiva!",
+		"activateAction": "Provalo ora",
+		"thanks": "Grazie per essere con noi",
+		"feedbackLink": "Suggerimento o segnala un problema",
+		"waitButton": "Aspetta qualche istante ({{counter}})",
+		"gotIt": "Capito"
 	}
 }

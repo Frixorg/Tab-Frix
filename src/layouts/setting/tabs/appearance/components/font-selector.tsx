@@ -29,6 +29,9 @@ export function FontSelector({ fetched_fonts }: FontSelectorProps) {
 			{ value: 'Samim', label: t('settings.appearance.font.names.samim'), description: desc },
 			{ value: 'Pofak', label: t('settings.appearance.font.names.pofak'), description: desc },
 			{ value: 'rooyin', label: t('settings.appearance.font.names.rooyin'), description: desc },
+			{ value: 'Inter', label: t('settings.appearance.font.names.inter'), description: desc },
+			{ value: 'Roboto', label: t('settings.appearance.font.names.roboto'), description: desc },
+			{ value: 'Outfit', label: t('settings.appearance.font.names.outfit'), description: desc },
 		]
 	}, [t])
 

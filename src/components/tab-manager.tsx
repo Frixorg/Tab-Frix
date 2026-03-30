@@ -81,41 +81,41 @@ export const TabManager = ({
 				>
 					<div className="flex flex-row sm:flex-col sm:gap-4">
 						{tabs.map((group, idx) => (
-								<div key={idx} className="flex flex-col gap-1">
-									{group.parentName && (
-										<div className="relative mx-4 my-2">
-											<div className="h-px bg-base-300" />
-											<span className={`absolute ${direction === 'rtl' ? 'right-0 pl-2' : 'left-0 pr-2'}  text-xs font-medium -top-2 bg-base-100 text-muted`}>
-												{group.parentName}
-											</span>
-										</div>
-									)}
+							<div key={idx} className="flex flex-col gap-1">
+								{group.parentName && (
+									<div className="relative mx-4 my-2">
+										<div className="h-px bg-base-300" />
+										<span className={`absolute ${direction === 'rtl' ? 'right-0 pl-2' : 'left-0 pr-2'}  text-xs font-medium -top-2 text-muted`}>
+											{group.parentName}
+										</span>
+									</div>
+								)}
 
-									{group.children?.map(
-										({ label, value, icon, isNew }) => (
-											<button
-												key={value}
-												onClick={() => handleTabChange(value)}
-												className={`relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-200 justify-start cursor-pointer whitespace-nowrap active:scale-[0.98] ${getTabButtonStyle(
+								{group.children?.map(
+									({ label, value, icon, isNew }) => (
+										<button
+											key={value}
+											onClick={() => handleTabChange(value)}
+											className={`relative flex items-center gap-3 px-4 py-3 rounded-full transition-all duration-200 justify-start cursor-pointer whitespace-nowrap active:scale-[0.98] ${getTabButtonStyle(
+												activeTab === value
+											)}`}
+										>
+											<span
+												className={`relative ${getTabIconStyle(
 													activeTab === value
 												)}`}
 											>
-												<span
-													className={`relative ${getTabIconStyle(
-														activeTab === value
-													)}`}
-												>
-													{icon}
-													{isNew && (
-														<span className="absolute left-0 z-30 w-2 h-2 rounded-full -bottom-1 bg-error animate-ping" />
-													)}
-												</span>
-												<span className="text-sm">{label}</span>
-											</button>
-										)
-									)}
-								</div>
-							))}
+												{icon}
+												{isNew && (
+													<span className="absolute left-0 z-30 w-2 h-2 rounded-full -bottom-1 bg-error animate-ping" />
+												)}
+											</span>
+											<span className="text-sm">{label}</span>
+										</button>
+									)
+								)}
+							</div>
+						))}
 					</div>
 					{children}
 				</div>
@@ -129,11 +129,10 @@ export const TabManager = ({
 					tab.children?.map(({ value, element }) => (
 						<div
 							key={value}
-							className={`absolute inset-0 p-1 rounded-lg transition-all duration-200 ${
-								activeTab === value
+							className={`absolute inset-0 p-1 rounded-lg transition-all duration-200 ${activeTab === value
 									? 'opacity-100 translate-x-0 z-10'
 									: 'opacity-0 translate-x-5 z-0 pointer-events-none'
-							}`}
+								}`}
 						>
 							{activeTab === value && element}
 						</div>

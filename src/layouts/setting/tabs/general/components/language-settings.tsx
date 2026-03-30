@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { setToStorage } from '@/common/storage'
 import { ItemSelector } from '@/components/item-selector'
 import { SectionPanel } from '@/components/section-panel'
+import { useAppearanceSetting } from '@/context/appearance.context'
 import { applyDocumentLang } from '@/i18n/document'
 import type { AppLanguage } from '@/i18n/types'
 import { APP_LANGUAGES } from '@/i18n/types'
@@ -12,11 +13,23 @@ export function LanguageSettings() {
 	const current =
 		APP_LANGUAGES.find((code) => i18n.language.startsWith(code)) ?? 'en'
 
+	const { fontFamily, setFontFamily } = useAppearanceSetting()
+	const PERSIAN_FONTS = ['Vazir', 'Samim', 'Pofak', 'rooyin']
+	const ENGLISH_FONTS = ['Inter', 'Roboto', 'Outfit']
+
 	async function selectLang(lng: AppLanguage) {
 		if (lng === current) return
 		await i18n.changeLanguage(lng)
 		await setToStorage('language', lng)
 		applyDocumentLang(lng)
+
+		if ((lng === 'en' || lng === 'it') && PERSIAN_FONTS.includes(fontFamily)) {
+			setFontFamily('Inter')
+		}
+
+		if (lng === 'fa' && ENGLISH_FONTS.includes(fontFamily)) {
+			setFontFamily('Vazir')
+		}
 	}
 
 	return (

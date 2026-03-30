@@ -46,14 +46,6 @@ export function useChangeBrowserTitle() {
 	})
 }
 
-export function useChangeFont() {
-	return useMutation<any, unknown, { font: string }>({
-		mutationFn: async ({ font }) => {
-			const client = await getMainClient()
-			await client.put('/extension/@me/font', { font })
-		},
-	})
-}
 
 export function useChangeUI() {
 	return useMutation<any, unknown, { ui: string }>({
