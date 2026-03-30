@@ -59,29 +59,11 @@ export interface UserProfile extends FetchedProfile {
 }
 
 export async function fetchUserProfile(): Promise<UserProfile> {
-	const client = await getMainClient()
-	try {
-		const response = await client.get<UserProfile>('/extension/@me')
-		await setToStorage('profile', { ...response.data, inCache: true })
-		return response.data
-	} catch (error: any) {
-		// if server error or network error, return cache data
-		const isServerErrorOrNetworkError =
-			error.response?.status >= 500 || error.code === 'ERR_NETWORK'
-		if (isServerErrorOrNetworkError) {
-			const cachedProfile = await getFromStorage('profile')
-			if (cachedProfile) {
-				return cachedProfile
-			}
-		}
-
-		if (error.response?.status === 401) {
-			await removeFromStorage('auth_token')
-			await removeFromStorage('profile')
-		}
-
-		throw error
+	const cachedProfile = await getFromStorage('profile')
+	if (cachedProfile) {
+		return cachedProfile
 	}
+	return {} as UserProfile
 }
 
 export function useGetUserProfile(options?: Partial<UseQueryOptions<UserProfile>>) {
@@ -99,11 +81,7 @@ export function useGetUserMoodStatus(enabled: boolean) {
 	return useQuery({
 		queryKey: ['userMoodStatus'],
 		queryFn: async () => {
-			const client = await getMainClient()
-
-			const response = await client.get('/users/@me/moods/status')
-
-			return response.data.data
+			return []
 		},
 		retry: 1,
 		refetchOnWindowFocus: false,
@@ -122,12 +100,7 @@ interface UpdateActivityResponse {
 async function updateActivity(
 	body: UpdateActivityParams
 ): Promise<UpdateActivityResponse> {
-	const client = await getMainClient()
-	const response = await client.put<UpdateActivityResponse>(
-		'/extension/@me/activity',
-		body
-	)
-	return response.data
+	return { message: 'success' }
 }
 
 export function useUpdateActivity() {
@@ -168,7 +141,7 @@ async function saveSelectedCity({
 	lon,
 }: SelectedCityInput): Promise<{ city: SelectedCityInput; profile: UserProfile | null }> {
 	// Always persist to dedicated key so it works with and without auth.
-	await setToStorage('selected_city', { id: cityId, name: city, lat, lon })
+	await setToStorage('selected_city', { id: cityId, name: city, lat, lon } as any)
 
 	// Also update cached profile city if the user is logged in.
 	const cachedProfile = await getFromStorage('profile')

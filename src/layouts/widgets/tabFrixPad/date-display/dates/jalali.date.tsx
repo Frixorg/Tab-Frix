@@ -1,12 +1,10 @@
 import { useDate } from '@/context/date.context'
 import { combineAndSortEvents } from '@/layouts/widgets/tools/events/utils'
-import { useGetEvents } from '@/services/hooks/date/getEvents.hook'
 import { HolidayBadge } from '../components/holiday.badge'
 
 export function JalaliDate() {
 	const { today, todayIsHoliday } = useDate()
-	const { data: events } = useGetEvents()
-	const eventsForCalendar = events || {
+	const eventsForCalendar = {
 		gregorianEvents: [],
 		hijriEvents: [],
 		shamsiEvents: [],

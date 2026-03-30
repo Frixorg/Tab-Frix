@@ -20,10 +20,13 @@
 				"currentLocation": "موقعیت فعلی",
 				"wind": "باد",
 				"humidity": "رطوبت",
-				"cloudCover": "پوشش ابری"
+				"cloudCover": "پوشش ابری",
+				"showWindHumidity": "نمایش باد و رطوبت",
+				"showForecast": "نمایش پیش‌بینی روزهای آینده"
 			},
 			"timeCalendar": {
 				"dateSectionTitle": "تنظیمات تاریخ",
+				"showWeather": "نمایش آب و هوای فعلی",
 				"clockSectionTitle": "تنظیمات ساعت",
 				"clockType": {
 					"title": "نوع نمایش ساعت را انتخاب کنید:",

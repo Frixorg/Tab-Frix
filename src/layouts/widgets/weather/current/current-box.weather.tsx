@@ -1,19 +1,20 @@
 import type { FetchedWeather } from '@/layouts/widgets/weather/weather.interface'
 import { unitsFlag } from '../unitSymbols'
 import Tooltip from '@/components/toolTip'
-import { TbWind } from 'react-icons/tb'
-import { WiCloudy, WiHumidity } from 'react-icons/wi'
+import { TbWind, TbDroplets, TbCloud } from 'react-icons/tb'
 import { useTranslation } from 'react-i18next'
 
 interface CurrentWeatherBoxProps {
 	fetchedWeather: FetchedWeather | null
 	temperatureUnit: keyof typeof unitsFlag
+	showWindHumidity?: boolean
 }
 
-export function CurrentWeatherBox({
+export const CurrentWeatherBox: React.FC<CurrentWeatherBoxProps> = ({
 	fetchedWeather,
 	temperatureUnit,
-}: CurrentWeatherBoxProps) {
+	showWindHumidity = true,
+}) => {
 	const { t, i18n } = useTranslation()
 	const currentLang = i18n.language as 'en' | 'fa' | 'it'
 	return (
@@ -44,17 +45,17 @@ export function CurrentWeatherBox({
 							{fetchedWeather?.city?.en === 'Current Location'
 								? t('settings.widgets.weather.currentLocation')
 								: cleanCityName(
-										(fetchedWeather?.city as any)?.[currentLang] ||
-											fetchedWeather?.city?.en ||
-											''
-									)}
+									(fetchedWeather?.city as any)?.[currentLang] ||
+									fetchedWeather?.city?.en ||
+									''
+								)}
 						</span>
 
 						<span className="flex items-baseline gap-1.5 text-4xl font-bold leading-none text-base-content drop-shadow-lg">
-							{Math.round(fetchedWeather?.weather?.temperature?.temp || 0)}
 							<span className="text-xl font-medium text-base-content/90 drop-shadow-lg">
 								{unitsFlag[temperatureUnit || 'metric']}
 							</span>
+							<span>{Math.round(fetchedWeather?.weather?.temperature?.temp || 0)}</span>
 						</span>
 
 						<span className="text-xs leading-tight text-muted drop-shadow-lg">
@@ -75,39 +76,38 @@ export function CurrentWeatherBox({
 				</div>
 			</div>
 
-			<div className="p-2 border rounded-2xl bg-base-200/40 border-content">
-				<div className="grid grid-cols-3 gap-1.5">
-					<Tooltip content={t('settings.widgets.weather.wind')}>
-						<div className="flex items-center justify-center gap-1.5 py-2 transition-colors border rounded-xl border-content">
-							<TbWind className="w-4 h-4 text-muted" />
-							<span className="text-xs font-medium text-muted">
-								{Math.round(
-									fetchedWeather?.weather?.temperature?.wind_speed || 0
-								)}{' '}
-								m/s
-							</span>
-						</div>
-					</Tooltip>
+			{showWindHumidity && (
+				<div className="p-2 border rounded-2xl bg-base-200/40 border-content mt-2">
+					<div className="flex gap-2.5 justify-center">
+						<Tooltip content={t('settings.widgets.weather.wind')}>
+							<div className="flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
+								<TbWind size={14} className="text-base-content" />
+								<span className="text-[10px] font-bold text-base-content">
+									{Math.round(fetchedWeather?.weather?.temperature?.wind_speed || 0)}
+								</span>
+							</div>
+						</Tooltip>
 
-					<Tooltip content={t('settings.widgets.weather.humidity')}>
-						<div className="flex items-center justify-center gap-1.5 py-2 transition-colors border rounded-xl border-content">
-							<WiHumidity className="w-4 h-4 text-muted" />
-							<span className="text-xs font-medium text-muted">
-								{fetchedWeather?.weather?.temperature?.humidity || 0}%
-							</span>
-						</div>
-					</Tooltip>
+						<Tooltip content={t('settings.widgets.weather.humidity')}>
+							<div className="flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
+								<TbDroplets size={14} className="text-base-content" />
+								<span className="text-[10px] font-bold text-base-content">
+									{fetchedWeather?.weather?.temperature?.humidity || 0}%
+								</span>
+							</div>
+						</Tooltip>
 
-					<Tooltip content={t('settings.widgets.weather.cloudCover')}>
-						<div className="flex items-center justify-center gap-1.5 py-2 transition-colors border rounded-xl border-content">
-							<WiCloudy className="w-4 h-4 text-muted" />
-							<span className="text-xs font-medium text-muted">
-								{fetchedWeather?.weather?.temperature?.clouds || 0}%
-							</span>
-						</div>
-					</Tooltip>
+						<Tooltip content={t('settings.widgets.weather.cloudCover')}>
+							<div className="flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
+								<TbCloud size={14} className="text-base-content" />
+								<span className="text-[10px] font-bold text-base-content">
+									{fetchedWeather?.weather?.temperature?.clouds || 0}%
+								</span>
+							</div>
+						</Tooltip>
+					</div>
 				</div>
-			</div>
+			)}
 		</>
 	)
 }

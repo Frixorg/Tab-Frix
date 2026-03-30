@@ -15,8 +15,8 @@ import type {
 	FetchedWeather,
 	WeatherSettings,
 } from '@/layouts/widgets/weather/weather.interface'
-import type { ClockSettings } from '@/layouts/widgets/wigiPad/clock-display/clock-setting.interface'
-import type { WigiPadDateSetting } from '@/layouts/widgets/wigiPad/date-display/date-setting.interface'
+import type { ClockSettings } from '@/layouts/widgets/tabFrixPad/clock-display/clock-setting.interface'
+import type { WigiPadDateSetting } from '@/layouts/widgets/tabFrixPad/date-display/date-setting.interface'
 import type { ExtensionConfigResponse } from '@/services/config-data/config_data-api'
 import type { FetchedCurrency } from '@/services/hooks/currency/getCurrencyByCode.hook'
 import type { RecommendedSite, TrendItem } from '@/services/hooks/trends/getTrends'

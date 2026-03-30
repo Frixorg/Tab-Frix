@@ -20,10 +20,13 @@
 				"currentLocation": "Posizione attuale",
 				"wind": "Vento",
 				"humidity": "Umidità",
-				"cloudCover": "Copertura nuvolosa"
+				"cloudCover": "Copertura nuvolosa",
+				"showWindHumidity": "Mostra Vento e Umidità",
+				"showForecast": "Mostra Previsioni Prossimi Giorni"
 			},
 			"timeCalendar": {
 				"dateSectionTitle": "Impostazioni data",
+				"showWeather": "Mostra meteo attuale",
 				"clockSectionTitle": "Impostazioni orologio",
 				"clockType": {
 					"title": "Scegli il tipo di orologio:",

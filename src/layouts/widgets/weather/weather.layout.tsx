@@ -105,7 +105,7 @@ export function WeatherLayout() {
 	}
 
 	return (
-		<WidgetContainer className="relative group">
+		<WidgetContainer className="relative group" isCustomHeight={!weatherSettings.showForecast || !weatherSettings.showWindHumidity ? true : false}>
 			<div className="absolute inset-0 z-20">
 				<Button
 					size="xs"
@@ -119,14 +119,17 @@ export function WeatherLayout() {
 				<CurrentWeatherBox
 					fetchedWeather={weatherState || null}
 					temperatureUnit={weatherSettings.temperatureUnit}
+					showWindHumidity={weatherSettings.showWindHumidity ?? true}
 				/>
 
-				<div className="flex justify-between gap-0.5 px-1  rounded-2xl bg-base-200/40">
-					<Forecast
-						temperatureUnit={weatherSettings.temperatureUnit}
-						forecast={forecastWeather}
-					/>
-				</div>
+				{(weatherSettings.showForecast ?? true) && (
+					<div className="flex justify-between gap-0.5 px-1  rounded-2xl bg-base-200/40">
+						<Forecast
+							temperatureUnit={weatherSettings.temperatureUnit}
+							forecast={forecastWeather}
+						/>
+					</div>
+				)}
 			</div>
 		</WidgetContainer>
 	)

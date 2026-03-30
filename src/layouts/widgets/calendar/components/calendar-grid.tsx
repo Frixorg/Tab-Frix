@@ -1,5 +1,4 @@
 import { useGeneralSetting } from '@/context/general-setting.context'
-import { useGetEvents } from '@/services/hooks/date/getEvents.hook'
 import type React from 'react'
 import { useState } from 'react'
 import { type WidgetifyDate, formatDateStr } from '../utils'
@@ -21,13 +20,11 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 	selectedDate,
 	setSelectedDate,
 }) => {
-		const [isOpenTooltip, setIsOpenTooltip] = useState<boolean>(false)
+	const [isOpenTooltip, setIsOpenTooltip] = useState<boolean>(false)
 	const { selected_timezone: timezone } = useGeneralSetting()
 	const [clickedElement, setClickedElement] = useState<HTMLDivElement | null>(null)
 
-	const { data: events } = useGetEvents()
-
-	const eventsForCalendar = events || {
+	const eventsForCalendar = {
 		gregorianEvents: [],
 		hijriEvents: [],
 		shamsiEvents: [],

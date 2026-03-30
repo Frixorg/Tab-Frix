@@ -17,26 +17,14 @@ export const useUpdateBookmark = () => {
 	return useMutation({
 		mutationKey: ['updateBookmark'],
 		mutationFn: async (input: BookmarkUpdatePayload): Promise<Bookmark> => {
-			const client = await getMainClient()
-
-			const formData = new FormData()
-
-			Object.entries(input).forEach(([key, value]) => {
-				if (value !== undefined) {
-					formData.append(key, value as any)
-				}
-			})
-			const response = await client.patch<Bookmark>(
-				`/bookmarks/${input.id}`,
-				formData,
-				{
-					headers: {
-						'Content-Type': 'multipart/form-data',
-					},
-				}
-			)
-
-			return response.data
+			return {
+				id: input.id,
+				title: input.title,
+				url: input.url,
+				sticker: input.sticker || null,
+				customTextColor: input.customTextColor || null,
+				customBackground: input.customBackground || null,
+			} as Bookmark
 		},
 	})
 }

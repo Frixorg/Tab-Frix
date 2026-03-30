@@ -34,6 +34,9 @@ export interface FetchedWeather {
 	}
 
 	forecast: FetchedForecast[]
+	fetchedAt?: string
+	lat?: number
+	lon?: number
 }
 
 export interface FetchedForecast {
@@ -58,4 +61,6 @@ export interface WeatherSettings {
 	temperatureUnit: TemperatureUnit
 	useAI: boolean
 	enableShowName: boolean
+	showWindHumidity?: boolean
+	showForecast?: boolean
 }

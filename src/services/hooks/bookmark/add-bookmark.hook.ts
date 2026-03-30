@@ -24,21 +24,16 @@ export const useAddBookmark = () => {
 }
 
 export async function AddBookmarkApi(input: BookmarkCreationPayload) {
-	const client = await getMainClient()
-
-	const formData = new FormData()
-
-	Object.entries(input).forEach(([key, value]) => {
-		if (value !== undefined && value !== null) {
-			formData.append(key, value as any)
-		}
-	})
-
-	const response = await client.post<Bookmark>(`/bookmarks`, formData, {
-		headers: {
-			'Content-Type': 'multipart/form-data',
-		},
-	})
-
-	return response.data
+	return {
+		id: Math.random().toString(36).substring(7),
+		title: input.title,
+		type: input.type,
+		url: input.url,
+		sticker: input.sticker,
+		parentId: input.parentId,
+		order: input.order || 0,
+		customTextColor: input.customTextColor,
+		customBackground: input.customBackground,
+		isLocal: true,
+	} as Bookmark
 }

@@ -20,10 +20,13 @@
 				"currentLocation": "Current Location",
 				"wind": "Wind",
 				"humidity": "Humidity",
-				"cloudCover": "Cloud Cover"
+				"cloudCover": "Cloud Cover",
+				"showWindHumidity": "Show Wind & Humidity",
+				"showForecast": "Show Next Days Forecast"
 			},
 			"timeCalendar": {
 				"dateSectionTitle": "Date settings",
+				"showWeather": "Show Current Weather",
 				"clockSectionTitle": "Clock settings",
 				"clockType": {
 					"title": "Choose clock type:",

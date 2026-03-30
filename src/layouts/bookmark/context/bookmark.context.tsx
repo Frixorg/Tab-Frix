@@ -183,8 +183,7 @@ export const BookmarkProvider: React.FC<{ children: React.ReactNode }> = ({
 					parentId = parentBookmark.onlineId
 				}
 			}
-			const [err, _] = await safeAwait<AxiosError, Bookmark>(
-				addBookmarkAsync({
+			const result = await addBookmarkAsync({
 					order: maxOrder + 1,
 					parentId: parentId,
 					title: inputBookmark.title,
@@ -195,20 +194,21 @@ export const BookmarkProvider: React.FC<{ children: React.ReactNode }> = ({
 					url: inputBookmark.url,
 					icon: inputBookmark.icon || null,
 				})
-			)
-			if (err) {
-				const translated: string | Record<string, string> = translateError(err)
-				const msg =
-					typeof translated === 'string'
-						? translated
-						: `${Object.keys(translated)[0]}: ${Object.values(translated)[0]}`
 
-				showToast(msg, 'error')
-				return
+			const newBookmark: Bookmark = {
+				...result,
+				id: result.id,
+				title: result.title,
+				type: result.type,
+				parentId: result.parentId,
+				isLocal: true,
+				url: result.url,
+				icon: result.icon || null,
+				order: result.order || 0,
 			}
 
+			setBookmarks((prev) => [...(prev || []), newBookmark])
 			cb()
-			await refetch()
 
 			Analytics.event('add_bookmark')
 		} catch (error) {
@@ -232,41 +232,22 @@ export const BookmarkProvider: React.FC<{ children: React.ReactNode }> = ({
 			bookmarkIdToEdit = foundedBookmark.onlineId || foundedBookmark.id
 		}
 
-		if (!bookmarkIdToEdit || validate(bookmarkIdToEdit)) {
-			showToast(
-				'برای ویرایش این بوکمارک، لطفا ابتدا بوکمارک‌های خود را همگام‌سازی کنید.',
-				'error',
-				{
-					duration: 8000, // 8 seconds
-				}
-			)
-			return
-		}
-
-		const [error, _] = await safeAwait<AxiosError, Bookmark>(
-			updateBookmarkAsync({
+		await updateBookmarkAsync({
 				id: bookmarkIdToEdit,
 				customBackground: input.customBackground,
 				customTextColor: input.customTextColor,
 				sticker: input.sticker,
-				title: input.title?.trim(),
+				title: input.title?.trim() as string,
 				icon: input.icon || null,
 				url: input.url,
 				isDeletedIcon: input.isDeletedIcon,
 			})
+
+		setBookmarks((prev) => 
+			prev?.map((b) => (b.id === bookmarkIdToEdit || b.onlineId === bookmarkIdToEdit) 
+				? ({ ...b, ...input, title: input.title?.trim(), icon: b.icon } as Bookmark) 
+				: b) || null
 		)
-
-		if (error) {
-			const translated: string | Record<string, string> = translateError(error)
-			const msg =
-				typeof translated === 'string'
-					? translated
-					: `${Object.keys(translated)[0]}: ${Object.values(translated)[0]}`
-			showToast(msg, 'error')
-			return
-		}
-
-		await refetch()
 
 		cb()
 	}
@@ -277,26 +258,13 @@ export const BookmarkProvider: React.FC<{ children: React.ReactNode }> = ({
 		const bookmarkToDelete = bookmarks.find((b) => b.id === id || b.onlineId === id)
 		if (!bookmarkToDelete) return
 
-		const idToDelete = bookmarkToDelete.onlineId || bookmarkToDelete.id
+		const idToDelete = bookmarkToDelete.id
 
-		if (validate(idToDelete)) {
-			showToast(
-				'برای حـذف این بوکمارک، لطفا ابتدا بوکمارک‌های خود را همگام‌سازی کنید.',
-				'error',
-				{
-					duration: 8000, // 8 seconds
-				}
-			)
-			return
-		}
-
-		const [error, _] = await safeAwait(removeBookmarkAsync(idToDelete))
-		if (error) {
-			showToast(translateError(error) as string, 'error')
-			return
-		}
-
-		await refetch()
+		await removeBookmarkAsync(idToDelete)
+		
+		setBookmarks((prev) => 
+			prev?.filter((b) => b.id !== idToDelete && b.onlineId !== idToDelete) || null
+		)
 
 		Analytics.event('delete_bookmark')
 		cb()

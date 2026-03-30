@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
+import { useState, useEffect } from 'react'
 import { getFromStorage } from '@/common/storage'
-import { getMainClient } from '@/services/api'
 
 export interface TrendItem {
 	title: string
@@ -29,15 +29,10 @@ export interface SearchBoxResponse {
 }
 
 async function fetchTrends(region = 'IR', limit = 10): Promise<SearchBoxResponse> {
-	const client = await getMainClient()
-
-	const response = await client.get<SearchBoxResponse>('/extension/searchbox', {
-		params: {
-			region,
-			limit,
-		},
-	})
-	return response.data
+	return {
+		trends: [],
+		recommendedSites: [],
+	}
 }
 
 export function useGetTrends(
@@ -66,7 +61,7 @@ export function useGetTrends(
 	return useQuery<SearchBoxResponse>({
 		queryKey: ['getTrends', region, limit],
 		queryFn: () => fetchTrends(region, limit),
-		refetchInterval: refetchInterval || false,
+		refetchInterval: false,
 		enabled,
 		initialData,
 	})

@@ -1,4 +1,3 @@
-import { getMainClient } from '@/services/api'
 import { useQuery } from '@tanstack/react-query'
 import type { GoogleCalendarEvent } from '../date/getGoogleCalendarEvents.hook'
 
@@ -28,9 +27,5 @@ async function getCalendarData(
 	start: string,
 	end: string
 ): Promise<GetCalendarDataResponse> {
-	const client = await getMainClient()
-	const { data } = await client.get<GetCalendarDataResponse>(
-		`/widgets/calendar?start=${start}&end=${end}`
-	)
-	return data ?? { moods: [], googleEvents: [] }
+	return { moods: [], googleEvents: [] }
 }

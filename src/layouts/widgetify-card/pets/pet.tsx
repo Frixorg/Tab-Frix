@@ -15,7 +15,7 @@ export function Pet() {
 	}
 
 	return (
-		<div className="relative group">
+		<div className="absolute w-full h-full">
 			<div className="absolute inset-0 z-20">
 				<Button
 					onClick={onClickSettings}

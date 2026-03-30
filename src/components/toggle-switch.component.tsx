@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 interface ToggleSwitchProps {
 	enabled: boolean
 	disabled?: boolean
@@ -9,12 +11,22 @@ export const ToggleSwitch = ({
 	disabled = false,
 	onToggle,
 }: ToggleSwitchProps) => {
+	const { i18n } = useTranslation()
+	const isRTL = i18n.language === 'fa'
+
 	const getTrackStyle = () => {
 		if (enabled) {
 			return 'bg-primary'
 		}
 
 		return 'bg-base-300'
+	}
+
+	const getTranslateClass = () => {
+		if (isRTL) {
+			return enabled ? 'translate-x-0' : 'translate-x-4'
+		}
+		return enabled ? 'translate-x-4' : 'translate-x-0'
 	}
 
 	return (
@@ -27,9 +39,7 @@ export const ToggleSwitch = ({
 			onClick={disabled ? undefined : onToggle}
 		>
 			<span
-				className={`absolute w-4 h-4 bg-white rounded-full shadow-sm top-1 left-1 transition-transform duration-300 ease-out ${
-					enabled ? 'translate-x-0' : 'translate-x-4'
-				}`}
+				className={`absolute w-4 h-4 bg-white rounded-full shadow-sm top-1 left-1 transition-transform duration-300 ease-out ${getTranslateClass()}`}
 			/>
 		</div>
 	)

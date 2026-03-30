@@ -4,11 +4,13 @@ import Analytics from '@/analytics'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
 import { ItemSelector } from '@/components/item-selector'
+import { ToggleSwitch } from '@/components/toggle-switch.component'
 import { WigiPadDateType } from './date-setting.interface'
 
 export function WigiPadDateSettingsModal() {
 	const { t } = useTranslation()
 	const [selectedType, setSelectedType] = useState<WigiPadDateType | null>()
+	const [showWeather, setShowWeather] = useState<boolean>(false)
 	const dateOptions = useMemo(
 		() => [
 			{
@@ -34,9 +36,11 @@ export function WigiPadDateSettingsModal() {
 			const wigiPadDateFromStore = await getFromStorage('wigiPadDate')
 			if (wigiPadDateFromStore) {
 				setSelectedType(wigiPadDateFromStore.dateType)
+				setShowWeather(!!wigiPadDateFromStore.showWeather)
 			} else {
 				// Default to European calendar.
 				setSelectedType(WigiPadDateType.Gregorian)
+				setShowWeather(false)
 			}
 		}
 
@@ -44,10 +48,18 @@ export function WigiPadDateSettingsModal() {
 	}, [])
 
 	const onSelectType = async (type: WigiPadDateType) => {
-		await setToStorage('wigiPadDate', { dateType: type })
+		await setToStorage('wigiPadDate', { dateType: type, showWeather })
 		setSelectedType(type)
-		callEvent('wigiPadDateSettingsChanged', { dateType: type })
+		callEvent('wigiPadDateSettingsChanged', { dateType: type, showWeather })
 		Analytics.event(`wigipad_date_settings_${selectedType}_save`)
+	}
+
+	const onToggleWeather = async () => {
+		const newValue = !showWeather
+		await setToStorage('wigiPadDate', { dateType: selectedType || WigiPadDateType.Gregorian, showWeather: newValue })
+		setShowWeather(newValue)
+		callEvent('wigiPadDateSettingsChanged', { dateType: selectedType || WigiPadDateType.Gregorian, showWeather: newValue })
+		Analytics.event(`wigipad_show_weather_${newValue}`)
 	}
 
 	return (
@@ -69,6 +81,16 @@ export function WigiPadDateSettingsModal() {
 						/>
 					))}
 				</div>
+			</div>
+
+			<div className="flex items-center justify-between px-4 py-3 bg-base-200/50 rounded-2xl">
+				<span className="text-sm font-medium text-base-content/80">
+					{t('settings.widgets.timeCalendar.showWeather')}
+				</span>
+				<ToggleSwitch
+					enabled={showWeather}
+					onToggle={onToggleWeather}
+				/>
 			</div>
 		</div>
 	)

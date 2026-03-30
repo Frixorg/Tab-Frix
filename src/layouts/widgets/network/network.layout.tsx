@@ -44,28 +44,14 @@ export function NetworkLayout({ enableBackground, inComboWidget }: Prop) {
 
 	const fetchNetworkData = async () => {
 		setIsLoading(true)
-		try {
-			const client = await getMainClient()
-			const response = await client.get('/extension/@me/ip')
-			const data = response.data
-			setNetworkInfo((prev) => ({
-				...prev,
-				ip: data.ip,
-				country: data.country,
-				countryIcon: data.countryIcon,
-				city: data.city,
-				isp: data.isp,
-			}))
-		} catch {
-			setNetworkInfo((prev) => ({
-				...prev,
-				ip: 'N/A',
-				country: null,
-				countryIcon: null,
-				city: null,
-				isp: null,
-			}))
-		}
+		setNetworkInfo((prev) => ({
+			...prev,
+			ip: 'N/A',
+			country: null,
+			countryIcon: null,
+			city: null,
+			isp: null,
+		}))
 
 		try {
 			const client = await getMainClient()

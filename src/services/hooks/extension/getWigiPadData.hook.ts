@@ -1,6 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { getMainClient } from '@/services/api'
-import type { ReactNode } from 'react'
 
 export interface WigiPadBirthday {
 	name: string
@@ -52,16 +50,12 @@ export interface WigiPadDataResponse {
 }
 
 async function fetchWigiPadData(timezone: string): Promise<WigiPadDataResponse> {
-	const client = await getMainClient()
-	const { data } = await client.get<{
-		data: WigiPadDataResponse
-	}>('/extension/wigi-pad-data', {
-		params: {
-			timezone,
-		},
-	})
-
-	return data.data
+	return {
+		birthdays: [],
+		notifications: [],
+		upcomingCalendarEvents: [],
+		widgetifyCardNotifications: [],
+	}
 }
 
 export function useGetWigiPadData(options: {

@@ -13,8 +13,7 @@ export interface UpdateExtensionSettingsInput {
 export function useUpdateExtensionSettings() {
 	return useMutation<any, unknown, UpdateExtensionSettingsInput>({
 		mutationFn: async (data: UpdateExtensionSettingsInput) => {
-			const client = await getMainClient()
-			await client.patch('/extension/@me', data)
+			return
 		},
 	})
 }
@@ -22,8 +21,7 @@ export function useUpdateExtensionSettings() {
 export function useChangeWallpaper() {
 	return useMutation<any, unknown, { wallpaperId: string | null }>({
 		mutationFn: async ({ wallpaperId }) => {
-			const client = await getMainClient()
-			await client.put('/wallpapers/@me', { wallpaperId })
+			return
 		},
 	})
 }
@@ -31,8 +29,7 @@ export function useChangeWallpaper() {
 export function useChangeTheme() {
 	return useMutation<any, unknown, { theme: string }>({
 		mutationFn: async ({ theme }) => {
-			const client = await getMainClient()
-			await client.put('/extension/@me/theme', { theme })
+			return
 		},
 	})
 }
@@ -40,8 +37,7 @@ export function useChangeTheme() {
 export function useChangeBrowserTitle() {
 	return useMutation<any, unknown, { browserTitleId: string }>({
 		mutationFn: async ({ browserTitleId }) => {
-			const client = await getMainClient()
-			await client.put('/extension/@me/browser-title', { browserTitleId })
+			return
 		},
 	})
 }
@@ -50,8 +46,7 @@ export function useChangeBrowserTitle() {
 export function useChangeUI() {
 	return useMutation<any, unknown, { ui: string }>({
 		mutationFn: async ({ ui }) => {
-			const client = await getMainClient()
-			await client.put('/extension/@me/ui', { ui })
+			return
 		},
 	})
 }

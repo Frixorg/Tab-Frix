@@ -5,8 +5,7 @@ export const useRemoveBookmark = () => {
 	return useMutation({
 		mutationKey: ['removeBookmark'],
 		mutationFn: async (bookmarkId: string) => {
-			const client = await getMainClient()
-			await client.delete(`/bookmarks/${bookmarkId}`)
+			return
 		},
 	})
 }

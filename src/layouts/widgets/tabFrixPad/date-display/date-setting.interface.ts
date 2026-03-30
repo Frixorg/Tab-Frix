@@ -5,4 +5,5 @@ export enum WigiPadDateType {
 
 export interface WigiPadDateSetting {
 	dateType: WigiPadDateType
+	showWeather?: boolean
 }
