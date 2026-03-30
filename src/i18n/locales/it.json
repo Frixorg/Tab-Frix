@@ -2,6 +2,9 @@
 	"common": {
 		"back": "Indietro"
 	},
+	"navbar": {
+		"reorderModeHint": "La modalità riordino è attiva, sposta i tuoi widget"
+	},
 	"settings": {
 		"title": "Impostazioni",
 		"Widgets": "Widgets",

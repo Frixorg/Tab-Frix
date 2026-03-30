@@ -11,7 +11,7 @@ import {
 	useSensors,
 } from '@dnd-kit/core'
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
-import { type ReactNode, useMemo, useState } from 'react'
+import { type ReactNode, memo, useCallback, useMemo, useState } from 'react'
 import Analytics from '@/analytics'
 import { useAppearanceSetting } from '@/context/appearance.context'
 import { DateProvider } from '@/context/date.context'
@@ -41,16 +41,16 @@ function EmptyGridSlot({
 	return (
 		<div
 			ref={setNodeRef}
-			className={`min-h-[210px] md:min-h-[240px] rounded-2xl transition-all duration-200 ${
+			className={`h-[320px] md:min-h-[240px] w-full rounded-2xl flex items-center justify-center${
 				showDropZone
-					? `border border-dashed ${
+					? `border border-2  ${
 						isHighlighted
-							? 'border-primary bg-primary/10'
-							: 'border-primary/20 bg-transparent'
+							? 'border-primary bg-primary/20 border-dashed'
+							: 'border-primary/60 bg-primary/10 border-none'
 					}`
 					: 'invisible'
 			}`}
-		/>
+		></div>
 	)
 }
 
@@ -91,14 +91,18 @@ const findAvailableStart = (
 	return -1
 }
 
-function SortableWidget({
+const getSpanTwoPairStart = (hoveredSlot: number) => {
+	const col = hoveredSlot % GRID_COLUMNS
+	return col <= GRID_COLUMNS - 2 ? hoveredSlot : hoveredSlot - 1
+}
+
+const SortableWidget = memo(function SortableWidget({
 	widget,
 	disabled,
 	displaceDirection,
 }: {
 	widget: WidgetItem
 	disabled?: boolean
-	/** 'left' | 'right' | null — the direction this widget will slide when another is dragged over it */
 	displaceDirection?: 'left' | 'right' | null
 }) {
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
@@ -106,9 +110,6 @@ function SortableWidget({
 			id: widget.id,
 			disabled: disabled ?? false,
 		})
-
-	// Use translate-only transform — CSS.Transform.toString also applies scaleX/scaleY
-	// from rectSortingStrategy which stretches/collapses widgets of different spans.
 	const displaceOffset = displaceDirection === 'left' ? -20 : displaceDirection === 'right' ? 20 : 0
 	const style = {
 		transform: transform
@@ -159,18 +160,25 @@ function SortableWidget({
 			{widget.node}
 		</div>
 	)
-}
+})
 
 export function ContentSection() {
 	const { contentAlignment, canReOrderWidget } = useAppearanceSetting()
 
 	const { getSortedWidgets, setWidgetOrder } = useWidgetVisibility()
-	const sortedWidgets = getSortedWidgets().filter((widget) => !widget.disabled)
+	const sortedWidgets = useMemo(
+		() => getSortedWidgets().filter((widget) => !widget.disabled),
+		[getSortedWidgets],
+	)
 
 	const totalWidgetCount = sortedWidgets.length
 	const [activeDragWidgetId, setActiveDragWidgetId] = useState<string | null>(null)
 	const [activeOverSlotId, setActiveOverSlotId] = useState<number | null>(null)
-	const activeDragWidget = sortedWidgets.find((widget) => widget.id === activeDragWidgetId)
+
+	const activeDragWidget = useMemo(
+		() => sortedWidgets.find((w) => w.id === activeDragWidgetId),
+		[sortedWidgets, activeDragWidgetId],
+	)
 	const activeDragWidgetSpan = getWidgetSpan(activeDragWidget)
 
 	const { occupiedSlots, widgetStarts } = useMemo(() => {
@@ -200,11 +208,6 @@ export function ContentSection() {
 			},
 		})
 	)
-
-	const getSpanTwoPairStart = (hoveredSlot: number) => {
-		const col = hoveredSlot % GRID_COLUMNS
-		return col <= GRID_COLUMNS - 2 ? hoveredSlot : hoveredSlot - 1
-	}
 
 	const activeDragWidgetSlot = useMemo(() => {
 		if (!activeDragWidget) return -1
@@ -237,7 +240,7 @@ export function ContentSection() {
 		return map
 	}, [highlightedSlots, widgetStarts, activeDragWidgetSlot, activeOverSlotId])
 
-	const handleDragEnd = (event: DragEndEvent) => {
+	const handleDragEnd = useCallback((event: DragEndEvent) => {
 		if (!canReOrderWidget) return
 		const { active, over } = event
 		setActiveDragWidgetId(null)
@@ -248,94 +251,108 @@ export function ContentSection() {
 		}
 
 		const overId = String(over.id)
-		let targetSlot = -1
 
 		if (overId.startsWith('slot-')) {
 			const parsedSlot = Number.parseInt(overId.replace('slot-', ''), 10)
 			if (!Number.isNaN(parsedSlot)) {
-				targetSlot =
+				const targetSlot =
 					activeDragWidgetSpan === 2
 						? getSpanTwoPairStart(parsedSlot)
 						: parsedSlot
+				setWidgetOrder(active.id as WidgetKeys, targetSlot)
 			}
 		} else {
-			targetSlot =
-				Array.from(widgetStarts.entries()).find(
-					([_, widget]) => widget.id === over.id
-				)?.[0] ?? -1
-		}
-
-		if (targetSlot !== -1) {
-			setWidgetOrder(active.id as WidgetKeys, targetSlot)
+			const targetEntry = Array.from(widgetStarts.entries()).find(
+				([_, widget]) => widget.id === overId
+			)
+			if (targetEntry && activeDragWidgetSlot !== -1) {
+				const [targetSlot, targetWidget] = targetEntry
+				setWidgetOrder(active.id as WidgetKeys, targetSlot)
+				setWidgetOrder(targetWidget.id, activeDragWidgetSlot)
+			}
 		}
 
 		Analytics.event('widget_reorder')
-	}
+	}, [canReOrderWidget, activeDragWidgetSpan, activeDragWidgetSlot, widgetStarts, setWidgetOrder])
 
-	const handleDragStart = (event: DragStartEvent) => {
+	const handleDragStart = useCallback((event: DragStartEvent) => {
 		setActiveDragWidgetId(String(event.active.id))
 		setActiveOverSlotId(null)
-	}
+	}, [])
 
-	const handleDragOver = (event: DragOverEvent) => {
+	const handleDragOver = useCallback((event: DragOverEvent) => {
 		if (!event.over) {
-			setActiveOverSlotId(null)
+			setActiveOverSlotId((prev) => (prev === null ? prev : null))
 			return
 		}
 		const overId = String(event.over.id)
+		let newSlot: number | null = null
 		if (overId.startsWith('slot-')) {
 			const slot = Number.parseInt(overId.replace('slot-', ''), 10)
-			setActiveOverSlotId(Number.isNaN(slot) ? null : slot)
+			newSlot = Number.isNaN(slot) ? null : slot
 		} else {
 			// Hovering over another widget — resolve to its start slot
 			const entry = Array.from(widgetStarts.entries()).find(([_, w]) => w.id === overId)
-			setActiveOverSlotId(entry ? entry[0] : null)
+			newSlot = entry ? entry[0] : null
 		}
-	}
+		// Skip setState when the slot hasn't changed — avoids a re-render every pointer-move frame
+		setActiveOverSlotId((prev) => (prev === newSlot ? prev : newSlot))
+	}, [widgetStarts])
 
-	const handleDragCancel = (_event: DragCancelEvent) => {
+	const handleDragCancel = useCallback((_event: DragCancelEvent) => {
 		setActiveDragWidgetId(null)
 		setActiveOverSlotId(null)
-	}
+	}, [])
+
+	// Memoize to avoid rebuilding the whole list on unrelated re-renders
+	const gridItems = useMemo(() => {
+		const items: ReactNode[] = []
+		for (let slotIndex = 0; slotIndex < GRID_SLOT_COUNT; slotIndex += 1) {
+			const widget = widgetStarts.get(slotIndex)
+			if (widget) {
+				if (canReOrderWidget && totalWidgetCount > 0) {
+					items.push(
+						<SortableWidget
+							key={widget.id}
+							widget={widget}
+							disabled={false}
+							displaceDirection={displaceDirectionMap.get(slotIndex) ?? null}
+						/>
+					)
+				} else {
+					items.push(
+						<div key={widget.id} className={widget.gridSpan || ''}>
+							{widget.node}
+						</div>
+					)
+				}
+				continue
+			}
+
+			if (occupiedSlots[slotIndex]) {
+				continue
+			}
+
+			items.push(
+				<EmptyGridSlot
+					key={`slot-${slotIndex}`}
+					slotId={`slot-${slotIndex}`}
+					showDropZone={canReOrderWidget}
+					isHighlighted={highlightedSlots.has(slotIndex)}
+				/>
+			)
+		}
+		return items
+	}, [widgetStarts, occupiedSlots, canReOrderWidget, totalWidgetCount, displaceDirectionMap, highlightedSlots])
+
+	// Stable id list for SortableContext
+	const sortableIds = useMemo(
+		() => sortedWidgets.map((w) => w.id),
+		[sortedWidgets],
+	)
 
 	const layoutClasses =
-		'grid w-full grid-cols-1 gap-2 transition-all duration-300 md:grid-cols-2 lg:grid-cols-4 md:gap-4'
-	const gridItems: ReactNode[] = []
-	for (let slotIndex = 0; slotIndex < GRID_SLOT_COUNT; slotIndex += 1) {
-		const widget = widgetStarts.get(slotIndex)
-		if (widget) {
-			if (canReOrderWidget && totalWidgetCount > 0) {
-				gridItems.push(
-					<SortableWidget
-						key={widget.id}
-						widget={widget}
-						disabled={false}
-						displaceDirection={displaceDirectionMap.get(slotIndex) ?? null}
-					/>
-				)
-			} else {
-				gridItems.push(
-					<div key={widget.id} className={widget.gridSpan || ''}>
-						{widget.node}
-					</div>
-				)
-			}
-			continue
-		}
-
-		if (occupiedSlots[slotIndex]) {
-			continue
-		}
-
-		gridItems.push(
-			<EmptyGridSlot
-				key={`slot-${slotIndex}`}
-				slotId={`slot-${slotIndex}`}
-				showDropZone={canReOrderWidget}
-				isHighlighted={highlightedSlots.has(slotIndex)}
-			/>
-		)
-	}
+		'grid w-full grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4 md:gap-4'
 
 	return (
 		<DateProvider>
@@ -354,12 +371,10 @@ export function ContentSection() {
 						onDragCancel={canReOrderWidget ? handleDragCancel : undefined}
 						onDragEnd={canReOrderWidget ? handleDragEnd : undefined}
 					>
-						<SortableContext
-							items={sortedWidgets.map((widget) => widget.id)}
-						>
-								<div className={layoutClasses}>{gridItems}</div>
-							</SortableContext>
-						</DndContext>
+						<SortableContext items={sortableIds}>
+							<div className={layoutClasses}>{gridItems}</div>
+						</SortableContext>
+					</DndContext>
 					</div>
 				)}
 			</div>

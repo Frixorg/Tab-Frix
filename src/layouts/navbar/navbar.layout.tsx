@@ -11,6 +11,7 @@ import { useAppearanceSetting } from '@/context/appearance.context'
 import Analytics from '@/analytics'
 import { HiRectangleGroup } from 'react-icons/hi2'
 import { usePage } from '@/context/page.context'
+import { useTranslation } from 'react-i18next'
 
 const WIDGETIFY_URLS = {
 	website: 'https://widgetify.ir',
@@ -75,6 +76,7 @@ export function NavbarTabs() {
 }
 
 export function NavbarLayout(): JSX.Element {
+	const { t } = useTranslation()
 	const { canReOrderWidget, toggleCanReOrderWidget } = useAppearanceSetting()
 	const [showSettings, setShowSettings] = useState(false)
 	const [isVisible, setIsVisible] = useState(false)
@@ -121,7 +123,7 @@ export function NavbarLayout(): JSX.Element {
 								size={16}
 								className="animate-bounce text-warning"
 							/>
-							<span>حالت جابجایی فعال، ویجت هارو جابجا کنید</span>
+							<span>{t('navbar.reorderModeHint')}</span>
 							<button
 								onClick={() => toggleCanReOrderWidget()}
 								className="transition-colors hover:text-red-400"

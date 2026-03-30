@@ -2,6 +2,9 @@
 	"common": {
 		"back": "Back"
 	},
+	"navbar": {
+		"reorderModeHint": "Reorder mode is active, move your widgets"
+	},
 	"settings": {
 		"title": "Settings",
 		"Widgets": "Widgets",

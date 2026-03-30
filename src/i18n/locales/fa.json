@@ -2,6 +2,9 @@
 	"common": {
 		"back": "بازگشت"
 	},
+	"navbar": {
+		"reorderModeHint": "حالت جابجایی فعال است، ویجت‌ها را جابجا کنید"
+	},
 	"settings": {
 		"title": "تنظیمات",
 		"Widgets": "ویجت‌ها",
