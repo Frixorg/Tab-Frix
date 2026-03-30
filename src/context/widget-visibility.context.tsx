@@ -177,6 +177,7 @@ interface WidgetVisibilityContextType {
 	visibility: WidgetKeys[]
 	toggleWidget: (widgetId: WidgetKeys) => void
 	reorderWidgets: (sourceIndex: number, destinationIndex: number) => void
+	setWidgetOrder: (widgetId: WidgetKeys, slotIndex: number) => void
 	getSortedWidgets: () => WidgetItem[]
 }
 
@@ -328,6 +329,13 @@ export function WidgetVisibilityProvider({ children }: { children: ReactNode }) 
 		})
 	}
 
+	const setWidgetOrder = (widgetId: WidgetKeys, slotIndex: number) => {
+		setWidgetOrders((prev) => ({
+			...prev,
+			[widgetId]: slotIndex,
+		}))
+	}
+
 	const getSortedWidgets = (): WidgetItem[] => {
 		return widgetItems
 			.filter((item) => visibility.includes(item.id))
@@ -339,13 +347,13 @@ export function WidgetVisibilityProvider({ children }: { children: ReactNode }) 
 	}
 	return (
 		<WidgetVisibilityContext.Provider
-			value={{
-				visibility,
-				toggleWidget,
-
-				reorderWidgets,
-				getSortedWidgets,
-			}}
+		value={{
+			visibility,
+			toggleWidget,
+			reorderWidgets,
+			setWidgetOrder,
+			getSortedWidgets,
+		}}
 		>
 			{children}
 		</WidgetVisibilityContext.Provider>
