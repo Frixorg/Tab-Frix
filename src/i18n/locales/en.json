@@ -16,6 +16,12 @@
 				"weather": "Weather",
 				"pet": "Pet"
 			},
+			"weather": {
+				"currentLocation": "Current Location",
+				"wind": "Wind",
+				"humidity": "Humidity",
+				"cloudCover": "Cloud Cover"
+			},
 			"timeCalendar": {
 				"dateSectionTitle": "Date settings",
 				"clockSectionTitle": "Clock settings",

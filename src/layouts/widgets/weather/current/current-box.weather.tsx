@@ -3,6 +3,7 @@ import { unitsFlag } from '../unitSymbols'
 import Tooltip from '@/components/toolTip'
 import { TbWind } from 'react-icons/tb'
 import { WiCloudy, WiHumidity } from 'react-icons/wi'
+import { useTranslation } from 'react-i18next'
 
 interface CurrentWeatherBoxProps {
 	fetchedWeather: FetchedWeather | null
@@ -13,6 +14,8 @@ export function CurrentWeatherBox({
 	fetchedWeather,
 	temperatureUnit,
 }: CurrentWeatherBoxProps) {
+	const { t, i18n } = useTranslation()
+	const currentLang = i18n.language as 'en' | 'fa' | 'it'
 	return (
 		<>
 			<div
@@ -38,7 +41,13 @@ export function CurrentWeatherBox({
 				<div className="relative z-10 flex items-center justify-between py-1">
 					<div className="flex flex-col gap-1.5">
 						<span className="text-xs font-medium text-muted drop-shadow-lg">
-							{cleanCityName(fetchedWeather?.city?.fa || '')}
+							{fetchedWeather?.city?.en === 'Current Location'
+								? t('settings.widgets.weather.currentLocation')
+								: cleanCityName(
+										(fetchedWeather?.city as any)?.[currentLang] ||
+											fetchedWeather?.city?.en ||
+											''
+									)}
 						</span>
 
 						<span className="flex items-baseline gap-1.5 text-4xl font-bold leading-none text-base-content drop-shadow-lg">
@@ -68,7 +77,7 @@ export function CurrentWeatherBox({
 
 			<div className="p-2 border rounded-2xl bg-base-200/40 border-content">
 				<div className="grid grid-cols-3 gap-1.5">
-					<Tooltip content={'باد'}>
+					<Tooltip content={t('settings.widgets.weather.wind')}>
 						<div className="flex items-center justify-center gap-1.5 py-2 transition-colors border rounded-xl border-content">
 							<TbWind className="w-4 h-4 text-muted" />
 							<span className="text-xs font-medium text-muted">
@@ -80,7 +89,7 @@ export function CurrentWeatherBox({
 						</div>
 					</Tooltip>
 
-					<Tooltip content={'رطوبت'}>
+					<Tooltip content={t('settings.widgets.weather.humidity')}>
 						<div className="flex items-center justify-center gap-1.5 py-2 transition-colors border rounded-xl border-content">
 							<WiHumidity className="w-4 h-4 text-muted" />
 							<span className="text-xs font-medium text-muted">
@@ -89,7 +98,7 @@ export function CurrentWeatherBox({
 						</div>
 					</Tooltip>
 
-					<Tooltip content="پوشش ابری">
+					<Tooltip content={t('settings.widgets.weather.cloudCover')}>
 						<div className="flex items-center justify-center gap-1.5 py-2 transition-colors border rounded-xl border-content">
 							<WiCloudy className="w-4 h-4 text-muted" />
 							<span className="text-xs font-medium text-muted">

@@ -16,6 +16,12 @@
 				"weather": "Meteo",
 				"pet": "Pet"
 			},
+			"weather": {
+				"currentLocation": "Posizione attuale",
+				"wind": "Vento",
+				"humidity": "Umidità",
+				"cloudCover": "Copertura nuvolosa"
+			},
 			"timeCalendar": {
 				"dateSectionTitle": "Impostazioni data",
 				"clockSectionTitle": "Impostazioni orologio",

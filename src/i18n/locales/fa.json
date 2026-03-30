@@ -16,6 +16,12 @@
 				"weather": "آب‌وهوا",
 				"pet": "پت"
 			},
+			"weather": {
+				"currentLocation": "موقعیت فعلی",
+				"wind": "باد",
+				"humidity": "رطوبت",
+				"cloudCover": "پوشش ابری"
+			},
 			"timeCalendar": {
 				"dateSectionTitle": "تنظیمات تاریخ",
 				"clockSectionTitle": "تنظیمات ساعت",

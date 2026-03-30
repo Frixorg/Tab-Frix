@@ -7,9 +7,12 @@ import { WiHumidity } from 'react-icons/wi'
 import { unitsFlag } from '../../weather/unitSymbols'
 import { Forecast } from '../../weather/forecast/forecast'
 import { useGeolocation } from '@/services/hooks/geo/useGeolocation'
+import { useTranslation } from 'react-i18next'
 import moment from 'jalali-moment'
 
 export function InfoWeather() {
+	const { t, i18n } = useTranslation()
+	const currentLang = i18n.language as 'en' | 'fa' | 'it'
 	const { data: user } = useGetUserProfile()
 	const { latitude, longitude, loading: geoLoading } = useGeolocation()
 	const [weatherSettings, setWeatherSettings] = useState<any>(null)
@@ -61,7 +64,9 @@ export function InfoWeather() {
 								: 'text-base-content/60'
 								}`}
 						>
-							{weather.city?.fa}
+							{weather.city?.en === 'Current Location'
+								? t('settings.widgets.weather.currentLocation')
+								: (weather?.city as any)?.[currentLang] || weather?.city?.en}
 						</span>
 						<div className="flex items-baseline gap-0.5">
 							<span
@@ -76,7 +81,7 @@ export function InfoWeather() {
 								className={`text-xs font-bold ${hasBanner ? 'text-white/70' : 'opacity-40'
 									}`}
 							>
-								{unitsFlag[weatherSettings?.temperatureUnit || 'metric']}
+								{unitsFlag[(weatherSettings?.temperatureUnit as any) || 'metric']}
 							</span>
 						</div>
 					</div>
@@ -144,7 +149,7 @@ export function InfoWeather() {
 						className="flex items-center justify-between p-1 transition-colors border border-transparent rounded-xl bg-base-200/20 hover:bg-base-200/40 hover:border-base-content/5"
 					>
 						<span className="w-12 text-xs font-bold">
-							{moment(forecast.date).locale('fa').format('HH:mm')}
+							{moment(forecast.date).locale(currentLang).format('HH:mm')}
 						</span>
 
 						<div className="flex items-center justify-center flex-1 gap-3">

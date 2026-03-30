@@ -10,7 +10,7 @@ interface WeatherLayoutProps {
 export function Forecast({ forecast, temperatureUnit }: WeatherLayoutProps) {
 	return (
 		<>
-			{forecast?.map((forecast) => {
+			{forecast?.slice(0, 5).map((forecast) => {
 				return (
 					<div
 						key={forecast.date}
