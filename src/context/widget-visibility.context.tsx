@@ -294,14 +294,35 @@ export function WidgetVisibilityProvider({ children }: { children: ReactNode }) 
 
 		setWidgetOrders((prev) => {
 			const newOrders = { ...prev }
+			const draggedWidget = visibleWidgets[sourceIndex]
+			if (!draggedWidget) {
+				return prev
+			}
 
-			const reorderedWidgets = [...visibleWidgets]
-			const [draggedWidget] = reorderedWidgets.splice(sourceIndex, 1)
-			reorderedWidgets.splice(destinationIndex, 0, draggedWidget)
+			const safeDestination = Math.max(0, destinationIndex)
+			const otherWidgets = visibleWidgets.filter(
+				(widget) => widget.id !== draggedWidget.id
+			)
 
-			reorderedWidgets.forEach((widget, index) => {
-				newOrders[widget.id] = index
-			})
+			newOrders[draggedWidget.id] = safeDestination
+
+			let nextSlot = 0
+			for (const widget of otherWidgets) {
+				if (nextSlot === safeDestination) {
+					nextSlot += 1
+				}
+
+				const preferredSlot = Math.max(0, widget.order ?? 0)
+				const assignedSlot = Math.max(nextSlot, preferredSlot)
+
+				if (assignedSlot === safeDestination) {
+					newOrders[widget.id] = assignedSlot + 1
+					nextSlot = assignedSlot + 2
+				} else {
+					newOrders[widget.id] = assignedSlot
+					nextSlot = assignedSlot + 1
+				}
+			}
 
 			return newOrders
 		})
