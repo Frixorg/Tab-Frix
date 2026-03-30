@@ -20,6 +20,10 @@ import { CurrencyProvider } from './currency.context'
 import { showToast } from '@/common/toast'
 import { YadkarWidget } from '@/layouts/widgets/yadkar/yadkar'
 import { TodoProvider } from './todo.context'
+import { BookmarksList } from '@/layouts/bookmark/bookmarks'
+import { SearchLayout } from '@/layouts/search/search'
+import { TimeAndDateLayout } from '@/layouts/widgets/timeAndDate/TimeandDateWidget.layout'
+import { BookmarkProvider } from '@/layouts/bookmark/context/bookmark.context'
 
 export enum WidgetKeys {
 	comboWidget = 'comboWidget',
@@ -31,9 +35,10 @@ export enum WidgetKeys {
 	tools = 'tools',
 	notes = 'notes',
 	youtube = 'youtube',
-	wigiPad = 'wigiPad',
+	TimeandDate = 'TimeandDate',
 	network = 'network',
 	yadKar = 'yadKar',
+	searchAndBookmarks = 'searchAndBookmarks',
 }
 export interface WidgetItem {
 	id: WidgetKeys
@@ -41,6 +46,7 @@ export interface WidgetItem {
 	label: string
 	node: any
 	order: number
+	gridSpan?: string
 	canToggle?: boolean
 	isNew?: boolean
 	disabled?: boolean
@@ -49,6 +55,30 @@ export interface WidgetItem {
 }
 
 export const widgetItems: WidgetItem[] = [
+	{
+		id: WidgetKeys.searchAndBookmarks,
+		emoji: '🔍',
+		label: 'Search & Bookmarks',
+		order: -2,
+		gridSpan: 'md:col-span-2',
+		node: (
+			<div className="space-y-2">
+				<SearchLayout />
+				<BookmarkProvider>
+					<BookmarksList />
+				</BookmarkProvider>
+			</div>
+		),
+		canToggle: false,
+	},
+	{
+		id: WidgetKeys.TimeandDate,
+		emoji: '🕑',
+		label: 'Time and Date',
+		order: -1,
+		node: <TimeAndDateLayout />,
+		canToggle: true,
+	},
 	{
 		id: WidgetKeys.calendar,
 		emoji: '📅',
@@ -151,12 +181,14 @@ interface WidgetVisibilityContextType {
 }
 
 const defaultVisibility: WidgetKeys[] = [
+	WidgetKeys.searchAndBookmarks,
+	WidgetKeys.TimeandDate,
 	WidgetKeys.calendar,
 	WidgetKeys.tools,
 	WidgetKeys.yadKar,
 	WidgetKeys.comboWidget,
 ]
-export const MAX_VISIBLE_WIDGETS = 5
+export const MAX_VISIBLE_WIDGETS = 8
 
 const WidgetVisibilityContext = createContext<WidgetVisibilityContextType | undefined>(
 	undefined

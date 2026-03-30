@@ -12,10 +12,6 @@ import Analytics from '@/analytics'
 import { useAppearanceSetting } from '@/context/appearance.context'
 import { DateProvider } from '@/context/date.context'
 import { useWidgetVisibility, type WidgetItem } from '@/context/widget-visibility.context'
-import { BookmarksList } from '@/layouts/bookmark/bookmarks'
-import { SearchLayout } from '@/layouts/search/search'
-import { WigiPadWidget } from '@/layouts/widgets/tabFrixPad/tabFrixPad.layout'
-import { BookmarkProvider } from '@/layouts/bookmark/context/bookmark.context'
 import { HomeContentSimplify } from './home-content-simplify'
 
 const layoutPositions: Record<string, string> = {
@@ -63,7 +59,7 @@ function SortableWidget({ widget }: { widget: WidgetItem }) {
 			style={style}
 			{...attributes}
 			{...dragListeners}
-			className={`transition-all duration-200 ${isDragging
+			className={`transition-all duration-200 ${widget.gridSpan || ''} ${isDragging
 				? 'opacity-50 scale-105 shadow-2xl cursor-grabbing'
 				: 'cursor-grab hover:scale-[1.02]'
 				}`}
@@ -120,20 +116,6 @@ export function ContentSection() {
 				data-tour="content"
 				className={`flex flex-col items-center overflow-y-auto scrollbar-none ${layoutPositions[contentAlignment]} flex-1 w-full px-1 md:px-4 py-1`}
 			>
-				<div className="grid w-full grid-cols-1 gap-2 transition-all duration-300 md:grid-cols-2 lg:grid-cols-4 md:gap-4">
-					<div
-						className={'order-1 lg:order-2 space-y-2 col-span-2 lg:col-start-2'}
-					>
-						<SearchLayout />
-						<BookmarkProvider>
-							<BookmarksList />
-						</BookmarkProvider>
-					</div>
-
-					<div className="order-2 lg:order-3">
-						<WigiPadWidget />
-					</div>
-				</div>
 
 				{sortedWidgets.length > 0 && (
 					<div className="w-full mt-2" id="widgets">
@@ -173,7 +155,10 @@ export function ContentSection() {
 											)
 										}
 										return (
-											<div key={widget.id}>
+											<div
+												key={widget.id}
+												className={widget.gridSpan || ''}
+											>
 												{widget.node}
 											</div>
 										)

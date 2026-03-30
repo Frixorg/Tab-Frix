@@ -22,7 +22,7 @@ const sections: any[] = [
 	// { id: 'weather', label: 'آب و هوا', icon: <MdOutlineCloud size={14} /> },
 ]
 
-export function WigiPadWidget() {
+export function TimeAndDateLayout() {
 	const [activeSection, setActiveSection] = useState<string>('all')
 	const [wigiPadSettings, setWigiPadSettings] = useState<WigiPadDateSetting | null>(null)
 	const [weatherSettings, setWeatherSettings] = useState<WeatherSettings | null>(null)
@@ -109,7 +109,7 @@ export function WigiPadWidget() {
 	}
 
 	return (
-		<WidgetContainer isCustomHeight={!wigiPadSettings?.showWeather} className={`flex flex-col !p-2 ${wigiPadSettings?.showWeather ? '!h-72 !min-h-72 !max-h-72' : ''}`}>
+		<WidgetContainer isCustomHeight={!wigiPadSettings?.showWeather} className={`flex flex-col !p-2 `}>
 
 			<div className="flex-1 relative h-60">
 				{/* {

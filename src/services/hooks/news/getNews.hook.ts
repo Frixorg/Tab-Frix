@@ -62,15 +62,15 @@ export const useGetRss = (url: string, sourceName: string) => {
 	})
 }
 export async function getRss(url: string, sourceName: string): Promise<FetchedRssItem[]> {
-	const client = await getMainClient()
-	const { data } = await client.get<FetchedRssItem[]>(
-		`/news/rss?url=${encodeURIComponent(url)}&sourceName=${encodeURIComponent(sourceName)}`
-	)
+	// const { data } = await client.get<FetchedRssItem[]>(
+	// 	`/news/rss?url=${encodeURIComponent(url)}&sourceName=${encodeURIComponent(sourceName)}`
+	// )
+	const { data } = {data: []}
 	return data
 }
 
 export async function getNews(): Promise<FetchedRssItem[]> {
-	const client = await getMainClient()
-	const { data } = await client.get<FetchedRssItem[]>('/news')
+	// const { data } = await client.get<FetchedRssItem[]>('/news')
+	const { data } = {data: []}
 	return data
 }

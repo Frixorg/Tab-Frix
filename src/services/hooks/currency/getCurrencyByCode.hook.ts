@@ -37,7 +37,14 @@ export const useGetCurrencyByCode = (
 }
 
 async function getSupportCurrencies(currency: string): Promise<FetchedCurrency> {
-	const client = await getMainClient()
-	const { data } = await client.get<FetchedCurrency>(`/currencies/${currency}`)
+	// const { data } = await client.get<FetchedCurrency>(`/currencies/${currency}`)
+	const { data } = [{
+		name: {
+			fa: 'یورو',
+			en: 'Euro',
+		},
+		icon: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+		price: 1.18,
+	}]
 	return data
 }

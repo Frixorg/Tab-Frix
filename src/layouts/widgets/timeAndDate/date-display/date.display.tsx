@@ -38,7 +38,7 @@ export function DateDisplay() {
 	}
 
 	const onClickSettings = () => {
-		callEvent('openWidgetsSettings', { tab: WidgetTabKeys.wigiPad })
+		callEvent('openWidgetsSettings', { tab: WidgetTabKeys.TimeandDate })
 	}
 
 	return (

@@ -7,7 +7,7 @@ import { ItemSelector } from '@/components/item-selector'
 import { ToggleSwitch } from '@/components/toggle-switch.component'
 import { WigiPadDateType } from './date-setting.interface'
 
-export function WigiPadDateSettingsModal() {
+export function DateSettingsModal() {
 	const { t } = useTranslation()
 	const [selectedType, setSelectedType] = useState<WigiPadDateType | null>()
 	const [showWeather, setShowWeather] = useState<boolean>(false)

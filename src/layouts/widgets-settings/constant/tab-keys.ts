@@ -1,6 +1,6 @@
 export enum WidgetTabKeys {
 	widget_management = 'widget_management',
-	wigiPad = 'wigiPad',
+	TimeandDate = 'TimeandDate',
 	wigiArz = 'wigiArz',
 	news_settings = 'news_settings',
 	weather_settings = 'weather_settings',
