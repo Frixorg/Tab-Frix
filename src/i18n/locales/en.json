@@ -18,6 +18,49 @@
 			"emptyFolder": "This folder is empty"
 		}
 	},
+	"extensionInstalled": {
+		"welcomeTitle": "Welcome to Tab",
+		"keepItAlt": "How to keep the extension enabled",
+		"keepItHint": "⚠️ To activate the extension, click the \"Keep It\" button.",
+		"getStarted": "Get started",
+		"firefox": {
+			"title": "Privacy notice",
+			"description": "Please choose which data you want to share:",
+			"points": {
+				"localSettings": "Local settings: all your preferences are stored only on your device.",
+				"icons": "Website icons: the domain is used to fetch favicons from a Google service (requires analytics consent).",
+				"sync": "Sync & calendar: only enabled if you sign in."
+			},
+			"allowAnalytics": "Send anonymous technical analytics (to improve the extension)",
+			"allowIcons": "Show bookmark icons",
+			"privacyLink": "Full privacy policy",
+			"decline": "Remove extension",
+			"confirm": "Allow and continue"
+		}
+	},
+	"homeTour": {
+		"footer": {
+			"title": "Declutter your browser",
+			"descriptionBefore": "To hide this bar, simply",
+			"highlight": "right-click",
+			"descriptionAfter": "on it and choose the option below:",
+			"imageAlt": "How to hide the browser footer bar"
+		},
+		"steps": {
+			"settingsButton": "Use this button to open extension settings and widget management, then customize them.",
+			"profileAndFriends": "Use this area to access and manage your profile and friends list.",
+			"bookmarks": "This section lets you manage bookmarks: add new ones, edit or delete existing ones, and change each bookmark's settings.",
+			"widgets": "This is the main widgets area. You can use widgets without limits, but to avoid clutter we suggest keeping at most 4 widgets active at the same time."
+		},
+		"locale": {
+			"next": "Next",
+			"back": "Back",
+			"skip": "Skip",
+			"last": "Finish",
+			"close": "Close",
+			"nextLabelWithProgress": "Next {step}/{steps}"
+		}
+	},
 	"settings": {
 		"title": "Settings",
 		"Widgets": "Widgets",

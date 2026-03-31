@@ -18,6 +18,49 @@
 			"emptyFolder": "Questa cartella è vuota"
 		}
 	},
+	"extensionInstalled": {
+		"welcomeTitle": "Benvenuto in Tab",
+		"keepItAlt": "Come mantenere l’estensione attiva",
+		"keepItHint": "⚠️ Per attivare l’estensione, fai clic sul pulsante \"Keep It\".",
+		"getStarted": "Inizia",
+		"firefox": {
+			"title": "Informativa sulla privacy",
+			"description": "Scegli quali dati vuoi condividere:",
+			"points": {
+				"localSettings": "Impostazioni locali: tutte le preferenze vengono salvate solo sul tuo dispositivo.",
+				"icons": "Icone dei siti: il dominio viene usato per recuperare le favicon da un servizio Google (richiede il consenso alle statistiche).",
+				"sync": "Sync e calendario: si attivano solo se effettui l’accesso."
+			},
+			"allowAnalytics": "Invia statistiche tecniche anonime (per migliorare l’estensione)",
+			"allowIcons": "Mostra le icone dei segnalibri",
+			"privacyLink": "Informativa completa sulla privacy",
+			"decline": "Rimuovi estensione",
+			"confirm": "Consenti e continua"
+		}
+	},
+	"homeTour": {
+		"footer": {
+			"title": "Rendi il browser piu pulito",
+			"descriptionBefore": "Per nascondere questa barra,",
+			"highlight": "fai clic destro",
+			"descriptionAfter": "su di essa e scegli l'opzione qui sotto:",
+			"imageAlt": "Come nascondere la barra inferiore del browser"
+		},
+		"steps": {
+			"settingsButton": "Usa questo pulsante per aprire le impostazioni dell'estensione e la gestione dei widget, poi personalizzarli.",
+			"profileAndFriends": "Da questa sezione puoi accedere e gestire il tuo profilo e la lista amici.",
+			"bookmarks": "Questa sezione ti permette di gestire i segnalibri: aggiungerne di nuovi, modificare o eliminare quelli esistenti e cambiare le impostazioni di ciascun segnalibro.",
+			"widgets": "Questa e l'area principale dei widget. Puoi usarli senza limiti, ma per evitare confusione consigliamo di mantenere al massimo 4 widget attivi contemporaneamente."
+		},
+		"locale": {
+			"next": "Avanti",
+			"back": "Indietro",
+			"skip": "Salta",
+			"last": "Fine",
+			"close": "Chiudi",
+			"nextLabelWithProgress": "Avanti {step}/{steps}"
+		}
+	},
 	"settings": {
 		"title": "Impostazioni",
 		"Widgets": "Widgets",

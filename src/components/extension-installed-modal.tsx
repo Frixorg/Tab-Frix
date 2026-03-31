@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import keepItImage from '@/assets/keep-it.png'
 import { Button } from './button/button'
 import Checkbox from './checkbox'
 import Modal from './modal'
-import { setToStorage } from '@/common/storage'
+import { useTranslation } from 'react-i18next'
 
 interface ExtensionInstalledModalProps {
 	show: boolean
@@ -15,12 +15,15 @@ export function ExtensionInstalledModal({
 	show,
 	onGetStarted,
 }: ExtensionInstalledModalProps) {
+	const { i18n } = useTranslation()
+	const isRtl = i18n.language.startsWith('fa')
+
 	return (
 		<Modal
 			isOpen={show}
 			onClose={() => {}}
 			size="sm"
-			direction="rtl"
+			direction={isRtl ? 'rtl' : 'ltr'}
 			showCloseButton={false}
 			closeOnBackdropClick={false}
 		>
@@ -36,11 +39,14 @@ interface StepOneProps {
 	onGetStarted: () => void
 }
 const StepOne = ({ onGetStarted }: StepOneProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<>
 			<div className="mb-3">
-				<h3 className={'mb-0 text-2xl font-bold text-content'}>
-					به ویجتیفای خوش آمدید! 🎉
+				<h3 className={'mb-0 text-2xl font-bold text-content inline-flex items-baseline gap-1'}>
+					{t('extensionInstalled.welcomeTitle')}
+					<GlitchFrix /> 🎉
 				</h3>
 			</div>
 
@@ -52,7 +58,7 @@ const StepOne = ({ onGetStarted }: StepOneProps) => {
 				<div className="flex items-center justify-center">
 					<img
 						src={keepItImage}
-						alt="نحوه فعالسازی افزونه"
+						alt={t('extensionInstalled.keepItAlt')}
 						className="h-auto max-w-full rounded-lg shadow-xl"
 						style={{ maxHeight: '220px' }}
 					/>
@@ -65,7 +71,7 @@ const StepOne = ({ onGetStarted }: StepOneProps) => {
 				}
 			>
 				<p className="font-bold text-muted">
-					⚠️ برای فعالسازی افزونه، روی دکمه "Keep It" کلیک کنید.
+					{t('extensionInstalled.keepItHint')}
 				</p>
 			</div>
 
@@ -75,9 +81,51 @@ const StepOne = ({ onGetStarted }: StepOneProps) => {
 				className="w-full text-base font-light shadow-sm rounded-2xl shadow-primary outline-none!"
 				isPrimary={true}
 			>
-				شروع کنید
+				{t('extensionInstalled.getStarted')}
 			</Button>
 		</>
+	)
+}
+
+function GlitchFrix() {
+	const [isGlitching, setIsGlitching] = useState(false)
+
+	useEffect(() => {
+		let cancelled = false
+		const timers: number[] = []
+
+		const schedule = (fn: () => void, ms: number) => {
+			const id = window.setTimeout(() => {
+				if (!cancelled) fn()
+			}, ms)
+			timers.push(id)
+		}
+
+		const trigger = () => {
+			if (cancelled) return
+			setIsGlitching(true)
+			schedule(() => {
+				setIsGlitching(false)
+				const nextDelay = Math.random() * 2500 + 500
+				schedule(trigger, nextDelay)
+			}, 300)
+		}
+
+		schedule(trigger, 800)
+
+		return () => {
+			cancelled = true
+			for (const id of timers) window.clearTimeout(id)
+		}
+	}, [])
+
+	return (
+		<span
+			className={`glitch-frix text-2xl font-bold text-primary ${isGlitching ? 'is-glitching' : ''}`}
+			data-text="Frix"
+		>
+			Frix
+		</span>
 	)
 }
 
@@ -85,6 +133,9 @@ interface StepFirefoxConsentProps {
 	onGetStarted: () => void
 }
 const StepFirefoxConsent = ({ onGetStarted }: StepFirefoxConsentProps) => {
+	const { t, i18n } = useTranslation()
+	const isRtl = i18n.language.startsWith('fa')
+
 	const [allowAnalytics, setAllowAnalytics] = useState(false)
 	const [allowIcon, setAllowIcon] = useState(false)
 
@@ -107,21 +158,19 @@ const StepFirefoxConsent = ({ onGetStarted }: StepFirefoxConsentProps) => {
 	}
 
 	return (
-		<div className="w-full overflow-clip">
+		<div className="w-full overflow-clip" dir={isRtl ? 'rtl' : 'ltr'}>
 			<h3 className="mb-3 text-2xl font-bold text-content">
-				{' '}
-				Privacy Notice (حریم خصوصی)
+				{t('extensionInstalled.firefox.title')}
 			</h3>
-			<p className="mb-2 font-semibold">لطفاً انتخاب کنید چه داده‌هایی ارسال شوند:</p>
+			<p className="mb-2 text-sm font-semibold">
+				{t('extensionInstalled.firefox.description')}
+			</p>
 
 			<div className="w-full px-2">
 				<ul className="w-full h-32 p-2 mb-2 space-y-1 overflow-y-auto text-xs list-disc list-inside border border-content rounded-2xl">
-					<li>تنظیمات محلی: همه تنظیمات شما در دستگاه خودتان ذخیره می‌شود.</li>
-					<li>
-						آیکون وب‌سایت‌ها: دامنه سایت خوانده می‌شود تا از سرویس گوگل آیکون
-						بگیرد. (به رضایت آمار نیاز دارد)
-					</li>
-					<li>همگام‌سازی و تقویم: فقط در صورت لاگین فعال می‌شوند.</li>
+					<li>{t('extensionInstalled.firefox.points.localSettings')}</li>
+					<li>{t('extensionInstalled.firefox.points.icons')}</li>
+					<li>{t('extensionInstalled.firefox.points.sync')}</li>
 				</ul>
 
 				<div className="mb-3 space-y-2">
@@ -130,8 +179,8 @@ const StepFirefoxConsent = ({ onGetStarted }: StepFirefoxConsentProps) => {
 							checked={allowAnalytics}
 							onChange={() => setAllowAnalytics(!allowAnalytics)}
 						/>
-						<span className="mr-2">
-							ارسال آمار فنی غیرشخصی (برای بهبود افزونه)
+						<span className={isRtl ? 'mr-2' : 'ml-2'}>
+							{t('extensionInstalled.firefox.allowAnalytics')}
 						</span>
 					</label>
 
@@ -140,7 +189,9 @@ const StepFirefoxConsent = ({ onGetStarted }: StepFirefoxConsentProps) => {
 							checked={allowIcon}
 							onChange={() => setAllowIcon(!allowIcon)}
 						/>
-						<span className="mr-2">نمایش آیکون‌های بوکمارک</span>
+						<span className={isRtl ? 'mr-2' : 'ml-2'}>
+							{t('extensionInstalled.firefox.allowIcons')}
+						</span>
 					</label>
 				</div>
 
@@ -148,10 +199,10 @@ const StepFirefoxConsent = ({ onGetStarted }: StepFirefoxConsentProps) => {
 					href="https://widgetify.ir/privacy"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="flex items-center justify-center font-medium underline text-primary gap-0.5 mb-2"
+					className="flex items-center justify-center mb-2 font-medium underline text-primary gap-0.5"
 				>
 					<FaExternalLinkAlt />
-					سیاست کامل حریم خصوصی
+					{t('extensionInstalled.firefox.privacyLink')}
 				</a>
 			</div>
 
@@ -161,14 +212,14 @@ const StepFirefoxConsent = ({ onGetStarted }: StepFirefoxConsentProps) => {
 					size="md"
 					className="flex items-center justify-center w-40 btn btn-error rounded-xl"
 				>
-					🚫 حذف افزونه
+					{t('extensionInstalled.firefox.decline')}
 				</Button>
 				<Button
 					onClick={handleConfirm}
 					size="md"
 					className="w-40 btn btn-success rounded-xl"
 				>
-					✅ تأیید و ادامه
+					{t('extensionInstalled.firefox.confirm')}
 				</Button>
 			</div>
 		</div>

@@ -22,7 +22,7 @@ export enum Theme {
 export const ThemeContext = createContext<ThemeContextType | null>(null)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-	const [theme, setTheme] = useState<string>(Theme.Glass)
+	const [theme, setTheme] = useState<string>(Theme.Icy)
 	const { mutateAsync } = useChangeTheme()
 	async function loadTheme() {
 		const theme = await getFromStorage('theme')
@@ -35,8 +35,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 				setTheme(theme)
 				document.documentElement.setAttribute('data-theme', theme)
 			} else {
-				setTheme(Theme.Glass)
-				document.documentElement.setAttribute('data-theme', Theme.Glass)
+				setTheme(Theme.Icy)
+				document.documentElement.setAttribute('data-theme', Theme.Icy)
 			}
 		})
 

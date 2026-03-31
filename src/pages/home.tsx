@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import Joyride, { type Step } from 'react-joyride'
+import { useTranslation } from 'react-i18next'
 import Analytics from '@/analytics'
 import { ConfigKey } from '@/common/constant/config.key'
 import { getFromStorage, setToStorage } from '@/common/storage'
@@ -13,83 +14,86 @@ import { WidgetVisibilityProvider } from '@/context/widget-visibility.context'
 import { NavbarLayout } from '@/layouts/navbar/navbar.layout'
 import type { WidgetTabKeys } from '@/layouts/widgets-settings/constant/tab-keys'
 import { WidgetSettingsModal } from '@/layouts/widgets-settings/widget-settings-modal'
-import { getRandomBundledImageWallpaper } from '@/layouts/setting/tabs/wallpapers/tab/gallery/data/gallery-wallpapers.const'
+import novitecFerrari from '@/assets/wallpapers/Cars/novitec-ferrari.jpeg'
 import { ContentSection } from './home/content-section'
 import { ExplorerContent } from '@/layouts/explorer/explorer'
 import { usePage } from '@/context/page.context'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAppearanceSetting } from '@/context/appearance.context'
 import { HomeContentSimplify } from './home/home-content-simplify'
+import howToDisableFooter from '@/assets/how-to-disable-footer.png'
 
-const steps: Step[] = [
-	{
-		target: '#chrome-footer',
-		content: (
-			<div className="flex flex-col gap-1 text-center">
-				<h4 className="text-[14px] font-black text-primary italic">
-					خلوت کردن فضای مرورگر
-				</h4>
-
-				<p className="text-[12px] leading-6 text-base-200 font-medium">
-					برای مخفی کردن این نوار، کافیست روی آن{' '}
-					<span className="font-black text-error">راست کلیک</span> کرده و گزینه
-					زیر را انتخاب کنید:
-				</p>
-
-				<div className="relative group">
-					<img
-						src="https://cdn.widgetify.ir/extension/how-to-disable-footer.png"
-						alt="نحوه مخفی کردن نوار پایین مرورگر"
-						className="object-cover w-full transition-transform duration-500 rounded-xl shadow-2xl border-2 border-primary/20 group-hover:scale-[1.02]"
-					/>
-					<div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-t from-black/20 to-transparent" />
-				</div>
-
-				<div className="p-2 border border-dashed rounded-lg bg-base-100/10 border-base-100/20">
-					<code className="text-[11px] font-bold text-content/60">
-						"Hide footer on New Tab page"
-					</code>
-				</div>
-			</div>
-		),
-		disableBeacon: true,
-		showSkipButton: true,
-		styles: {
-			options: {
-				width: 320,
-				zIndex: 10000,
-			},
-		},
-	},
-	{
-		target: '#settings-button',
-		content:
-			'از این دکمه می‌توانید به تنظیمات عمومی افزونه و مدیریت ویجت‌ها دسترسی پیدا کنید و آن‌ها را سفارشی‌سازی کنید.',
-	},
-	{
-		target: '#profile-and-friends-list',
-		content:
-			'از این بخش می‌توانید به پروفایل شخصی خود و لیست دوستان دسترسی پیدا کنید و آن‌ها را مدیریت کنید.',
-	},
-	{
-		target: '#bookmarks',
-		content:
-			'این بخش به شما امکان می‌دهد بوکمارک‌ها را مدیریت کنید: بوکمارک جدید اضافه کنید، بوکمارک‌های موجود را ویرایش یا حذف کنید و تنظیمات هر بوکمارک را تغییر دهید.',
-	},
-	{
-		target: '#widgets',
-		content:
-			'این محیط اصلی ویجت‌ها است. شما می‌توانید بدون محدودیت از ویجت‌ها استفاده کنید، اما برای جلوگیری از شلوغی بیش از حد، پیشنهاد می‌کنیم حداکثر ۴ ویجت را همزمان فعال نگه دارید.',
-	},
-]
 export function HomePage() {
 	const { ui } = useAppearanceSetting()
+	const { t } = useTranslation()
 	const [showWelcomeModal, setShowWelcomeModal] = useState(false)
 	const [showReleaseNotes, setShowReleaseNotes] = useState(false)
 	const [showWidgetSettings, setShowWidgetSettings] = useState(false)
 	const [tab, setTab] = useState<string | null>(null)
 	const [showTour, setShowTour] = useState(false)
 	const { page } = usePage()
+	const steps: Step[] = useMemo(
+		() => [
+			{
+				target: '#chrome-footer',
+				content: (
+					<div className="flex flex-col gap-1 text-center">
+						<h4 className="text-[14px] font-black text-primary italic">
+							{t('homeTour.footer.title')}
+						</h4>
+
+						<p className="text-[12px] leading-6 text-base-200 font-medium">
+							{t('homeTour.footer.descriptionBefore')}{' '}
+							<span className="font-black text-error">
+								{t('homeTour.footer.highlight')}
+							</span>{' '}
+							{t('homeTour.footer.descriptionAfter')}
+						</p>
+
+						<div className="relative group">
+							<img
+								src={howToDisableFooter}
+								alt={t('homeTour.footer.imageAlt')}
+								className="object-cover w-full transition-transform duration-500 rounded-xl shadow-2xl border-2 border-primary/20 group-hover:scale-[1.02]"
+							/>
+							<div className="absolute inset-0 pointer-events-none rounded-xl bg-gradient-to-t from-black/20 to-transparent" />
+						</div>
+
+						<div className="p-2 border border-dashed rounded-lg bg-base-100/10 border-base-100/20">
+							<code className="text-[11px] font-bold text-content/60">
+								"Hide footer on New Tab page"
+							</code>
+						</div>
+					</div>
+				),
+				disableBeacon: true,
+				showSkipButton: true,
+				styles: {
+					options: {
+						width: 320,
+						zIndex: 10000,
+					},
+				},
+			},
+			{
+				target: '#settings-button',
+				content: t('homeTour.steps.settingsButton'),
+			},
+			{
+				target: '#profile-and-friends-list',
+				content: t('homeTour.steps.profileAndFriends'),
+			},
+			{
+				target: '#bookmarks',
+				content: t('homeTour.steps.bookmarks'),
+			},
+			{
+				target: '#widgets',
+				content: t('homeTour.steps.widgets'),
+			},
+		],
+		[t]
+	)
 
 	useEffect(() => {
 		async function displayModalIfNeeded() {
@@ -119,24 +123,13 @@ export function HomePage() {
 			if (wallpaper) {
 				changeWallpaper(wallpaper)
 			} else {
-				const bundled = getRandomBundledImageWallpaper()
-				if (bundled) {
-					changeWallpaper(bundled)
-					setToStorage('wallpaper', bundled)
-				} else {
-					const defaultGradient: StoredWallpaper = {
-						id: 'gradient-a1c4fd-c2e9fb',
-						type: 'GRADIENT',
-						src: '',
-						gradient: {
-							from: '#a1c4fd',
-							to: '#c2e9fb',
-							direction: 'to-r',
-						},
-					}
-					changeWallpaper(defaultGradient)
-					setToStorage('wallpaper', defaultGradient)
+				const defaultWallpaper: StoredWallpaper = {
+					id: 'gallery-wp-novitec-ferrari',
+					type: 'IMAGE',
+					src: novitecFerrari,
 				}
+				changeWallpaper(defaultWallpaper)
+				setToStorage('wallpaper', defaultWallpaper)
 			}
 		}
 
@@ -295,17 +288,37 @@ export function HomePage() {
 				showProgress
 				showSkipButton
 				locale={{
-					next: 'بعدی',
-					back: 'قبلی',
-					skip: 'رد کردن',
-					last: 'پایان',
-					close: 'بستن',
-					nextLabelWithProgress: 'بعدی {step}/{steps}',
+					next: t('homeTour.locale.next'),
+					back: t('homeTour.locale.back'),
+					skip: t('homeTour.locale.skip'),
+					last: t('homeTour.locale.last'),
+					close: t('homeTour.locale.close'),
+					nextLabelWithProgress: t('homeTour.locale.nextLabelWithProgress'),
 				}}
 				callback={onDoneTour}
 				styles={{
 					options: {
 						primaryColor: '#3b82f6',
+						backgroundColor: 'rgba(15, 23, 42, 0.65)',
+						textColor: '#e5e7eb',
+						overlayColor: 'rgba(2, 6, 23, 0.45)',
+						arrowColor: 'rgba(15, 23, 42, 0.65)',
+						zIndex: 10000,
+					},
+					tooltip: {
+						backdropFilter: 'blur(10px)',
+						border: '1px solid rgba(148, 163, 184, 0.2)',
+						borderRadius: '16px',
+						boxShadow: '0 10px 35px rgba(0, 0, 0, 0.3)',
+					},
+					tooltipContent: {
+						padding: '12px',
+					},
+					buttonBack: {
+						color: '#cbd5e1',
+					},
+					buttonSkip: {
+						color: '#cbd5e1',
 					},
 				}}
 			/>
