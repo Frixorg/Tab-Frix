@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { listenEvent } from '@/common/utils/call-event'
+import i18n from '@/i18n'
 
 export enum PetTypes {
 	DOG_AKITA = 'dog-akita',
@@ -25,6 +26,59 @@ export interface PetSettings {
 	>
 }
 
+function createDefaultPetOptions(): PetSettings {
+	return {
+		petType: PetTypes.DOG_AKITA,
+		petOptions: {
+			[PetTypes.DOG_AKITA]: {
+				name: i18n.t('settings.widgets.pet.defaultNames.dogAkita'),
+				emoji: '🐶',
+				type: 'dog',
+				hungryState: {
+					level: 100,
+					lastHungerTick: null,
+				},
+			},
+			[PetTypes.CHICKEN]: {
+				name: i18n.t('settings.widgets.pet.defaultNames.chicken'),
+				emoji: '🐔',
+				type: 'chicken',
+				hungryState: {
+					level: 100,
+					lastHungerTick: null,
+				},
+			},
+			[PetTypes.CRAB]: {
+				name: i18n.t('settings.widgets.pet.defaultNames.crab'),
+				emoji: '🦀',
+				type: 'crab',
+				hungryState: {
+					level: 100,
+					lastHungerTick: null,
+				},
+			},
+			[PetTypes.CAT]: {
+				name: i18n.t('settings.widgets.pet.defaultNames.cat'),
+				emoji: '🐈',
+				type: 'cat',
+				hungryState: {
+					level: 100,
+					lastHungerTick: null,
+				},
+			},
+			[PetTypes.FROG]: {
+				name: i18n.t('settings.widgets.pet.defaultNames.frog'),
+				emoji: '🐸',
+				type: 'frog',
+				hungryState: {
+					level: 100,
+					lastHungerTick: null,
+				},
+			},
+		},
+	}
+}
+
 interface PetSettingsContextType extends PetSettings {
 	getCurrentPetName: (petType: PetTypes) => string
 	levelUpHungryState: (petType: PetTypes) => void
@@ -37,56 +91,7 @@ interface PetSettingsContextType extends PetSettings {
 	isEnabled: boolean
 	setIsEnabled: (value: boolean) => void
 }
-export const BASE_PET_OPTIONS: PetSettings = {
-	petType: PetTypes.DOG_AKITA,
-	petOptions: {
-		[PetTypes.DOG_AKITA]: {
-			name: 'آکیتا',
-			emoji: '🐶',
-			type: 'dog',
-			hungryState: {
-				level: 100,
-				lastHungerTick: null,
-			},
-		},
-		[PetTypes.CHICKEN]: {
-			name: 'قدقدپور',
-			emoji: '🐔',
-			type: 'chicken',
-			hungryState: {
-				level: 100,
-				lastHungerTick: null,
-			},
-		},
-		[PetTypes.CRAB]: {
-			name: 'چنگولی',
-			emoji: '🦀',
-			type: 'crab',
-			hungryState: {
-				level: 100,
-				lastHungerTick: null,
-			},
-		},
-		[PetTypes.CAT]: {
-			name: 'زردآلو',
-			emoji: '🐈',
-			type: 'cat',
-			hungryState: {
-				level: 100,
-				lastHungerTick: null,
-			},
-		},
-		[PetTypes.FROG]: {
-			name: 'قوری',
-			emoji: '🐸',
-			type: 'frog',
-			hungryState: {
-				level: 100,
-				lastHungerTick: null,
-			},
-		},
-	},
-}
+export const BASE_PET_OPTIONS: PetSettings = createDefaultPetOptions()
 
 const PetContext = createContext<PetSettingsContextType | undefined>(undefined)
 
@@ -105,25 +110,28 @@ export function PetProvider({ children }: { children: React.ReactNode }) {
 			])
 			if (storedPets) {
 				if (!storedPets.petOptions['dog-akita'].hungryState) {
+					const basePetOptions = createDefaultPetOptions()
 					setToStorage('pets', {
-						...BASE_PET_OPTIONS,
+						...basePetOptions,
 					})
 					setSettings({
-						...BASE_PET_OPTIONS,
+						...basePetOptions,
 					})
 				} else {
+					const basePetOptions = createDefaultPetOptions()
 					setSettings({
-						...BASE_PET_OPTIONS,
+						...basePetOptions,
 						...storedPets,
 						petOptions: {
-							...BASE_PET_OPTIONS.petOptions,
+							...basePetOptions.petOptions,
 							...(storedPets.petOptions || {}),
 						},
 					})
 				}
 			} else {
+				const basePetOptions = createDefaultPetOptions()
 				const initialSettings = {
-					...BASE_PET_OPTIONS,
+					...basePetOptions,
 					petType: PetTypes.DOG_AKITA,
 				}
 				setSettings(initialSettings)

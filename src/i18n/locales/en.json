@@ -134,6 +134,97 @@
 				"positionTop": "Top",
 				"positionCenter": "Center",
 				"positionBottom": "Bottom"
+			},
+			"manage": {
+				"simpleUiWarning": "In simple UI mode, widgets cannot be managed.",
+				"title": "Select widgets to display",
+				"badges": {
+					"new": "New",
+					"popular": "Popular",
+					"disabled": "Disabled",
+					"soon": "Soon"
+				},
+				"widgetNames": {
+					"searchAndBookmarks": "Search & Bookmarks",
+					"timeAndDate": "Time & Date",
+					"calendar": "Calendar",
+					"todoAndNotes": "Todo & Notes",
+					"pomodoroTimer": "Pomodoro Timer",
+					"weather": "Weather",
+					"currencyAndNews": "Currency & News"
+				}
+			},
+			"currency": {
+				"priceChangeColor": "Price change color",
+				"normal": "Normal",
+				"reversed": "Reversed",
+				"currencies": "Currencies",
+				"searchPlaceholder": "Search...",
+				"filters": {
+					"all": "All currencies",
+					"crypto": "Cryptocurrencies",
+					"currency": "Currencies",
+					"coin": "Gold & Coins"
+				},
+				"groupTitles": {
+					"crypto": "Cryptocurrencies",
+					"currency": "Currencies",
+					"coin": "Gold & Coins"
+				}
+			},
+			"news": {
+				"sections": {
+					"general": "General settings",
+					"addFeed": "Add new RSS feed",
+					"suggestedFeeds": "Suggested feeds",
+					"yourFeeds": "Your feeds ({{count}})"
+				},
+				"useDefault": {
+					"title": "Use default news sources",
+					"description": "When enabled, news is shown from default sources"
+				},
+				"placeholders": {
+					"feedName": "Feed name (example: TechCrunch)",
+					"feedUrl": "RSS URL (example: https://techcrunch.com/feed)"
+				},
+				"actions": {
+					"addFeed": "Add new feed"
+				},
+				"errors": {
+					"required": "Feed name and URL are required",
+					"invalidUrl": "Feed URL is invalid",
+					"feedAlreadyAdded": "Feed \"{{name}}\" is already added"
+				},
+				"empty": {
+					"title": "No RSS feed has been added",
+					"description": "Use the form above to add a feed"
+				}
+			},
+			"pet": {
+				"types": {
+					"dog": "Dog",
+					"chicken": "Chicken",
+					"crab": "Crab",
+					"frog": "Frog",
+					"cat": "Cat"
+				},
+				"defaultNames": {
+					"dogAkita": "Akita",
+					"chicken": "Clucky",
+					"crab": "Pinchy",
+					"cat": "Apricot",
+					"frog": "Teapot"
+				},
+				"showPetTitle": "Show pet",
+				"showPetDescription": "Display interactive pet on the home page",
+				"petTypeTitle": "Pet type",
+				"petNameTitle": "Pet name",
+				"petNamePlaceholder": "Custom name...",
+				"careTipsTitle": "💡 Care tips:",
+				"careTips": {
+					"play": "• Click the pet to play with it",
+					"feed": "• Click around the area to feed the pet"
+				}
 			}
 		},
 		"groups": {

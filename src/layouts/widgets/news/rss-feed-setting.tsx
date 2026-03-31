@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BiRss } from 'react-icons/bi'
+import { useTranslation } from 'react-i18next'
 import { VscAdd, VscTrash } from 'react-icons/vsc'
 import Analytics from '@/analytics'
 import { getFromStorage, setToStorage } from '@/common/storage'
@@ -28,6 +29,7 @@ const SUGGESTED_FEEDS = [
 ]
 
 export const RssFeedSetting = () => {
+	const { t } = useTranslation()
 	const [newFeed, setNewFeed] = useState<{ name: string; url: string }>({
 		name: '',
 		url: '',
@@ -47,7 +49,7 @@ export const RssFeedSetting = () => {
 
 	const addNewFeed = () => {
 		if (!newFeed.name.trim() || !newFeed.url.trim()) {
-			setError('نام و آدرس فید الزامی است')
+			setError(t('settings.widgets.news.errors.required'))
 			return
 		}
 
@@ -55,7 +57,7 @@ export const RssFeedSetting = () => {
 		try {
 			new URL(newFeed.url)
 		} catch {
-			setError('آدرس فید معتبر نیست')
+			setError(t('settings.widgets.news.errors.invalidUrl'))
 			return
 		}
 
@@ -86,7 +88,11 @@ export const RssFeedSetting = () => {
 		)
 
 		if (feedExists) {
-			setError(`فید "${suggestedFeed.name}" قبلاً اضافه شده است`)
+			setError(
+				t('settings.widgets.news.errors.feedAlreadyAdded', {
+					name: suggestedFeed.name,
+				})
+			)
 			return
 		}
 
@@ -116,7 +122,7 @@ export const RssFeedSetting = () => {
 			new URL(url)
 			setError(null)
 		} catch (_e) {
-			setError('آدرس فید معتبر نیست')
+			setError(t('settings.widgets.news.errors.invalidUrl'))
 		}
 	}
 
@@ -192,26 +198,26 @@ export const RssFeedSetting = () => {
 					{error}
 				</div>
 			)}
-			<SectionPanel title="تنظیمات کلی" size="sm">
+			<SectionPanel title={t('settings.widgets.news.sections.general')} size="sm">
 				<CheckBoxWithDescription
 					isEnabled={rssState.useDefaultNews}
 					onToggle={toggleDefaultNews}
-					title="استفاده از منابع خبری پیش‌فرض"
-					description="با فعال کردن این گزینه، اخبار از منابع پیش‌فرض نمایش داده می‌شوند"
+					title={t('settings.widgets.news.useDefault.title')}
+					description={t('settings.widgets.news.useDefault.description')}
 				/>
 			</SectionPanel>
 
-			<SectionPanel title="افزودن فید RSS جدید" size="sm">
+			<SectionPanel title={t('settings.widgets.news.sections.addFeed')} size="sm">
 				<div className="flex flex-col gap-3">
 					<TextInput
 						type="text"
-						placeholder="نام فید (مثال: دیجیاتو)"
+						placeholder={t('settings.widgets.news.placeholders.feedName')}
 						value={newFeed.name}
 						onChange={(value) => setNewFeed({ ...newFeed, name: value })}
 					/>
 					<TextInput
 						type="url"
-						placeholder="آدرس RSS (مثال: https://digiato.com/feed)"
+						placeholder={t('settings.widgets.news.placeholders.feedUrl')}
 						value={newFeed.url}
 						onChange={(value) => {
 							setNewFeed({ ...newFeed, url: value })
@@ -225,13 +231,13 @@ export const RssFeedSetting = () => {
 						onClick={addNewFeed}
 					>
 						<VscAdd size={16} />
-						<span>افزودن فید جدید</span>
+						<span>{t('settings.widgets.news.actions.addFeed')}</span>
 					</Button>
 				</div>
 			</SectionPanel>
 
 			{/* Suggested Feeds Section */}
-			<SectionPanel title="فیدهای پیشنهادی" size="sm">
+			<SectionPanel title={t('settings.widgets.news.sections.suggestedFeeds')} size="sm">
 				<div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
 					{SUGGESTED_FEEDS.filter((feed) => !isFeedAlreadyAdded(feed.url)).map(
 						(feed) => (
@@ -251,11 +257,17 @@ export const RssFeedSetting = () => {
 				</div>
 			</SectionPanel>
 
-			<SectionPanel title={`فیدهای شما (${rssState.customFeeds.length})`} size="sm">
+			<SectionPanel
+				title={t('settings.widgets.news.sections.yourFeeds', {
+					count: rssState.customFeeds.length,
+				})}
+				size="sm"
+			>
 				<FeedsList
 					feeds={rssState.customFeeds}
 					onToggleFeed={(id) => onToggleFeed(id)}
 					onRemoveFeed={onRemoveFeed}
+					t={t}
 				/>
 			</SectionPanel>
 		</WidgetSettingWrapper>
@@ -272,9 +284,10 @@ interface FeedsListProps {
 	isLoading?: boolean
 	onToggleFeed: (id: string) => void
 	onRemoveFeed: (id: string) => void
+	t: (key: string) => string
 }
 
-const FeedsList = ({ feeds, onToggleFeed, onRemoveFeed }: FeedsListProps) => {
+const FeedsList = ({ feeds, onToggleFeed, onRemoveFeed, t }: FeedsListProps) => {
 	return (
 		<div className="h-full">
 			{feeds.length === 0 ? (
@@ -285,10 +298,10 @@ const FeedsList = ({ feeds, onToggleFeed, onRemoveFeed }: FeedsListProps) => {
 				>
 					<BiRss className={'mb-3 opacity-50 text-content'} size={32} />
 					<p className={'mb-1 text-sm font-medium opacity-70 text-content'}>
-						هیچ فید RSS اضافه نشده است
+						{t('settings.widgets.news.empty.title')}
 					</p>
 					<p className={'text-xs opacity-50'}>
-						از فرم بالا برای افزودن فید استفاده کنید
+						{t('settings.widgets.news.empty.description')}
 					</p>
 				</div>
 			) : (

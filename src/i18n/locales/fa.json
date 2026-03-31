@@ -134,6 +134,97 @@
 				"positionTop": "بالا",
 				"positionCenter": "وسط",
 				"positionBottom": "پایین"
+			},
+			"manage": {
+				"simpleUiWarning": "در حالت ظاهری ساده، امکان مدیریت ویجت‌ها نیست!",
+				"title": "انتخاب ویجت‌ها برای نمایش",
+				"badges": {
+					"new": "جدید",
+					"popular": "محبوب",
+					"disabled": "غیرفعال",
+					"soon": "به زودی"
+				},
+				"widgetNames": {
+					"searchAndBookmarks": "جستجو و بوکمارک‌ها",
+					"timeAndDate": "زمان و تاریخ",
+					"calendar": "تقویم",
+					"todoAndNotes": "یادداشت و کارها",
+					"pomodoroTimer": "تایمر پومودورو",
+					"weather": "آب‌وهوا",
+					"currencyAndNews": "ارز و خبر"
+				}
+			},
+			"currency": {
+				"priceChangeColor": "رنگ تغییر قیمت",
+				"normal": "عادی",
+				"reversed": "معکوس",
+				"currencies": "ارزها",
+				"searchPlaceholder": "جستجو ...",
+				"filters": {
+					"all": "همه ارزها",
+					"crypto": "ارزهای دیجیتال",
+					"currency": "ارزها",
+					"coin": "طلا و سکه"
+				},
+				"groupTitles": {
+					"crypto": "ارزهای دیجیتال",
+					"currency": "ارزها",
+					"coin": "طلا و سکه"
+				}
+			},
+			"news": {
+				"sections": {
+					"general": "تنظیمات کلی",
+					"addFeed": "افزودن فید RSS جدید",
+					"suggestedFeeds": "فیدهای پیشنهادی",
+					"yourFeeds": "فیدهای شما ({{count}})"
+				},
+				"useDefault": {
+					"title": "استفاده از منابع خبری پیش‌فرض",
+					"description": "با فعال کردن این گزینه، اخبار از منابع پیش‌فرض نمایش داده می‌شوند"
+				},
+				"placeholders": {
+					"feedName": "نام فید (مثال: دیجیاتو)",
+					"feedUrl": "آدرس RSS (مثال: https://digiato.com/feed)"
+				},
+				"actions": {
+					"addFeed": "افزودن فید جدید"
+				},
+				"errors": {
+					"required": "نام و آدرس فید الزامی است",
+					"invalidUrl": "آدرس فید معتبر نیست",
+					"feedAlreadyAdded": "فید \"{{name}}\" قبلاً اضافه شده است"
+				},
+				"empty": {
+					"title": "هیچ فید RSS اضافه نشده است",
+					"description": "از فرم بالا برای افزودن فید استفاده کنید"
+				}
+			},
+			"pet": {
+				"types": {
+					"dog": "سگ",
+					"chicken": "مرغ",
+					"crab": "خرچنگ",
+					"frog": "قورباغه",
+					"cat": "گربه"
+				},
+				"defaultNames": {
+					"dogAkita": "آکیتا",
+					"chicken": "قدقدپور",
+					"crab": "چنگولی",
+					"cat": "زردآلو",
+					"frog": "قوری"
+				},
+				"showPetTitle": "نمایش حیوان خانگی",
+				"showPetDescription": "نمایش حیوان خانگی تعاملی روی صفحه اصلی",
+				"petTypeTitle": "نوع حیوان خانگی",
+				"petNameTitle": "نام حیوان خانگی",
+				"petNamePlaceholder": "اسم دلخواه...",
+				"careTipsTitle": "💡 نکات مراقبت:",
+				"careTips": {
+					"play": "• برای بازی با حیوان خانگی، روی آن کلیک کنید",
+					"feed": "• برای غذا دادن به حیوان، در محیط اطراف کلیک کنید"
+				}
 			}
 		},
 		"groups": {

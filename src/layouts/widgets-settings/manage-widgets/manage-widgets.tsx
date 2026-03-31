@@ -1,9 +1,10 @@
 import { SectionPanel } from '@/components/section-panel'
+import { useTranslation } from 'react-i18next'
 import {
 	MAX_VISIBLE_WIDGETS,
 	useWidgetVisibility,
 	type WidgetItem,
-	type WidgetKeys,
+	WidgetKeys,
 	widgetItems,
 } from '@/context/widget-visibility.context'
 import { ItemSelector } from '../../../components/item-selector'
@@ -11,16 +12,17 @@ import { WidgetSettingWrapper } from '../widget-settings-wrapper'
 import { useAppearanceSetting } from '@/context/appearance.context'
 
 export function ManageWidgets() {
-		const { ui } = useAppearanceSetting()
+	const { t } = useTranslation()
+	const { ui } = useAppearanceSetting()
 	const { visibility, toggleWidget } = useWidgetVisibility()
 	return (
 		<WidgetSettingWrapper>
 			{ui === 'SIMPLE' && (
 				<div className="alert alert-warning rounded-2xl ring-4 ring-warning/10">
-					در حالت ظاهری ساده، امکان مدیریت ویجت ها نیست!
+					{t('settings.widgets.manage.simpleUiWarning')}
 				</div>
 			)}
-			<SectionPanel title="انتخاب ویجت‌ها برای نمایش" size="sm">
+			<SectionPanel title={t('settings.widgets.manage.title')} size="sm">
 				<div
 					className={`grid grid-cols-2 gap-2 ${ui === 'SIMPLE' ? 'pointer-events-none blur-xs' : ''}`}
 				>
@@ -30,6 +32,7 @@ export function ManageWidgets() {
 							key={widget.id + 'selector'}
 							visibility={visibility}
 							toggleWidget={toggleWidget}
+							t={t}
 							true={true}
 						/>
 					))}
@@ -43,6 +46,7 @@ interface WidgetItemComponentProps {
 	widget: WidgetItem
 	visibility: string[]
 	toggleWidget: (widgetId: WidgetKeys) => void
+	t: (key: string) => string
 	true: boolean
 }
 
@@ -50,6 +54,7 @@ function WidgetItemComponent({
 	widget,
 	visibility,
 	toggleWidget,
+	t,
 }: WidgetItemComponentProps) {
 	const isActive = visibility.includes(widget.id)
 	const canToggle = isActive || visibility.length < MAX_VISIBLE_WIDGETS
@@ -78,28 +83,56 @@ function WidgetItemComponent({
 					<span
 						className={`text-xs ${!finalCanToggle ? 'text-muted' : ''} truncate`}
 					>
-						{widget.emoji} {widget.label}
+						{widget.emoji} {getWidgetLabel(widget.id, t)}
 					</span>
 					<div className="flex gap-0.5">
 						{widget.isNew && (
 							<span className="text-white badge badge-primary badge-xs">
-								جدید
+								{t('settings.widgets.manage.badges.new')}
 							</span>
 						)}
 						{widget.popular && (
 							<span className="badge badge-success badge-soft badge-sm">
-								محبوب
+								{t('settings.widgets.manage.badges.popular')}
 							</span>
 						)}
 						{isDisabled && (
-							<span className="badge badge-error badge-xs">غیرفعال</span>
+							<span className="badge badge-error badge-xs">
+								{t('settings.widgets.manage.badges.disabled')}
+							</span>
 						)}
 						{isSoon && (
-							<span className="badge badge-warning badge-xs">به زودی</span>
+							<span className="badge badge-warning badge-xs">
+								{t('settings.widgets.manage.badges.soon')}
+							</span>
 						)}
 					</div>
 				</div>
 			}
 		/>
 	)
+}
+
+function getWidgetLabel(
+	widgetId: WidgetKeys,
+	t: (key: string) => string
+): string {
+	switch (widgetId) {
+		case WidgetKeys.searchAndBookmarks:
+			return t('settings.widgets.manage.widgetNames.searchAndBookmarks')
+		case WidgetKeys.TimeandDate:
+			return t('settings.widgets.manage.widgetNames.timeAndDate')
+		case WidgetKeys.calendar:
+			return t('settings.widgets.manage.widgetNames.calendar')
+		case WidgetKeys.yadKar:
+			return t('settings.widgets.manage.widgetNames.todoAndNotes')
+		case WidgetKeys.tools:
+			return t('settings.widgets.manage.widgetNames.pomodoroTimer')
+		case WidgetKeys.weather:
+			return t('settings.widgets.manage.widgetNames.weather')
+		case WidgetKeys.comboWidget:
+			return t('settings.widgets.manage.widgetNames.currencyAndNews')
+		default:
+			return ''
+	}
 }

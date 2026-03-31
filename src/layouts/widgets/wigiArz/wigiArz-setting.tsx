@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Analytics from '@/analytics'
 import { getFromStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
@@ -12,6 +13,7 @@ import { useGetSupportCurrencies } from '@/services/hooks/currency/getSupportCur
 import { CurrenciesType, type SupportedCurrencies } from './wigiArz-setting.interface'
 
 export function WigiArzSetting() {
+	const { t } = useTranslation()
 	const { data: supportCurrencies } = useGetSupportCurrencies()
 	const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>([])
 	const [currencyColorMode, setCurrencyColorMode] = useState<CurrencyColorMode>(
@@ -61,7 +63,8 @@ export function WigiArzSetting() {
 	const currencyGroups = getCurrencyOptions(
 		supportCurrencies.filter((currency) =>
 			currencyType !== 'all' ? currency.type === currencyType : true
-		)
+		),
+		t
 	)
 	const filteredGroups = currencyGroups
 		.map((group) => ({
@@ -93,10 +96,10 @@ export function WigiArzSetting() {
 	return (
 		<WidgetSettingWrapper>
 			<div className={`transition-all duration-300 ease-out`}>
-				<SectionPanel title="رنگ تغییر قیمت" size="xs">
+				<SectionPanel title={t('settings.widgets.currency.priceChangeColor')} size="xs">
 					<div className="flex flex-row gap-2">
 						<ItemSelector
-							label="عادی"
+							label={t('settings.widgets.currency.normal')}
 							isActive={currencyColorMode === CurrencyColorMode.NORMAL}
 							className="w-full"
 							onClick={() =>
@@ -104,7 +107,7 @@ export function WigiArzSetting() {
 							}
 						/>
 						<ItemSelector
-							label="معکوس"
+							label={t('settings.widgets.currency.reversed')}
 							isActive={currencyColorMode === CurrencyColorMode.X}
 							className="w-full"
 							onClick={() => toggleCurrencyColorMode(CurrencyColorMode.X)}
@@ -112,20 +115,32 @@ export function WigiArzSetting() {
 					</div>
 				</SectionPanel>
 
-				<SectionPanel title="ارزها" size="xs">
+				<SectionPanel title={t('settings.widgets.currency.currencies')} size="xs">
 					<div className="flex flex-col gap-1 mb-2">
 						<TextInput
 							type="text"
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e)}
-							placeholder="جستجو ..."
+							placeholder={t('settings.widgets.currency.searchPlaceholder')}
 						/>
 						<SelectBox
 							options={[
-								{ value: 'all', label: 'همه ارزها' },
-								{ value: CurrenciesType.CRYPTO, label: 'ارزهای دیجیتال' },
-								{ value: CurrenciesType.CURRENCY, label: 'ارزها' },
-								{ value: CurrenciesType.COIN, label: 'طلا و سکه' },
+								{
+									value: 'all',
+									label: t('settings.widgets.currency.filters.all'),
+								},
+								{
+									value: CurrenciesType.CRYPTO,
+									label: t('settings.widgets.currency.filters.crypto'),
+								},
+								{
+									value: CurrenciesType.CURRENCY,
+									label: t('settings.widgets.currency.filters.currency'),
+								},
+								{
+									value: CurrenciesType.COIN,
+									label: t('settings.widgets.currency.filters.coin'),
+								},
 							]}
 							value={currencyType as any}
 							onChange={(value) => setCurrencyType(value)}
@@ -203,7 +218,10 @@ interface Option {
 		label: string
 	}[]
 }
-function getCurrencyOptions(supported: SupportedCurrencies): Option[] {
+function getCurrencyOptions(
+	supported: SupportedCurrencies,
+	t: (key: string) => string
+): Option[] {
 	const keys = Object.keys(supported)
 
 	const isCrypto = keys
@@ -220,7 +238,7 @@ function getCurrencyOptions(supported: SupportedCurrencies): Option[] {
 
 	return [
 		{
-			label: '🪙 ارزهای دیجیتال',
+			label: `🪙 ${t('settings.widgets.currency.groupTitles.crypto')}`,
 			options: isCrypto.map((index) => ({
 				value: supported[index].key,
 				label: supported[index].label.fa,
@@ -228,7 +246,7 @@ function getCurrencyOptions(supported: SupportedCurrencies): Option[] {
 			})),
 		},
 		{
-			label: '💵 ارزها',
+			label: `💵 ${t('settings.widgets.currency.groupTitles.currency')}`,
 			options: isCurrency.map((index) => ({
 				value: supported[index].key,
 				label: supported[index].label.fa,
@@ -236,7 +254,7 @@ function getCurrencyOptions(supported: SupportedCurrencies): Option[] {
 			})),
 		},
 		{
-			label: '🥇 طلا و سکه',
+			label: `🥇 ${t('settings.widgets.currency.groupTitles.coin')}`,
 			options: supportedCoins.map((index) => ({
 				value: supported[index].key,
 				label: supported[index].label.fa,

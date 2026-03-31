@@ -134,6 +134,97 @@
 				"positionTop": "In alto",
 				"positionCenter": "Al centro",
 				"positionBottom": "In basso"
+			},
+			"manage": {
+				"simpleUiWarning": "In modalita UI semplice, i widget non possono essere gestiti.",
+				"title": "Seleziona i widget da mostrare",
+				"badges": {
+					"new": "Nuovo",
+					"popular": "Popolare",
+					"disabled": "Disattivato",
+					"soon": "Presto"
+				},
+				"widgetNames": {
+					"searchAndBookmarks": "Cerca e segnalibri",
+					"timeAndDate": "Ora e data",
+					"calendar": "Calendario",
+					"todoAndNotes": "Attivita e note",
+					"pomodoroTimer": "Timer Pomodoro",
+					"weather": "Meteo",
+					"currencyAndNews": "Valuta e notizie"
+				}
+			},
+			"currency": {
+				"priceChangeColor": "Colore variazione prezzo",
+				"normal": "Normale",
+				"reversed": "Invertito",
+				"currencies": "Valute",
+				"searchPlaceholder": "Cerca...",
+				"filters": {
+					"all": "Tutte le valute",
+					"crypto": "Criptovalute",
+					"currency": "Valute",
+					"coin": "Oro e monete"
+				},
+				"groupTitles": {
+					"crypto": "Criptovalute",
+					"currency": "Valute",
+					"coin": "Oro e monete"
+				}
+			},
+			"news": {
+				"sections": {
+					"general": "Impostazioni generali",
+					"addFeed": "Aggiungi nuovo feed RSS",
+					"suggestedFeeds": "Feed consigliati",
+					"yourFeeds": "I tuoi feed ({{count}})"
+				},
+				"useDefault": {
+					"title": "Usa fonti di notizie predefinite",
+					"description": "Quando attivo, le notizie vengono mostrate da fonti predefinite"
+				},
+				"placeholders": {
+					"feedName": "Nome feed (esempio: TechCrunch)",
+					"feedUrl": "URL RSS (esempio: https://techcrunch.com/feed)"
+				},
+				"actions": {
+					"addFeed": "Aggiungi nuovo feed"
+				},
+				"errors": {
+					"required": "Nome feed e URL sono obbligatori",
+					"invalidUrl": "URL feed non valido",
+					"feedAlreadyAdded": "Il feed \"{{name}}\" è già stato aggiunto"
+				},
+				"empty": {
+					"title": "Nessun feed RSS aggiunto",
+					"description": "Usa il modulo sopra per aggiungere un feed"
+				}
+			},
+			"pet": {
+				"types": {
+					"dog": "Cane",
+					"chicken": "Pollo",
+					"crab": "Granchio",
+					"frog": "Rana",
+					"cat": "Gatto"
+				},
+				"defaultNames": {
+					"dogAkita": "Akita",
+					"chicken": "Chicco",
+					"crab": "Chela",
+					"cat": "Albicocca",
+					"frog": "Teiera"
+				},
+				"showPetTitle": "Mostra animale domestico",
+				"showPetDescription": "Mostra un animale domestico interattivo nella pagina principale",
+				"petTypeTitle": "Tipo di animale",
+				"petNameTitle": "Nome animale",
+				"petNamePlaceholder": "Nome personalizzato...",
+				"careTipsTitle": "💡 Suggerimenti di cura:",
+				"careTips": {
+					"play": "• Clicca sull'animale per giocarci",
+					"feed": "• Clicca nell'area intorno per dargli da mangiare"
+				}
 			}
 		},
 		"groups": {
