@@ -11,6 +11,7 @@ import {
 	VscSettingsGear,
 } from 'react-icons/vsc'
 import Analytics from '@/analytics'
+import { getFromStorage, setToStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
 import Modal from '@/components/modal'
 import { TabFrixBrand } from '@/components/tabfrix-brand'
@@ -34,6 +35,7 @@ interface SettingModalProps {
 export const SettingModal = ({ isOpen, onClose, selectedTab }: SettingModalProps) => {
 	const { t, i18n } = useTranslation()
 	const [isUpdateModalOpen, setUpdateModalOpen] = useState(false)
+	const [activeTab, setActiveTab] = useState('general')
 
 	const direction = i18n.language.startsWith('fa') ? 'rtl' : 'ltr'
 
@@ -114,6 +116,30 @@ export const SettingModal = ({ isOpen, onClose, selectedTab }: SettingModalProps
 		}
 	}, [isOpen])
 
+	useEffect(() => {
+		if (!isOpen) return
+		if (selectedTab) {
+			setActiveTab(selectedTab)
+			return
+		}
+
+		async function loadLastTab() {
+			const storedTab = await getFromStorage('settings_tab')
+			if (storedTab) {
+				setActiveTab(storedTab)
+			} else {
+				setActiveTab('general')
+			}
+		}
+
+		void loadLastTab()
+	}, [isOpen, selectedTab])
+
+	const handleTabChange = (tabValue: string) => {
+		setActiveTab(tabValue)
+		void setToStorage('settings_tab', tabValue)
+	}
+
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -125,8 +151,9 @@ export const SettingModal = ({ isOpen, onClose, selectedTab }: SettingModalProps
 			<TabManager
 				tabOwner="setting"
 				tabs={tabs}
-				defaultTab="general"
-				selectedTab={selectedTab}
+				defaultTab={selectedTab || activeTab || 'general'}
+				selectedTab={selectedTab || activeTab}
+				onTabChange={handleTabChange}
 				direction={direction}
 			>
 				<div className="flex flex-row gap-1 sm:flex-col">

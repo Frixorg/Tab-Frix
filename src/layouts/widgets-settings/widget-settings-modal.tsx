@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MdPets } from 'react-icons/md'
 import { TbApps, TbCalendarUser, TbCurrencyDollar, TbNews, TbSearch } from 'react-icons/tb'
 import { TiWeatherCloudy } from 'react-icons/ti'
 import { VscSettings } from 'react-icons/vsc'
 import Analytics from '@/analytics'
+import { getFromStorage, setToStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
 import Modal from '@/components/modal'
 import { TabItem, TabManager } from '@/components/tab-manager'
@@ -31,6 +32,7 @@ export function WidgetSettingsModal({
 }: WidgetSettingsModalProps) {
 	const { t, i18n } = useTranslation()
 	const isRtl = i18n.language.startsWith('fa')
+	const [activeTab, setActiveTab] = useState(WidgetTabKeys.widget_management)
 	const tabs: TabItem[] = useMemo(
 		() => [
 			{
@@ -84,6 +86,30 @@ export function WidgetSettingsModal({
 		[t]
 	)
 
+	useEffect(() => {
+		if (!isOpen) return
+		if (selectedTab) {
+			setActiveTab(selectedTab as WidgetTabKeys)
+			return
+		}
+
+		async function loadLastTab() {
+			const storedTab = await getFromStorage('widgets_settings_tab')
+			if (storedTab) {
+				setActiveTab(storedTab as WidgetTabKeys)
+			} else {
+				setActiveTab(WidgetTabKeys.widget_management)
+			}
+		}
+
+		void loadLastTab()
+	}, [isOpen, selectedTab])
+
+	const handleTabChange = (tabValue: string) => {
+		setActiveTab(tabValue as WidgetTabKeys)
+		void setToStorage('widgets_settings_tab', tabValue)
+	}
+
 	function onClickSettings() {
 		onClose()
 		callEvent('openSettings')
@@ -102,7 +128,9 @@ export function WidgetSettingsModal({
 			<TabManager
 				tabs={tabs}
 				tabOwner="widgets-settings"
-				defaultTab={selectedTab || WidgetTabKeys.widget_management}
+				defaultTab={selectedTab || activeTab || WidgetTabKeys.widget_management}
+				selectedTab={selectedTab || activeTab}
+				onTabChange={handleTabChange}
 				direction={isRtl ? 'rtl' : 'ltr'}
 			>
 				<button

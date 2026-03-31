@@ -103,4 +103,6 @@ export interface StorageKV {
 	widget_tab: string
 	selected_city: { id: string; name: string } | null
 	searchAndBookmarksSettings: SearchAndBookmarksSettings
+	settings_tab: string
+	widgets_settings_tab: string
 }
