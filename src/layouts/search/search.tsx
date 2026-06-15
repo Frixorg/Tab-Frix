@@ -9,15 +9,17 @@ import { ImageSearchButton } from './image/image-search.button'
 import { EngineSelector } from './select-engine/engine-selector'
 import { SearchHistoryPortal } from './history.portal'
 import type { EngineMeta } from '@/services/hooks/trends/getTrends'
+import { useLanguage } from '@/context/language.context'
 
 const DEFAULT_ENGINE: EngineMeta = {
 	id: 'google',
 	prefix: '',
-	label: 'گوگل',
+	label: 'Google',
 	icon: '',
 }
 
 export function SearchLayout() {
+	const { t } = useLanguage()
 	const [searchQuery, setSearchQuery] = useState('')
 	const [isInputFocused, setIsInputFocused] = useState(false)
 	const [selectedEngine, setSelectedEngine] = useState<EngineMeta>(DEFAULT_ENGINE)
@@ -167,7 +169,7 @@ export function SearchLayout() {
 							className={
 								'w-full py-1.5 text-base font-light text-right focus:outline-none text-content placeholder:text-base-content/60 placeholder:font-medium focus:placeholder:opacity-50 bg-transparent'
 							}
-							placeholder={`جستجو در ${selectedEngine.label}`}
+							placeholder={t('widgets.search.placeholder', { engine: selectedEngine.label })}
 							autoComplete="off"
 						/>
 						<button

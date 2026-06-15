@@ -15,26 +15,27 @@ import { Button } from '@/components/button/button'
 import Tooltip from '@/components/toolTip'
 import { useGetTodos } from '@/services/hooks/todo/get-todos.hook'
 import { TodoItem } from './todo.item'
+import { useLanguage } from '@/context/language.context'
 
-const filterOptions = [
-	{ value: 'all', label: 'همه' },
-	{ value: 'today', label: 'امروز' },
-	{ value: 'thisMonth', label: 'این ماه' },
-	{ value: 'done', label: 'تکمیل‌شده' },
-	{ value: 'pending', label: 'در انتظار' },
-]
-
-const sortOptions = [
-	{ value: 'def', label: 'پیشفرض' },
-	{ value: 'high', label: 'مهم' },
-	{ value: 'medium', label: 'متوسط' },
-	{ value: 'low', label: 'کم اهمیت' },
-]
 const TagList = ['', '-all-']
 
 export function TodosLayout() {
 	const { isAuthenticated } = useAuth()
 	const { blurMode } = useGeneralSetting()
+	const { t } = useLanguage()
+	const filterOptions = [
+		{ value: 'all', label: t('widgets.todos.filterAll') },
+		{ value: 'today', label: t('widgets.todos.filterToday') },
+		{ value: 'thisMonth', label: t('widgets.todos.filterThisMonth') },
+		{ value: 'done', label: t('widgets.todos.filterDone') },
+		{ value: 'pending', label: t('widgets.todos.filterPending') },
+	]
+	const sortOptions = [
+		{ value: 'def', label: t('widgets.todos.sortDefault') },
+		{ value: 'high', label: t('widgets.todos.sortHigh') },
+		{ value: 'medium', label: t('widgets.todos.sortMedium') },
+		{ value: 'low', label: t('widgets.todos.sortLow') },
+	]
 	const [editingTodo, setEditingTodo] = useState<Todo | null>(null)
 	const [dateFilter, setDateFilter] = useState<string>('all')
 	const [sort, setSort] = useState<string>('def')
@@ -161,7 +162,7 @@ export function TodosLayout() {
 			})) || []
 	if (tagFilterOptions.length) {
 		tagFilterOptions.unshift({
-			label: 'همه',
+			label: t('widgets.todos.filterAll'),
 			value: '-all-',
 		})
 	}
@@ -199,7 +200,7 @@ export function TodosLayout() {
 									)
 								}
 								onChange={onDateFilterChange}
-								placeholder="فیلتر"
+								placeholder={t('widgets.todos.phFilter')}
 								buttonClassName={`truncate gap-1.5`}
 							/>
 							<FilterTooltip
@@ -216,7 +217,7 @@ export function TodosLayout() {
 								options={tagFilterOptions}
 								value={tagFilter || '-all-'}
 								onChange={onTagFilterChange}
-								placeholder="دسته‌بندی"
+								placeholder={t('widgets.todos.phCategory')}
 							/>
 							<FilterTooltip
 								icon={
@@ -232,14 +233,14 @@ export function TodosLayout() {
 								options={sortOptions}
 								value={sort}
 								onChange={onSortChange}
-								placeholder="ترتیب"
+								placeholder={t('widgets.todos.phSort')}
 								buttonClassName="truncate gap-2"
 							/>
 						</div>
 					</div>
 					<div className="flex items-center gap-1">
 						{isLoading ? <IconLoading /> : null}
-						<Tooltip content="بارگزاری مجدد">
+						<Tooltip content={t('widgets.todos.reload')}>
 							<Button
 								size="sm"
 								className={`px-2 py-0! border-none! rounded-xl text-base-content/40 shrink-0 active:scale-95 h-7!`}
@@ -305,6 +306,7 @@ export function TodosLayout() {
 }
 
 function TodosEmpty() {
+	const { t } = useLanguage()
 	return (
 		<div
 			className={
@@ -319,10 +321,10 @@ function TodosEmpty() {
 				<FiList className="text-content" size={24} />
 			</div>
 			<p className="mt-1 font-bold text-center text-content">
-				هیچ تسکی برای نمایش وجود ندارد
+				{t('widgets.todos.empty')}
 			</p>
 			<p className="text-center text-[.65rem] text-content opacity-75">
-				یک تسک جدید اضافه کنید یا فیلترها را تغییر دهید
+				{t('widgets.todos.emptyHint')}
 			</p>
 		</div>
 	)

@@ -1,34 +1,36 @@
 import { FaExternalLinkAlt, FaGlobe, FaHeart, FaTelegramPlane } from 'react-icons/fa'
 import { SectionPanel } from '@/components/section-panel'
+import { useLanguage } from '@/context/language.context'
 import { ConfigKey } from '../../../../common/constant/config.key'
 import { RiArticleLine } from 'react-icons/ri'
 
 export function AboutUsTab() {
+	const { t, dir } = useLanguage()
+
 	return (
-		<div className="w-full max-w-2xl mx-auto" dir="rtl">
+		<div className="w-full max-w-2xl mx-auto" dir={dir}>
 			<div className="flex flex-col items-center p-3 text-center">
 				<h1
 					className={
 						'mb-1 text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600'
 					}
 				>
-					ویجتیفای
+					{t('appName')}
 				</h1>
 				<div
 					className={
 						'inline-flex items-center px-3 py-1 mb-2 text-xs font-medium border rounded-full backdrop-blur-sm text-primary/80'
 					}
 				>
-					<span>نسخه "{ConfigKey.VERSION_NAME}"</span>
+					<span>{t('settings.about.version', { version: ConfigKey.VERSION_NAME })}</span>
 				</div>
 
 				<p className={'max-w-lg mb-2 text-sm leading-relaxed text-content'}>
-					ویجتیفای یک افزونه واسه مرورگر شماست که صفحه جدید را با ابزارهای
-					کاربردی و سبک زیبا به محیطی کارآمد و شخصی‌سازی شده تبدیل می‌کند.
+					{t('settings.about.tagline')}
 				</p>
 			</div>
 
-			<SectionPanel title="ارتباطات و شبکه های اجتماعی">
+			<SectionPanel title={t('settings.about.social.title')}>
 				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 					<a
 						href="https://widgetify.ir"
@@ -40,9 +42,9 @@ export function AboutUsTab() {
 							<div className="flex items-center justify-center w-10 h-10 transition-transform rounded-xl bg-primary/10 text-primary group-hover:scale-110">
 								<FaGlobe size={18} />
 							</div>
-							<div className="text-right">
+							<div className="text-start">
 								<h3 className="text-xs font-bold text-base-content">
-									وب‌سایت رسمی
+									{t('settings.about.social.website')}
 								</h3>
 								<p className="text-[10px] text-base-content/40 mt-0.5">
 									widgetify.ir
@@ -65,9 +67,9 @@ export function AboutUsTab() {
 							<div className="flex items-center justify-center w-10 h-10 transition-transform rounded-xl bg-secondary/10 text-secondary group-hover:scale-110">
 								<RiArticleLine size={18} />
 							</div>
-							<div className="text-right">
+							<div className="text-start">
 								<h3 className="text-xs font-bold text-base-content">
-									وبلاگ رسمی
+									{t('settings.about.social.blog')}
 								</h3>
 								<p className="text-[10px] text-base-content/40 mt-0.5">
 									blog.widgetify.ir
@@ -90,9 +92,9 @@ export function AboutUsTab() {
 							<div className="flex items-center justify-center w-10 h-10 transition-transform rounded-xl bg-info/10 text-info group-hover:scale-110">
 								<FaTelegramPlane size={18} />
 							</div>
-							<div className="text-right">
+							<div className="text-start">
 								<h3 className="text-xs font-bold text-base-content">
-									کانال تلگرام
+									{t('settings.about.social.telegram')}
 								</h3>
 								<p className="text-[10px] text-base-content/40 mt-0.5">
 									t.me/widgetify
@@ -126,9 +128,9 @@ export function AboutUsTab() {
 									/>
 								</svg>
 							</div>
-							<div className="text-right">
+							<div className="text-start">
 								<h3 className="text-xs font-bold text-base-content">
-									پیام‌رسان بله
+									{t('settings.about.social.bale')}
 								</h3>
 								<p className="text-[10px] text-base-content/40 mt-0.5">
 									ble.ir/widgetify
@@ -146,16 +148,16 @@ export function AboutUsTab() {
 			{/* Footer */}
 			<div
 				className={
-					'flex items-center justify-center mt-8 space-x-1 space-x-reverse text-sm text-content opacity-75'
+					'flex items-center justify-center mt-8 space-x-1 text-sm text-content opacity-75'
 				}
 			>
-				<span>ساخته شده با</span>
+				<span>{t('settings.about.madeWith')}</span>
 				<FaHeart className="mx-1 text-red-500 animate-pulse" size={14} />
-				<span>در ایران</span>
+				<span>{t('settings.about.inIran')}</span>
 			</div>
 
 			<div className={'mt-2 mb-4 text-xs text-center text-content opacity-55'}>
-				© ویجتیفای - تمامی حقوق محفوظ است
+				{t('settings.about.copyright')}
 			</div>
 		</div>
 	)

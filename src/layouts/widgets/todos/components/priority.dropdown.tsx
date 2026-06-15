@@ -2,30 +2,7 @@ import { BsFilterLeft } from 'react-icons/bs'
 import { Dropdown } from '@/components/dropdown'
 import { Button } from '@/components/button/button'
 import { TodoPriority } from '@/services/hooks/todo/todo.interface'
-
-const priorityOptions = [
-	{
-		value: TodoPriority.Low,
-		label: 'کم اهمیت',
-		color: 'text-success',
-		bg: 'bg-success/10',
-		border: 'border-success/20',
-	},
-	{
-		value: TodoPriority.Medium,
-		label: 'متوسط',
-		color: 'text-warning',
-		bg: 'bg-warning/10',
-		border: 'border-warning/20',
-	},
-	{
-		value: TodoPriority.High,
-		label: 'مهم',
-		color: 'text-error',
-		bg: 'bg-error/10',
-		border: 'border-error/20',
-	},
-]
+import { useLanguage } from '@/context/language.context'
 
 interface PriorityDropdownProps {
 	priority: TodoPriority | undefined
@@ -33,6 +10,30 @@ interface PriorityDropdownProps {
 }
 
 export function PriorityDropdown({ priority, setPriority }: PriorityDropdownProps) {
+	const { t } = useLanguage()
+	const priorityOptions = [
+		{
+			value: TodoPriority.Low,
+			label: t('widgets.todos.prioLow'),
+			color: 'text-success',
+			bg: 'bg-success/10',
+			border: 'border-success/20',
+		},
+		{
+			value: TodoPriority.Medium,
+			label: t('widgets.todos.prioMedium'),
+			color: 'text-warning',
+			bg: 'bg-warning/10',
+			border: 'border-warning/20',
+		},
+		{
+			value: TodoPriority.High,
+			label: t('widgets.todos.prioHigh'),
+			color: 'text-error',
+			bg: 'bg-error/10',
+			border: 'border-error/20',
+		},
+	]
 	const selected = priorityOptions.find((f) => f.value === priority)
 
 	return (
@@ -61,7 +62,7 @@ export function PriorityDropdown({ priority, setPriority }: PriorityDropdownProp
 							: 'text-base-content/60 hover:bg-base-content/5'
 					}`}
 				>
-					بدون اولویت
+					{t('widgets.todos.prioNone')}
 				</button>
 
 				{priorityOptions.map((option) => (

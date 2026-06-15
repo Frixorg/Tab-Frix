@@ -21,6 +21,8 @@ import {
 } from 'react-icons/hi2'
 import { Page, usePage } from '@/context/page.context'
 import { useAuth } from '@/context/auth.context'
+import { useLanguage } from '@/context/language.context'
+import type { TranslateParams } from '@/i18n'
 import { BlurModeButton } from '@/components/blur-mode/blur-mode.button'
 import type { UserProfile } from '@/services/hooks/user/userService.hook'
 import Tooltip from '@/components/toolTip'
@@ -32,30 +34,33 @@ const WIDGETIFY_URLS = {
 	website: 'https://widgetify.ir',
 } as const
 
-const tabs = [
-	{
-		id: Page.Home,
-		icon: <HiOutlineHome />,
-		activeIcon: <HiHome />,
-		label: 'ویجتیفای',
-	},
-
-	{
-		id: Page.Explorer,
-		icon: <HiOutlineGlobeAlt size={22} />,
-		activeIcon: <HiGlobeAlt size={22} />,
-		label: 'کاوش',
-	},
-	{
-		id: Page.MiniApps,
-		icon: <HiOutlineSquares2X2 size={22} />,
-		activeIcon: <HiSquares2X2 size={22} />,
-		label: 'برنامک‌ها',
-	},
-]
 export function NavbarTabs() {
+	const { t } = useLanguage()
 	const { page, setPage } = usePage()
 	SyncAccount()
+
+	const tabs = [
+		{
+			id: Page.Home,
+			icon: <HiOutlineHome />,
+			activeIcon: <HiHome />,
+			label: t('navbar.home'),
+		},
+
+		{
+			id: Page.Explorer,
+			icon: <HiOutlineGlobeAlt size={22} />,
+			activeIcon: <HiGlobeAlt size={22} />,
+			label: t('navbar.explore'),
+		},
+		{
+			id: Page.MiniApps,
+			icon: <HiOutlineSquares2X2 size={22} />,
+			activeIcon: <HiSquares2X2 size={22} />,
+			label: t('navbar.miniApps'),
+		},
+	]
+
 	const handleTabClick = (tab: Page) => {
 		setPage(tab)
 		Analytics.event(`navbar_tab_${tab}_click`)
@@ -67,6 +72,8 @@ export function NavbarTabs() {
 				<button
 					key={tab.id}
 					onClick={() => handleTabClick(tab.id)}
+					title={tab.label}
+					aria-label={tab.label}
 					className="relative p-1.5 sm:p-2 cursor-pointer group nav-btn"
 				>
 					<span
@@ -96,6 +103,7 @@ export function NavbarTabs() {
 }
 
 export function NavbarLayout(): JSX.Element {
+	const { t } = useLanguage()
 	const { canReOrderWidget, toggleCanReOrderWidget } = useAppearanceSetting()
 	const [showSettings, setShowSettings] = useState(false)
 	const [isVisible, setIsVisible] = useState(false)
@@ -143,7 +151,7 @@ export function NavbarLayout(): JSX.Element {
 								size={16}
 								className="animate-bounce text-warning"
 							/>
-							<span>حالت جابجایی فعال، ویجت هارو جابجا کنید</span>
+							<span>{t('navbar.reorderActive')}</span>
 							<button
 								onClick={() => toggleCanReOrderWidget()}
 								className="transition-colors hover:text-red-400"
@@ -165,7 +173,7 @@ export function NavbarLayout(): JSX.Element {
 			)}
 
 			<div
-				className={`fixed z-60 -translate-x-1/2 left-1/2 w-full px-2 md:px-4 lg:px-4 max-w-[1080px] transition-all ease-[cubic-bezier(0.23,1,0.32,1)] 
+				className={`fixed z-60 -translate-x-1/2 left-1/2 w-full px-2 md:px-4 lg:px-4 max-w-[1080px] transition-all ease-[cubic-bezier(0.23,1,0.32,1)]
 					${
 						isVisible
 							? 'bottom-2 opacity-100 scale-100'
@@ -192,7 +200,7 @@ export function NavbarLayout(): JSX.Element {
 							/>
 						</a>
 						<p className="hidden text-xs font-semibold sm:block sm:text-sm text-content">
-							{getUserLabel(user)}
+							{getUserLabel(user, t)}
 						</p>
 					</div>
 
@@ -201,7 +209,7 @@ export function NavbarLayout(): JSX.Element {
 					</div>
 
 					<div className="flex items-center justify-end flex-1 gap-1 sm:gap-2">
-						<Tooltip content="بستن نوار">
+						<Tooltip content={t('navbar.closeBar')}>
 							<button
 								onClick={() => onToggleNavbar()}
 								className="p-2 transition-all cursor-pointer nav-btn text-base-content/40 hover:text-base-content active:scale-90"
@@ -227,23 +235,26 @@ export function NavbarLayout(): JSX.Element {
 	)
 }
 
-function getUserLabel(user: UserProfile | null) {
-	if (!user) return 'ویجتیفای'
+function getUserLabel(
+	user: UserProfile | null,
+	t: (key: string, params?: TranslateParams) => string
+) {
+	if (!user) return t('appName')
 
 	if (user.isBirthdayToday) {
-		return `🎂  تولدت مبارک ${user.name}`
+		return t('navbar.birthday', { name: user.name })
 	}
 
 	const hour = getCurrentDate(user.timeZone).hours()
 
-	let greeting = 'سلام'
+	let greeting = t('navbar.greetings.hello')
 
 	if (hour >= 5 && hour < 12) {
-		greeting = 'صبح بخیر'
+		greeting = t('navbar.greetings.morning')
 	} else if (hour >= 12 && hour < 17) {
-		greeting = 'ظهر بخیر'
+		greeting = t('navbar.greetings.noon')
 	} else if (hour >= 17 && hour < 21) {
-		greeting = 'عصر بخیر'
+		greeting = t('navbar.greetings.afternoon')
 	}
 
 	return `${greeting} ${user.name}`

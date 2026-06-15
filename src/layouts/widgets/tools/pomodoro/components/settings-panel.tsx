@@ -2,6 +2,7 @@ import type React from 'react'
 import { Button } from '@/components/button/button'
 import CustomCheckbox from '@/components/checkbox'
 import Modal from '@/components/modal'
+import { useLanguage } from '@/context/language.context'
 import { TextInput } from '@/components/text-input'
 import type { PomodoroSettings } from '../types'
 
@@ -61,6 +62,8 @@ export const PomodoroSettingsPanel: React.FC<PomodoroSettingsPanelProps> = ({
 		})
 	}
 
+	const { t } = useLanguage()
+
 	const handleSaveAndClose = () => {
 		onClose()
 		onReset()
@@ -70,7 +73,7 @@ export const PomodoroSettingsPanel: React.FC<PomodoroSettingsPanelProps> = ({
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title="تنظیمات تایمر پومودورو"
+			title={t('widgets.pomodoro.settingsTitle')}
 			direction="rtl"
 		>
 			<div className={'rounded-xl'}>
@@ -79,12 +82,12 @@ export const PomodoroSettingsPanel: React.FC<PomodoroSettingsPanelProps> = ({
 						'pb-2 text-sm font-medium text-base-content border-b border-b-base-300'
 					}
 				>
-					تنظیمات زمان (دقیقه)
+					{t('widgets.pomodoro.timeSettings')}
 				</h4>
 
 				<div className="my-2">
 					<SettingInput
-						label="زمان کار:"
+						label={t('widgets.pomodoro.workTimeLabel')}
 						value={settings.workTime}
 						onChange={(value) => {
 							handleSettingChange('workTime', value)
@@ -93,7 +96,7 @@ export const PomodoroSettingsPanel: React.FC<PomodoroSettingsPanelProps> = ({
 					/>
 
 					<SettingInput
-						label="استراحت کوتاه:"
+						label={t('widgets.pomodoro.shortBreakLabel')}
 						value={settings.shortBreakTime}
 						onChange={(value) => {
 							handleSettingChange('shortBreakTime', value)
@@ -120,11 +123,10 @@ export const PomodoroSettingsPanel: React.FC<PomodoroSettingsPanelProps> = ({
 							className="cursor-pointer"
 						>
 							<p className={'font-medium text-content'}>
-								فعال‌سازی هشدار صوتی
+								{t('widgets.pomodoro.alarmEnable')}
 							</p>
 							<p className={'text-sm font-light text-muted'}>
-								با فعال‌سازی این گزینه، در پایان هر دوره کاری، یک هشدار
-								صوتی پخش خواهد شد.
+								{t('widgets.pomodoro.alarmDesc')}
 							</p>
 						</div>
 					</div>
@@ -136,7 +138,7 @@ export const PomodoroSettingsPanel: React.FC<PomodoroSettingsPanelProps> = ({
 						isPrimary={true}
 						className="w-full rounded-xl"
 					>
-						ذخیره و بستن
+						{t('widgets.todos.saveClose')}
 					</Button>
 				</div>
 			</div>

@@ -1,3 +1,4 @@
+import { useLanguage } from '@/context/language.context'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useGetSearchboxData } from '@/services/hooks/trends/getTrends'
 import { getFaviconFromUrl } from '@/common/utils/icon'
@@ -10,6 +11,7 @@ import Analytics from '@/analytics'
 import { NewBadge } from '@/components/badges/new.badge'
 
 export function BrowserBookmark() {
+	const { t } = useLanguage()
 	const { data } = useGetSearchboxData({ enabled: true })
 	const { setPage } = usePage()
 	const { data: fetchedSearchbox } = useGetSearchboxData({})
@@ -72,7 +74,7 @@ export function BrowserBookmark() {
 					>
 						<div className="relative flex items-center justify-center w-fit px-1 gap-1 h-6 p-0.5 rounded-xl bg-base-300 group-hover:scale-95 transition-transform">
 							<HiGlobeAlt size={20} className="text-base-content/60" />
-							<p className="font-medium text-base-content/60">کاوش</p>
+							<p className="font-medium text-base-content/60">{t('navbar.explore')}</p>
 							{fetchedSearchbox?.explorer?.newBadge && (
 								<NewBadge className="top-0 left-0" />
 							)}
@@ -93,7 +95,7 @@ export function BrowserBookmark() {
 							}`}
 						>
 							<MdFolderSpecial size={20} />
-							<p className="font-medium">بوکمارک مرورگر</p>
+							<p className="font-medium">{t('widgets.search.bookmarksTab')}</p>
 						</div>
 					</div>
 				</div>

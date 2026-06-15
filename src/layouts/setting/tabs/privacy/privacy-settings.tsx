@@ -1,9 +1,11 @@
 import { SectionPanel } from '@/components/section-panel'
 import { ToggleSwitch } from '@/components/toggle-switch.component'
 import { useGeneralSetting } from '@/context/general-setting.context'
+import { useLanguage } from '@/context/language.context'
 import { SearchAutocompleteSwitch } from './components/search-autocomplete.switch'
 
 export function PrivacySettings() {
+	const { t } = useLanguage()
 	const {
 		analyticsEnabled,
 		setAnalyticsEnabled,
@@ -15,19 +17,18 @@ export function PrivacySettings() {
 
 	return (
 		<div className="w-full max-w-xl mx-auto">
-			<SectionPanel title="حریم خصوصی" delay={0.1}>
+			<SectionPanel title={t('settings.privacy.title')} delay={0.1}>
 				<div className="space-y-4">
 					<div className="flex items-center justify-between">
 						<div className="flex-1 space-y-2">
 							<h3 className="font-medium text-content">
-								ردیابی استفاده از افزونه (Analytics)
+								{t('settings.privacy.analytics.title')}
 							</h3>
 							<p className="text-sm font-light leading-relaxed text-muted">
-								با فعال کردن این گزینه، آمار استفاده از افزونه برای بهبود
-								عملکرد جمع‌آوری می‌شود. هیچ اطلاعات شخصی ارسال نخواهد شد
+								{t('settings.privacy.analytics.description')}
 							</p>
 						</div>
-						<div className="flex-shrink-0 ml-4">
+						<div className="flex-shrink-0 ms-4">
 							<ToggleSwitch
 								enabled={analyticsEnabled}
 								onToggle={() => setAnalyticsEnabled(!analyticsEnabled)}
@@ -37,15 +38,13 @@ export function PrivacySettings() {
 					<div className="flex items-center justify-between">
 						<div className="flex-1 space-y-2">
 							<h3 className="font-medium text-content">
-								دسترسی به بوکمارک های مرورگر
+								{t('settings.privacy.bookmarks.title')}
 							</h3>
 							<p className="text-sm font-light leading-relaxed text-muted">
-								با فعال‌سازی این گزینه، افزونه فقط برای نمایش بوکمارک‌های
-								مرورگر شما دسترسی خواهد داشت. هیچ اطلاعاتی ذخیره یا ارسال
-								نمی‌شود و بوکمارک‌ها صرفاً در محیط افزونه نمایش داده می‌شوند.
+								{t('settings.privacy.bookmarks.description')}
 							</p>
 						</div>
-						<div className="flex-shrink-0 ml-4">
+						<div className="flex-shrink-0 ms-4">
 							<ToggleSwitch
 								enabled={browserBookmarksEnabled}
 								onToggle={() =>
@@ -56,14 +55,14 @@ export function PrivacySettings() {
 					</div>
 					<div className="flex items-center justify-between">
 						<div className="flex-1 space-y-2">
-							<h3 className="font-medium text-content">دسترسی به تب‌ها</h3>
+							<h3 className="font-medium text-content">
+								{t('settings.privacy.tabs.title')}
+							</h3>
 							<p className="text-sm font-light leading-relaxed text-muted">
-								با فعال کردن این گزینه، افزونه می‌تواند بوکمارک‌های داخل
-								پوشه‌ها را به صورت گروهی باز و مدیریت کند. هیچ اطلاعات شخصی
-								ذخیره یا ارسال نمی‌شود.
+								{t('settings.privacy.tabs.description')}
 							</p>
 						</div>
-						<div className="flex-shrink-0 ml-4">
+						<div className="flex-shrink-0 ms-4">
 							<ToggleSwitch
 								enabled={browserTabsEnabled}
 								onToggle={() =>

@@ -45,7 +45,7 @@ export function PlatformModal({ isOpen, onClose, platform }: PlatformModalProps)
 
 				<div className="space-y-2 text-sm leading-relaxed text-content/80">
 					<p>
-						ویجتیفای هیچگونه نقشی در ترجمه ندارد. ترجمه توسط{' '}
+						تب فریکس هیچگونه نقشی در ترجمه ندارد. ترجمه توسط{' '}
 						<button
 							onClick={handleOpenLink}
 							className="font-medium text-blue-400 underline cursor-pointer hover:text-blue-500"
@@ -56,7 +56,7 @@ export function PlatformModal({ isOpen, onClose, platform }: PlatformModalProps)
 					</p>
 					<p className="text-xs text-content/60">
 						داده‌های شما (فقط متن ورودی) مستقیماً به سرویس ترجمه ارسال می‌شود و
-						ویجتیفای دسترسی به آن ندارد.
+						تب فریکس دسترسی به آن ندارد.
 					</p>
 				</div>
 

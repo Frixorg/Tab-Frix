@@ -12,7 +12,9 @@ import { WidgetSettingWrapper } from '@/layouts/widgets-settings/widget-settings
 import { useGetSupportCurrencies } from '@/services/hooks/currency/getSupportCurrencies.hook'
 import { CurrenciesType, type SupportedCurrencies } from './wigiArz-setting.interface'
 
+import { useLanguage } from '@/context/language.context'
 export function WigiArzSetting() {
+	const { t } = useLanguage()
 	const { data: supportCurrencies } = useGetSupportCurrencies()
 	const [selectedCurrencies, setSelectedCurrencies] = useState<string[]>([])
 	const [currencyColorMode, setCurrencyColorMode] = useState<CurrencyColorMode>(
@@ -94,10 +96,10 @@ export function WigiArzSetting() {
 	return (
 		<WidgetSettingWrapper>
 			<div className={`transition-all duration-300 ease-out`}>
-				<SectionPanel title="رنگ تغییر قیمت" size="xs">
+				<SectionPanel title={t('widgets.wigiArz.colorTitle')} size="xs">
 					<div className="flex flex-row gap-2">
 						<ItemSelector
-							label="عادی"
+							label={t('widgets.wigiArz.normal')}
 							isActive={currencyColorMode === CurrencyColorMode.NORMAL}
 							className="w-full"
 							onClick={() =>
@@ -105,7 +107,7 @@ export function WigiArzSetting() {
 							}
 						/>
 						<ItemSelector
-							label="معکوس"
+							label={t('widgets.wigiArz.inverted')}
 							isActive={currencyColorMode === CurrencyColorMode.X}
 							className="w-full"
 							onClick={() => toggleCurrencyColorMode(CurrencyColorMode.X)}
@@ -113,20 +115,20 @@ export function WigiArzSetting() {
 					</div>
 				</SectionPanel>
 
-				<SectionPanel title="ارزها" size="xs">
+				<SectionPanel title={t('widgets.wigiArz.currencies')} size="xs">
 					<div className="flex flex-col gap-1 mb-2">
 						<TextInput
 							type="text"
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e)}
-							placeholder="جستجو ..."
+							placeholder={t('widgets.wigiArz.searchPlaceholder')}
 						/>
 						<SelectBox
 							options={[
-								{ value: 'all', label: 'همه ارزها' },
-								{ value: CurrenciesType.CRYPTO, label: 'ارزهای دیجیتال' },
-								{ value: CurrenciesType.CURRENCY, label: 'ارزها' },
-								{ value: CurrenciesType.COIN, label: 'طلا و سکه' },
+								{ value: 'all', label: t('widgets.wigiArz.optAll') },
+								{ value: CurrenciesType.CRYPTO, label: t('widgets.wigiArz.optCrypto') },
+								{ value: CurrenciesType.CURRENCY, label: t('widgets.wigiArz.optCurrency') },
+								{ value: CurrenciesType.COIN, label: t('widgets.wigiArz.optCoin') },
 							]}
 							value={currencyType as any}
 							onChange={(value) => setCurrencyType(value)}
@@ -146,7 +148,7 @@ export function WigiArzSetting() {
 										'text-sm font-medium mb-3 currency-group-heading'
 									}
 								>
-									{group.label}
+									{t(group.label)}
 								</h3>
 								<div className="grid grid-cols-2 gap-3 md:grid-cols-4">
 									{group.options.map((option) => {
@@ -212,7 +214,7 @@ function getCurrencyOptions(supported: SupportedCurrencies): Option[] {
 
 	return [
 		{
-			label: '🪙 ارزهای دیجیتال',
+			label: 'widgets.wigiArz.groupCrypto',
 			options: isCrypto.map((index) => ({
 				value: supported[index].key,
 				label: supported[index].label.fa,
@@ -220,7 +222,7 @@ function getCurrencyOptions(supported: SupportedCurrencies): Option[] {
 			})),
 		},
 		{
-			label: '💵 ارزها',
+			label: 'widgets.wigiArz.groupCurrency',
 			options: isCurrency.map((index) => ({
 				value: supported[index].key,
 				label: supported[index].label.fa,
@@ -228,7 +230,7 @@ function getCurrencyOptions(supported: SupportedCurrencies): Option[] {
 			})),
 		},
 		{
-			label: '🥇 طلا و سکه',
+			label: 'widgets.wigiArz.groupCoin',
 			options: supportedCoins.map((index) => ({
 				value: supported[index].key,
 				label: supported[index].label.fa,

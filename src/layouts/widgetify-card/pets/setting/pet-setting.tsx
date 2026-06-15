@@ -5,8 +5,10 @@ import { ItemSelector } from '@/components/item-selector'
 import { TextInput } from '@/components/text-input'
 import { ToggleSwitch } from '@/components/toggle-switch.component'
 import { BASE_PET_OPTIONS, PetTypes } from '@/layouts/widgetify-card/pets/pet.context'
+import { useLanguage } from '@/context/language.context'
 
 export function PetSettings() {
+	const { t } = useLanguage()
 	const [enablePets, setEnablePets] = useState(true)
 	const [petType, setPetType] = useState<PetTypes>(PetTypes.DOG_AKITA)
 	const [petName, setPetName] = useState<string>('')
@@ -57,9 +59,9 @@ export function PetSettings() {
 		})
 	}
 	const persianType: Record<string, string> = {
-		dog: 'سگ',
-		chicken: 'مرغ',
-		crab: 'خرچنگ',
+		dog: t('widgets.pet.dog'),
+		chicken: t('widgets.pet.chicken'),
+		crab: t('widgets.pet.crab'),
 	}
 	const availablePets = Object.entries(BASE_PET_OPTIONS.petOptions).map(
 		([key, value]) => ({
@@ -72,9 +74,9 @@ export function PetSettings() {
 		<div className="flex flex-col w-full max-w-xl mx-auto">
 			<div className="flex items-center justify-between flex-1 gap-3">
 				<div className="overflow-hidden">
-					<span className={`block truncate`}>نمایش حیوان خانگی</span>
+					<span className={`block truncate`}>{t('widgets.pet.show')}</span>
 					<span className={'block text-sm font-light text-muted'}>
-						نمایش حیوان خانگی تعاملی روی صفحه اصلی
+						{t('widgets.pet.showDesc')}
 					</span>
 				</div>
 				<ToggleSwitch
@@ -85,7 +87,7 @@ export function PetSettings() {
 			</div>
 
 			<div className={'p-4 mt-4 rounded-lg border border-content'}>
-				<p className={'mb-3 font-medium text-content'}>نوع حیوان خانگی</p>
+				<p className={'mb-3 font-medium text-content'}>{t('widgets.pet.type')}</p>
 				<div className="grid grid-cols-3 gap-1.5 mb-2">
 					{availablePets.map((pet) => (
 						<ItemSelector
@@ -98,21 +100,21 @@ export function PetSettings() {
 					))}
 				</div>
 
-				<p className={'mb-3 font-medium text-content'}>نام حیوان خانگی</p>
+				<p className={'mb-3 font-medium text-content'}>{t('widgets.pet.name')}</p>
 				<TextInput
 					type="text"
 					value={petName}
 					onChange={(value) => onChangePetName(value)}
-					placeholder={'اسم دلخواه...'}
+					placeholder={t('widgets.pet.namePlaceholder')}
 				/>
 
 				<div className="p-3 mt-2 border rounded-lg border-primary/30 bg-primary/20">
 					<p className="mb-1 text-xs font-medium text-primary">
-						💡 نکات مراقبت:
+						{t('widgets.pet.careTips')}
 					</p>
 					<ul className="text-xs text-primary-content space-y-0.5">
-						<li>• برای بازی با حیوان خانگی، روی آن کلیک کنید</li>
-						<li>• برای غذا دادن به حیوان، در محیط اطراف کلیک کنید</li>
+						<li>• {t('widgets.pet.tipPlay')}</li>
+						<li>• {t('widgets.pet.tipFeed')}</li>
 					</ul>
 				</div>
 			</div>

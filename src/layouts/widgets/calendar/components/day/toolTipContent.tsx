@@ -22,6 +22,7 @@ import { autoFormatErrorToast, showToast } from '@/common/toast'
 import type { MoodEntry } from '@/services/hooks/moodLog/get-moods.hook'
 import Analytics from '@/analytics'
 import { moodOptions } from '@/common/constant/moods'
+import { useLanguage } from '@/context/language.context'
 import { TbMoodHappy } from 'react-icons/tb'
 
 interface CalendarDayDetailsProps {
@@ -37,6 +38,8 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 	onMoodChange,
 }) => {
 	const { selectedDate, today, getHijriDate } = useDate()
+	const { t, lang } = useLanguage()
+	const isJalali = lang === 'fa'
 	const { isAuthenticated } = useAuth()
 	const { mutateAsync: upsertMoodLog } = useUpsertMoodLog()
 
@@ -48,7 +51,7 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 		if (isAdding) return
 		if (value === '') return
 		if (!isAuthenticated) {
-			showToast('برای ثبت حال روزانه باید وارد حساب کاربری خود شوید.', 'error')
+			showToast(t('widgets.calendar.moodSignIn'), 'error')
 			return
 		}
 
@@ -56,7 +59,7 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 		const selectedGregorian = selectedDate.clone().doAsGregorian()
 
 		if (selectedGregorian.isAfter(currentGregorian, 'day')) {
-			showToast('تاریخ انتخاب شده نمی‌تواند در آینده باشد.', 'error')
+			showToast(t('widgets.calendar.moodFuture'), 'error')
 			return
 		}
 
@@ -66,7 +69,7 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 				'day'
 			)
 		) {
-			showToast('تاریخ انتخاب شده نمی‌تواند بیش از ۷ روز گذشته باشد.', 'error')
+			showToast(t('widgets.calendar.moodTooOld'), 'error')
 			return
 		}
 
@@ -87,13 +90,10 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 		onMoodChange?.(value as MoodType)
 		if (response.action === 'removed') {
 			setMood('')
-			showToast(
-				'حال روزانت حذف شد. اگه بعدا خواستی دوباره می‌تونی یکی انتخاب کنی.',
-				'info'
-			)
+showToast(t('widgets.calendar.moodRemoved'), 'info')
 		} else {
 			setMood(value as MoodType)
-			showToast('حال روزانه شما با موفقیت ثبت شد.', 'success', {
+			showToast(t('widgets.calendar.moodSaved'), 'success', {
 				alarmSound: true,
 			})
 		}
@@ -123,6 +123,13 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 	const gregorian = selectedDate.clone().doAsGregorian().format('DD MMM YYYY')
 	const jalali = selectedDate.format('jYYYY/jMM/jD')
 	const jalaliDay = selectedDate.format('dddd')
+	const gregWeekday = selectedDate.clone().locale('en').format('dddd')
+	const weekdayLabel = isJalali ? jalaliDay : gregWeekday
+	const primaryDate = isJalali ? jalali : gregorian
+	const secondaryDate = isJalali ? gregorian : jalali
+	const selectedIsToday =
+		selectedDate.clone().doAsGregorian().format('YYYY-MM-DD') ===
+		today.clone().doAsGregorian().format('YYYY-MM-DD')
 
 	const totalEvents = dayEvent.length
 	const holidayStyle = isHoliday
@@ -142,8 +149,8 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 				className={`px-3 py-2 bg-gradient-to-r rounded-b-lg ${holidayStyle} text-white`}
 			>
 				<div className="flex items-center justify-between text-sm">
-					<span className="font-medium">{jalaliDay}</span>
-					<span className="opacity-90">{jalali}</span>
+					<span className="font-medium">{weekdayLabel}</span>
+					<span className="opacity-90">{primaryDate}</span>
 				</div>
 			</div>
 
@@ -157,7 +164,7 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 					</div>
 					<div className="flex items-center gap-1">
 						<FaGlobeAsia size={10} />
-						<span>{gregorian}</span>
+						<span>{secondaryDate}</span>
 					</div>
 				</div>
 
@@ -166,8 +173,9 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 						<div className="flex items-center gap-1 mb-1.5 px-0.5">
 							<TbMoodHappy className="text-secondary" size={12} />
 							<span className="text-[10px] font-medium text-content">
-								حس و حال{' '}
-								{jalaliDay === today.format('dddd') ? 'امروز' : 'روز'}
+								{selectedIsToday
+									? t('widgets.calendar.moodToday')
+									: t('widgets.calendar.moodDay')}
 							</span>
 						</div>
 						<div className="grid grid-cols-4 gap-1">

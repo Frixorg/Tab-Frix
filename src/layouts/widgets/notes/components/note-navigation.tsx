@@ -8,9 +8,11 @@ import Analytics from '@/analytics'
 import { IconLoading } from '@/components/loading/icon-loading'
 import { MdEdit, MdRefresh } from 'react-icons/md'
 import { callEvent } from '@/common/utils/call-event'
+import { useLanguage } from '@/context/language.context'
 
 export function NoteNavigation() {
 	const { isAuthenticated } = useAuth()
+	const { t } = useLanguage()
 
 	const {
 		notes,
@@ -56,7 +58,7 @@ export function NoteNavigation() {
 		<div
 			className={`flex items-center ${activeNoteId ? 'justify-end' : 'justify-between'} gap-x-1`}
 		>
-			{isSaving && <IconLoading title="درحال ذخیره..." />}
+			{isSaving && <IconLoading title={t('widgets.notes.saving')} />}
 			{activeNoteId ? (
 				<>
 					<Tooltip
@@ -68,7 +70,7 @@ export function NoteNavigation() {
 									onCancel={() => setShowDeleteConfirm(false)}
 								/>
 							) : (
-								'حذف یادداشت'
+								t('widgets.notes.deleteNote')
 							)
 						}
 						position="bottom"
@@ -81,7 +83,7 @@ export function NoteNavigation() {
 							<FiTrash2 size={14} />
 						</Button>
 					</Tooltip>
-					<Tooltip content="لیست یادداشت ها" position="top">
+					<Tooltip content={t('widgets.notes.notesList')} position="top">
 						<button
 							className={`h-7 w-7 flex items-center justify-center rounded-full cursor-pointer transition-colors text-muted opacity-70 hover:bg-base-300 hover:opacity-100 ${activeNoteIndex > 0 ? 'opacity-100' : 'opacity-30 cursor-not-allowed'} duration-300`}
 							onClick={() => onBackToList()}
@@ -97,15 +99,15 @@ export function NoteNavigation() {
 						size="xs"
 						disabled={isCreatingNote}
 						loading={isCreatingNote}
-						loadingText={<IconLoading title="درحال ساخت..." />}
+						loadingText={<IconLoading title={t('widgets.notes.creating')} />}
 						className={`h-6 w-fit px-2! text-xs font-medium  hover:scale-95 rounded-xl`}
 						isPrimary={true}
 					>
 						<MdEdit size={12} />
-						چیزی بنویس
+						{t('widgets.notes.writeSomething')}
 					</Button>
 					<div className="space-x-1">
-						<Tooltip content="بارگزاری مجدد">
+						<Tooltip content={t('widgets.notes.reload')}>
 							<Button
 								size="sm"
 								className={`px-2 py-0! border-none! rounded-xl text-base-content/40 shrink-0 active:scale-95 h-7!`}
@@ -127,21 +129,22 @@ interface Props {
 	onCancel: () => void
 }
 function ToolTipConfirmContent({ onConfirm, onCancel }: Props) {
+	const { t } = useLanguage()
 	return (
 		<div className="flex flex-col gap-1 p-3 w-52">
 			<p className="mb-2 text-sm font-medium text-muted">
-				آیا از حذف این یادداشت مطمئن هستید؟
+				{t('widgets.notes.deleteConfirm')}
 			</p>
 			<div className="flex justify-between gap-2">
 				<Button onClick={onCancel} size="xs" className="btn rounded-2xl">
-					انصراف
+					{t('common.cancel')}
 				</Button>
 				<Button
 					onClick={onConfirm}
 					size="xs"
 					className="text-white btn btn-error rounded-2xl"
 				>
-					حذف یادداشت
+					{t('widgets.notes.deleteNote')}
 				</Button>
 			</div>
 		</div>

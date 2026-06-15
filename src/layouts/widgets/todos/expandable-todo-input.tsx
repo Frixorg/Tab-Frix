@@ -18,6 +18,7 @@ import type { FetchedTodo, TodoPriority } from '@/services/hooks/todo/todo.inter
 import { LuX } from 'react-icons/lu'
 import { type TodoCreationPayload, useAddTodo } from '@/services/hooks/todo/add-todo.hook'
 import { useUpdateTodo } from '@/services/hooks/todo/update-todo.hook'
+import { useLanguage } from '@/context/language.context'
 import { translateError } from '@/utils/translate-error'
 import { showToast } from '@/common/toast'
 import type { Friend } from '@/services/hooks/friends/friendService.hook'
@@ -43,6 +44,7 @@ export function ExpandableTodoInput({
 	transparentInput,
 }: ExpandableTodoInputProps) {
 	const { isAuthenticated } = useAuth()
+	const { t } = useLanguage()
 	const { mutateAsync: addTodoAsync, isPending: isCreatingTodo } = useAddTodo()
 	const { mutateAsync: updateTodoAsync, isPending: isUpdatingTodo } = useUpdateTodo(
 		editTodo?.id || null
@@ -243,7 +245,7 @@ export function ExpandableTodoInput({
 							ref={inputRef}
 							defaultValue=""
 							onChange={handleTodoTextChange}
-							placeholder="عنوان تسک جدید..."
+							placeholder={t('widgets.todos.phNewTitle')}
 							className="h-6! border-none! outline-none! shadow-none! ring-0! w-full p-0 pr-1 text-sm bg-transparent! rounded-2xl focus:placeholder:text-base-content/20"
 							onFocus={handleInputFocus}
 							onKeyDown={handleKeyDown}
@@ -293,7 +295,7 @@ export function ExpandableTodoInput({
 											onChange={(e) =>
 												handleNotesChange(e.target.value)
 											}
-											placeholder="توضیحات بیشتر یا لینک اضافه کنید..."
+											placeholder={t('widgets.todos.phDetails')}
 											className={twMerge(
 												'w-full px-4 py-2 text-xs leading-relaxed transition-all outline-none resize-none rounded-2xl min-h-28 focus:placeholder:text-base-content/20 text-base-content/60',
 												`${transparentInput ? 'bg-transparent!' : 'bg-base-200! focus:ring-primary'} border-none! shadow-none!`
@@ -325,7 +327,7 @@ export function ExpandableTodoInput({
 													? formatJalaliDateForDisplay(
 															selectedDate
 														)
-													: 'تاریخ انجامش'}
+													: t('widgets.todos.dueDate')}
 											</p>
 										</Button>
 										<Button
@@ -336,7 +338,7 @@ export function ExpandableTodoInput({
 										>
 											<IoPricetagOutline size={16} />
 											<p className="truncate max-w-14 min-w-5">
-												{category || 'دسته‌بندی'}
+												{category || t('widgets.todos.category')}
 											</p>
 										</Button>
 									</div>
@@ -353,7 +355,7 @@ export function ExpandableTodoInput({
 												<TextInput
 													value={category}
 													onChange={(val) => setCategory(val)}
-													placeholder="مثلا: کارهای خونه"
+													placeholder={t('widgets.todos.phCategoryExample')}
 												/>
 												<Button
 													size="xs"

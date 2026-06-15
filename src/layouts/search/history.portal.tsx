@@ -1,3 +1,4 @@
+import { useLanguage } from '@/context/language.context'
 import { useState } from 'react'
 import { LuSparkles } from 'react-icons/lu'
 import { useSearchSuggestions } from '@/services/hooks/search/getSuggestSearch.hook'
@@ -22,6 +23,7 @@ export function SearchHistoryPortal({
 	portalStyles,
 	portalRef,
 }: SearchHistoryPortalProps) {
+	const { t } = useLanguage()
 	const { isAuthenticated, user } = useAuth()
 	const [showConsentModal, setShowConsentModal] = useState(false)
 
@@ -62,10 +64,10 @@ export function SearchHistoryPortal({
 							</div>
 							<div className="space-y-1">
 								<p className="text-xs font-medium text-base-content/70">
-									پیشنهادهای جستجو
+									{t('widgets.search.suggestionsTitle')}
 								</p>
 								<p className="text-[11px] text-base-content/40 leading-relaxed">
-									با فعال‌سازی، هنگام تایپ پیشنهادهای هوشمندی داده میشه!
+									{t('widgets.search.suggestionsHint')}
 								</p>
 							</div>
 							<button
@@ -76,7 +78,7 @@ export function SearchHistoryPortal({
 								className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-xl cursor-pointer transition-all bg-base-content/5 text-base-content/60 hover:text-primary hover:bg-primary/8 searchbox-item"
 							>
 								<LuSparkles size={12} />
-								فعال‌سازی
+								{t('widgets.search.enable')}
 							</button>
 						</div>
 					)}

@@ -7,6 +7,7 @@ import Analytics from '@/analytics'
 import { callEvent } from '@/common/utils/call-event'
 import { ItemSelector } from '@/components/item-selector'
 import { SectionPanel } from '@/components/section-panel'
+import { useLanguage } from '@/context/language.context'
 import { useTheme } from '@/context/theme.context'
 import type { UserInventoryItem } from '@/services/hooks/market/market.interface'
 
@@ -17,45 +18,47 @@ interface ThemeItem {
 	description?: string
 }
 
-const defaultThemes: ThemeItem[] = [
-	{
-		id: 'light',
-		name: 'روشن',
-		icon: <IoMdSunny size={14} />,
-		description: 'تم کلاسیک روشن',
-	},
-	{
-		id: 'dark',
-		name: 'تیره',
-		icon: <IoMdMoon size={14} />,
-		description: 'تم کلاسیک تیره',
-	},
-	{
-		id: 'glass',
-		name: 'شیشه‌ای',
-		icon: <MdOutlineBlurOn size={14} />,
-		description: 'تم شفاف با افکت شیشه‌ای',
-	},
-	{
-		id: 'icy',
-		name: 'یخی',
-		icon: <MdOutlineBlurOn size={14} />,
-		description: 'تم سفید شفاف با حالت یخی',
-	},
-	{
-		id: 'zarna',
-		name: 'زرنا',
-		icon: <IoMdStar size={14} />,
-		description: 'تم زرنا با رنگ‌های گرم',
-	},
-]
-
 interface Props {
 	fetched_themes: UserInventoryItem[]
 }
 
 export function ThemeSelector({ fetched_themes }: Props) {
+	const { t } = useLanguage()
 	const { setTheme, theme } = useTheme()
+
+	const defaultThemes: ThemeItem[] = [
+		{
+			id: 'light',
+			name: t('settings.appearance.theme.light'),
+			icon: <IoMdSunny size={14} />,
+			description: t('settings.appearance.theme.lightDesc'),
+		},
+		{
+			id: 'dark',
+			name: t('settings.appearance.theme.dark'),
+			icon: <IoMdMoon size={14} />,
+			description: t('settings.appearance.theme.darkDesc'),
+		},
+		{
+			id: 'glass',
+			name: t('settings.appearance.theme.glass'),
+			icon: <MdOutlineBlurOn size={14} />,
+			description: t('settings.appearance.theme.glassDesc'),
+		},
+		{
+			id: 'icy',
+			name: t('settings.appearance.theme.icy'),
+			icon: <MdOutlineBlurOn size={14} />,
+			description: t('settings.appearance.theme.icyDesc'),
+		},
+		{
+			id: 'zarna',
+			name: t('settings.appearance.theme.zarna'),
+			icon: <IoMdStar size={14} />,
+			description: t('settings.appearance.theme.zarnaDesc'),
+		},
+	]
+
 	const [themes, setThemes] = useState<ThemeItem[]>(defaultThemes)
 	const [selected, setSelected] = useState<ThemeItem | null>(null)
 
@@ -76,9 +79,9 @@ export function ThemeSelector({ fetched_themes }: Props) {
 		if (fetched_themes.length) {
 			const mapped: ThemeItem[] = fetched_themes.map((item) => ({
 				id: item.value,
-				name: item.name ?? 'بدون نام',
+				name: item.name ?? t('common.noName'),
 				icon: <IoMdStar size={14} />,
-				description: item?.description || 'تم خریداری شده',
+				description: item?.description || t('settings.appearance.theme.purchased'),
 			}))
 			setThemes([...defaultThemes, ...mapped])
 		}
@@ -90,9 +93,11 @@ export function ThemeSelector({ fetched_themes }: Props) {
 	}
 
 	return (
-		<SectionPanel title="انتخاب تم" delay={0.2} size="sm">
+		<SectionPanel title={t('settings.appearance.theme.title')} delay={0.2} size="sm">
 			<div className="space-y-3">
-				<p className="text-sm text-muted">تم ظاهری ویجتیفای را انتخاب کنید.</p>
+				<p className="text-sm text-muted">
+					{t('settings.appearance.theme.description')}
+				</p>
 
 				<div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
 					{themes.map((item) => (
@@ -108,7 +113,7 @@ export function ThemeSelector({ fetched_themes }: Props) {
 						onClick={() => handleMoreClick()}
 					>
 						<FiShoppingBag size={18} />
-						<span>فروشگاه</span>
+						<span>{t('common.store')}</span>
 					</div>
 				</div>
 			</div>

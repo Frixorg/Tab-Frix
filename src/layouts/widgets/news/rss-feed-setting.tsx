@@ -11,6 +11,7 @@ import { TextInput } from '@/components/text-input'
 import { ToggleSwitch } from '@/components/toggle-switch.component'
 import { WidgetSettingWrapper } from '@/layouts/widgets-settings/widget-settings-wrapper'
 import type { WigiNewsSetting } from './rss.interface'
+import { useLanguage } from '@/context/language.context'
 
 const SUGGESTED_FEEDS = [
 	{
@@ -28,6 +29,7 @@ const SUGGESTED_FEEDS = [
 ]
 
 export const RssFeedSetting = () => {
+	const { t } = useLanguage()
 	const [newFeed, setNewFeed] = useState<{ name: string; url: string }>({
 		name: '',
 		url: '',
@@ -47,7 +49,7 @@ export const RssFeedSetting = () => {
 
 	const addNewFeed = () => {
 		if (!newFeed.name.trim() || !newFeed.url.trim()) {
-			setError('نام و آدرس فید الزامی است')
+			setError(t('widgets.rss.errRequired'))
 			return
 		}
 
@@ -55,7 +57,7 @@ export const RssFeedSetting = () => {
 		try {
 			new URL(newFeed.url)
 		} catch {
-			setError('آدرس فید معتبر نیست')
+			setError(t('widgets.rss.errInvalidUrl'))
 			return
 		}
 
@@ -86,7 +88,7 @@ export const RssFeedSetting = () => {
 		)
 
 		if (feedExists) {
-			setError(`فید "${suggestedFeed.name}" قبلاً اضافه شده است`)
+			setError(t('widgets.rss.errExists', { name: suggestedFeed.name }))
 			return
 		}
 
@@ -116,7 +118,7 @@ export const RssFeedSetting = () => {
 			new URL(url)
 			setError(null)
 		} catch (_e) {
-			setError('آدرس فید معتبر نیست')
+			setError(t('widgets.rss.errInvalidUrl'))
 		}
 	}
 
@@ -192,26 +194,26 @@ export const RssFeedSetting = () => {
 					{error}
 				</div>
 			)}
-			<SectionPanel title="تنظیمات کلی" size="xs">
+			<SectionPanel title={t('widgets.rss.generalTitle')} size="xs">
 				<CheckBoxWithDescription
 					isEnabled={rssState.useDefaultNews}
 					onToggle={toggleDefaultNews}
-					title="استفاده از منابع خبری پیش‌فرض"
-					description="با فعال کردن این گزینه، اخبار از منابع پیش‌فرض نمایش داده می‌شوند"
+					title={t('widgets.rss.useDefault')}
+					description={t('widgets.rss.useDefaultDesc')}
 				/>
 			</SectionPanel>
 
-			<SectionPanel title="افزودن فید RSS جدید" size="xs">
+			<SectionPanel title={t('widgets.rss.addTitle')} size="xs">
 				<div className="flex flex-col gap-3">
 					<TextInput
 						type="text"
-						placeholder="نام فید (مثال: دیجیاتو)"
+						placeholder={t('widgets.rss.namePlaceholder')}
 						value={newFeed.name}
 						onChange={(value) => setNewFeed({ ...newFeed, name: value })}
 					/>
 					<TextInput
 						type="url"
-						placeholder="آدرس RSS (مثال: https://digiato.com/feed)"
+						placeholder={t('widgets.rss.urlPlaceholder')}
 						value={newFeed.url}
 						onChange={(value) => {
 							setNewFeed({ ...newFeed, url: value })
@@ -225,12 +227,12 @@ export const RssFeedSetting = () => {
 						onClick={addNewFeed}
 					>
 						<VscAdd size={16} />
-						<span>افزودن فید جدید</span>
+						<span>{t('widgets.rss.addBtn')}</span>
 					</Button>
 				</div>
 			</SectionPanel>
 
-			<SectionPanel title="فیدهای پیشنهادی" size="xs">
+			<SectionPanel title={t('widgets.rss.suggestedTitle')} size="xs">
 				<div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
 					{SUGGESTED_FEEDS.filter((feed) => !isFeedAlreadyAdded(feed.url)).map(
 						(feed) => (
@@ -250,7 +252,7 @@ export const RssFeedSetting = () => {
 				</div>
 			</SectionPanel>
 
-			<SectionPanel title={`فیدهای شما (${rssState.customFeeds.length})`} size="sm">
+			<SectionPanel title={t('widgets.rss.yourFeeds', { count: rssState.customFeeds.length })} size="sm">
 				<FeedsList
 					feeds={rssState.customFeeds}
 					onToggleFeed={(id) => onToggleFeed(id)}
@@ -274,6 +276,7 @@ interface FeedsListProps {
 }
 
 const FeedsList = ({ feeds, onToggleFeed, onRemoveFeed }: FeedsListProps) => {
+	const { t } = useLanguage()
 	return (
 		<div className="h-full">
 			{feeds.length === 0 ? (
@@ -284,10 +287,10 @@ const FeedsList = ({ feeds, onToggleFeed, onRemoveFeed }: FeedsListProps) => {
 				>
 					<BiRss className={'mb-3 opacity-50 text-content'} size={32} />
 					<p className={'mb-1 text-sm font-medium opacity-70 text-content'}>
-						هیچ فید RSS اضافه نشده است
+						{t('widgets.rss.empty')}
 					</p>
 					<p className={'text-xs opacity-50'}>
-						از فرم بالا برای افزودن فید استفاده کنید
+						{t('widgets.rss.emptyHint')}
 					</p>
 				</div>
 			) : (

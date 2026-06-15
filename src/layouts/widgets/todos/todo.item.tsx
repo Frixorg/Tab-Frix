@@ -5,6 +5,7 @@ import CustomCheckbox from '@/components/checkbox'
 import type { FetchedTodo, Todo } from '@/services/hooks/todo/todo.interface'
 import { ConfirmationModal } from '@/components/modal/confirmation-modal'
 import { useAuth } from '@/context/auth.context'
+import { useLanguage } from '@/context/language.context'
 import { showToast } from '@/common/toast'
 import { useRemoveTodo } from '@/services/hooks/todo/remove-todo.hook'
 import { safeAwait } from '@/services/api'
@@ -26,14 +27,14 @@ interface Prop {
 	onUpdated?: () => void
 }
 
-const translatedPriority = {
-	low: 'کم',
-	medium: 'متوسط',
-	high: 'مهم',
-}
-
 export function TodoItem({ todo, blurMode = false, onEdit, onUpdated }: Prop) {
 	const { isAuthenticated } = useAuth()
+	const { t } = useLanguage()
+	const translatedPriority = {
+		low: t('widgets.todos.prioShortLow'),
+		medium: t('widgets.todos.prioShortMedium'),
+		high: t('widgets.todos.prioShortHigh'),
+	}
 	const [currentTodo, setCurrentTodo] = useState<FetchedTodo>(todo)
 	const [expanded, setExpanded] = useState(false)
 	const [showConfirmation, setShowConfirmation] = useState(false)
@@ -46,24 +47,24 @@ export function TodoItem({ todo, blurMode = false, onEdit, onUpdated }: Prop) {
 
 	const isPending = isUpdating || isRemoving
 	const handleDelete = (e: React.MouseEvent) => {
-		if (isTemp) return showToast('این تسک هنوز همگام‌سازی نشده است.', 'error')
+		if (isTemp) return showToast(t('widgets.todos.notSynced'), 'error')
 		e.stopPropagation()
 		if (isPending) return
-		if (!isAuthenticated) return showToast('برای حذف باید وارد شوید', 'error')
+		if (!isAuthenticated) return showToast(t('widgets.todos.signInDelete'), 'error')
 		setShowConfirmation(true)
 	}
 
 	const handleEdit = (e: React.MouseEvent) => {
-		if (isTemp) return showToast('این تسک هنوز همگام‌سازی نشده است.', 'error')
+		if (isTemp) return showToast(t('widgets.todos.notSynced'), 'error')
 		e.stopPropagation()
-		if (!isAuthenticated) return showToast('برای ویرایش باید وارد شوید', 'error')
+		if (!isAuthenticated) return showToast(t('widgets.todos.signInEdit'), 'error')
 		onEdit(todo)
 	}
 
 	const onConfirmDelete = async () => {
 		if (isPending) return
 		const onlineId = currentTodo.id
-		if (validate(onlineId)) return showToast('خطا در شناسه تسک', 'error')
+		if (validate(onlineId)) return showToast(t('widgets.todos.idError'), 'error')
 
 		const [err] = await safeAwait(mutateAsync())
 		setShowConfirmation(false)
@@ -151,7 +152,7 @@ export function TodoItem({ todo, blurMode = false, onEdit, onUpdated }: Prop) {
 				<div className="flex relative items-center gap-0.5 shrink-0">
 					{isPending && <IconLoading />}
 					{hasFriends && (
-						<Tooltip content="مشترک">
+						<Tooltip content={t('widgets.todos.shared')}>
 							<FiUsers size={12} className="text-muted" />
 						</Tooltip>
 					)}
@@ -236,8 +237,8 @@ export function TodoItem({ todo, blurMode = false, onEdit, onUpdated }: Prop) {
 					isOpen={showConfirmation}
 					onClose={() => setShowConfirmation(false)}
 					onConfirm={onConfirmDelete}
-					confirmText={isPending ? <IconLoading /> : 'حذف'}
-					message="آیا از حذف مطمئن هستید؟"
+					confirmText={isPending ? <IconLoading /> : t('common.delete')}
+					message={t('widgets.todos.deleteConfirm')}
 					variant="danger"
 				/>
 			)}

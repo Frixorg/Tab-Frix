@@ -276,7 +276,7 @@ export const WelcomeWizard = ({ isOpen, onClose }: WelcomeWizardProps) => {
 									مرحله ۴: از کجا شنیدی؟
 								</h2>
 								<p className="text-sm font-medium leading-loose opacity-70 text-balance">
-									لطفاً بگو از کجا با ویجتیفای آشنا شدی.
+									لطفاً بگو از کجا با تب فریکس آشنا شدی.
 								</p>
 							</div>
 

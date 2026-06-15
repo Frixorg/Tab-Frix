@@ -17,7 +17,9 @@ interface BookmarkPopoverProps {
 	coords: { top: number; left: number }
 }
 
+import { useLanguage } from '@/context/language.context'
 export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProps) {
+	const { t } = useLanguage()
 	const { browserBookmarksEnabled, setBrowserBookmarksEnabled } = useGeneralSetting()
 	const [fetchedBookmarks, setFetchedBookmarks] = useState<FetchedBrowserBookmark[]>([])
 	const [currentFolderId, setCurrentFolderId] = useState<string | null>(null)
@@ -73,7 +75,7 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 	}
 
 	const c =
-		fetchedBookmarks.find((b) => b.id === currentFolderId)?.title || 'بوکمارک‌های من'
+		fetchedBookmarks.find((b) => b.id === currentFolderId)?.title || t('widgets.search.myBookmarks')
 
 	return createPortal(
 		<div
@@ -89,10 +91,9 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 					<div className="flex items-center justify-center w-8 h-8 mx-auto mb-3 rounded-full bg-primary/10">
 						<FiLock className="text-primary" size={18} />
 					</div>
-					<p className="mb-1 text-sm font-bold">دسترسی به بوکمارک‌ها</p>
+					<p className="mb-1 text-sm font-bold">{t('widgets.search.bookmarksAccess')}</p>
 					<p className="mb-4 text-xs leading-relaxed text-muted">
-						برای مشاهده بوکمارک‌های مرورگر در این بخش، نیاز به دسترسی شما
-						داریم.
+						{t('widgets.search.bookmarksAccessHint')}
 					</p>
 					<Button
 						size="sm"
@@ -100,7 +101,7 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 						className="w-full rounded-2xl"
 						isPrimary
 					>
-						فعال‌سازی دسترسی
+						{t('widgets.search.enableAccess')}
 					</Button>
 				</div>
 			) : (
@@ -114,7 +115,7 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 								className="text-[10px] btn-ghost text-muted rounded-xl flex items-center gap-1!"
 							>
 								<HiChevronRight />
-								بازگشت
+								{t('common.back')}
 							</Button>
 						)}
 					</div>
@@ -157,7 +158,7 @@ export function BookmarkPopover({ isOpen, onClose, coords }: BookmarkPopoverProp
 							))
 						) : (
 							<div className="py-8 text-xs text-center text-muted">
-								پوشه خالی است
+								{t('widgets.search.folderEmpty')}
 							</div>
 						)}
 					</div>

@@ -3,6 +3,7 @@ import { unitsFlag } from '../unitSymbols'
 import Tooltip from '@/components/toolTip'
 import { TbWind } from 'react-icons/tb'
 import { WiCloudy, WiHumidity } from 'react-icons/wi'
+import { useLanguage } from '@/context/language.context'
 
 interface CurrentWeatherBoxProps {
 	fetchedWeather: FetchedWeather | null
@@ -13,6 +14,7 @@ export function CurrentWeatherBox({
 	fetchedWeather,
 	temperatureUnit,
 }: CurrentWeatherBoxProps) {
+	const { t } = useLanguage()
 	return (
 		<>
 			<div
@@ -68,7 +70,7 @@ export function CurrentWeatherBox({
 
 			<div className="p-2 border rounded-2xl bg-base-200/40 border-content">
 				<div className="grid grid-cols-3 gap-1.5">
-					<Tooltip content={'باد'}>
+					<Tooltip content={t('widgets.weather.wind')}>
 						<div className="flex items-center justify-center gap-1.5 py-2 transition-colors border rounded-xl border-content">
 							<TbWind className="w-4 h-4 text-muted" />
 							<span className="text-xs font-medium text-muted">
@@ -80,7 +82,7 @@ export function CurrentWeatherBox({
 						</div>
 					</Tooltip>
 
-					<Tooltip content={'رطوبت'}>
+					<Tooltip content={t('widgets.weather.humidity')}>
 						<div className="flex items-center justify-center gap-1.5 py-2 transition-colors border rounded-xl border-content">
 							<WiHumidity className="w-4 h-4 text-muted" />
 							<span className="text-xs font-medium text-muted">
@@ -89,7 +91,7 @@ export function CurrentWeatherBox({
 						</div>
 					</Tooltip>
 
-					<Tooltip content="پوشش ابری">
+					<Tooltip content={t('widgets.weather.cloudCover')}>
 						<div className="flex items-center justify-center gap-1.5 py-2 transition-colors border rounded-xl border-content">
 							<WiCloudy className="w-4 h-4 text-muted" />
 							<span className="text-xs font-medium text-muted">

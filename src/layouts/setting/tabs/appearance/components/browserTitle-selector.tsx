@@ -7,6 +7,7 @@ import { callEvent } from '@/common/utils/call-event'
 import { ItemSelector } from '@/components/item-selector'
 import { renderBrowserTitlePreview } from '@/components/market/title/title-render-preview'
 import { SectionPanel } from '@/components/section-panel'
+import { useLanguage } from '@/context/language.context'
 import { safeAwait } from '@/services/api'
 import { useChangeBrowserTitle } from '@/services/hooks/extension/updateSetting.hook'
 import type { UserInventoryItem } from '@/services/hooks/market/market.interface'
@@ -31,6 +32,7 @@ interface Prop {
 	isAuthenticated: boolean
 }
 export function BrowserTitleSelector({ fetched_browserTitles, isAuthenticated }: Prop) {
+	const { t } = useLanguage()
 	const [browserTitles, setBrowserTitles] =
 		useState<BrowserTitle[]>(defaultBrowserTitles)
 	const [selected, setSelected] = useState<BrowserTitle | null>(null)
@@ -70,7 +72,7 @@ export function BrowserTitleSelector({ fetched_browserTitles, isAuthenticated }:
 	useEffect(() => {
 		const updateAndCheck = async () => {
 			const mapped: BrowserTitle[] = fetched_browserTitles.map((item) => ({
-				name: item.name || 'بدون نام',
+				name: item.name || t('common.noName'),
 				id: item.id,
 				template: item.value,
 			}))
@@ -95,11 +97,10 @@ export function BrowserTitleSelector({ fetched_browserTitles, isAuthenticated }:
 	}
 
 	return (
-		<SectionPanel title="عنوان مرورگر" size="sm">
+		<SectionPanel title={t('settings.appearance.browserTitle.title')} size="sm">
 			<div className="space-y-3">
 				<p className={'text-xs text-muted'}>
-					عنوان تب مرورگر خود را همین‌جا تغییر دهید تا هر وقت روی تب بودید،
-					راحت‌تر پیدایش کنید.
+					{t('settings.appearance.browserTitle.description')}
 				</p>
 				<div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
 					{browserTitles?.map((item) => (
@@ -108,7 +109,11 @@ export function BrowserTitleSelector({ fetched_browserTitles, isAuthenticated }:
 							onClick={() => onClick(item)}
 							key={item.template}
 							className="w-full h-20"
-							label={item.name}
+							label={
+								item.id === 'default'
+									? t('settings.appearance.browserTitle.default')
+									: item.name
+							}
 							description={renderBrowserTitlePreview(item)}
 						/>
 					))}
@@ -117,7 +122,7 @@ export function BrowserTitleSelector({ fetched_browserTitles, isAuthenticated }:
 						onClick={() => handleMoreClick()}
 					>
 						<FiShoppingBag size={18} />
-						<span>فروشگاه</span>
+						<span>{t('common.store')}</span>
 					</div>
 				</div>
 			</div>

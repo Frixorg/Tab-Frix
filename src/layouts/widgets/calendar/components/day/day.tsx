@@ -12,10 +12,12 @@ import {
 	getShamsiEvents,
 } from '../../utils'
 import { moodOptions } from '@/common/constant/moods'
+import { useLanguage } from '@/context/language.context'
 
 interface DayItemProps {
 	day: number
 	currentDate: jalaliMoment.Moment
+	isJalali: boolean
 	events: FetchedAllEvents
 	selectedDateStr: string
 	setSelectedDate: (date: jalaliMoment.Moment) => void
@@ -28,6 +30,7 @@ interface DayItemProps {
 export function DayItem({
 	day,
 	currentDate,
+	isJalali,
 	events,
 	selectedDateStr,
 	setSelectedDate,
@@ -36,7 +39,10 @@ export function DayItem({
 	onClick,
 }: DayItemProps) {
 	const dayRef = useRef<HTMLDivElement>(null)
-	const cellDate = currentDate.clone().jDate(day)
+	const { t } = useLanguage()
+	const cellDate = isJalali
+		? currentDate.clone().jDate(day)
+		: currentDate.clone().date(day)
 	const dateStr = formatDateStr(cellDate)
 	const todayShamsiEvents = getShamsiEvents(events, cellDate)
 	const todayHijriEvents = getHijriEvents(events, cellDate)
@@ -50,7 +56,7 @@ export function DayItem({
 	].filter(Boolean) as string[]
 
 	const isSelected = selectedDateStr === dateStr
-	const isCurrentDay = isToday(cellDate, timezone)
+	const isCurrentDay = isToday(cellDate, timezone, isJalali)
 
 	const isHoliday =
 		cellDate.day() === 5 ||
@@ -119,7 +125,7 @@ export function DayItem({
 			return (
 				<img
 					src={eventIcons[0]}
-					alt="مناسبت"
+					alt={t('widgets.calendar.eventAlt')}
 					className="object-contain w-6 h-6 transition-all rounded-full"
 					loading="lazy"
 				/>
@@ -162,11 +168,13 @@ export function DayItem({
 	)
 }
 
-const isToday = (date: jalaliMoment.Moment, timezone: string) => {
+const isToday = (date: jalaliMoment.Moment, timezone: string, isJalali = true) => {
 	const today = getCurrentDate(timezone)
-	return (
-		date.jDate() === today.jDate() &&
-		date.jMonth() === today.jMonth() &&
-		date.jYear() === today.jYear()
-	)
+	return isJalali
+		? date.jDate() === today.jDate() &&
+				date.jMonth() === today.jMonth() &&
+				date.jYear() === today.jYear()
+		: date.date() === today.date() &&
+				date.month() === today.month() &&
+				date.year() === today.year()
 }

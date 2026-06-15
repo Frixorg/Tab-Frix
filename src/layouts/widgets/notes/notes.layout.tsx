@@ -5,10 +5,12 @@ import { NotesProvider, useNotes } from '@/context/notes.context'
 import { NoteEditor } from './components/note-editor'
 import { NoteItem } from './components/note-item'
 import { NoteNavigation } from './components/note-navigation'
+import { useLanguage } from '@/context/language.context'
 
 function NotesContent() {
 	const { notes, activeNoteId } = useNotes()
 	const { blurMode } = useGeneralSetting()
+	const { t } = useLanguage()
 
 	const activeNote = notes.find((note) => note.id === activeNoteId)
 
@@ -18,9 +20,9 @@ function NotesContent() {
 				className={`flex flex-col items-center justify-center h-full ${blurMode ? 'blur-mode' : 'disabled-blur-mode'}`}
 			>
 				<PiNotepad size={42} className={'mb-2 text-content opacity-50'} />
-				<p className={'text-sm text-muted'}>یادداشتی پیدا نشد</p>
+				<p className={'text-sm text-muted'}>{t('widgets.notes.empty')}</p>
 				<span className="font-light text-muted">
-					منتظر چی هستی؟ شروع کن به نوشتن!
+					{t('widgets.notes.emptyHint')}
 				</span>
 			</div>
 		)

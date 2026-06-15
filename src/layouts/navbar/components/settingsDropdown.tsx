@@ -6,12 +6,14 @@ import { useAppearanceSetting } from '@/context/appearance.context'
 import { AiOutlineDrag } from 'react-icons/ai'
 import { showToast } from '@/common/toast'
 import { HiOutlineCog6Tooth } from 'react-icons/hi2'
+import { useLanguage } from '@/context/language.context'
 
 interface SettingsProps {
 	setShowSettings: (value: boolean) => void
 }
 export const SettingsDropdown = ({ setShowSettings }: SettingsProps) => {
 	const { canReOrderWidget, toggleCanReOrderWidget, ui } = useAppearanceSetting()
+	const { t } = useLanguage()
 	const [isOpen, setIsOpen] = useState(false)
 	const triggerRef = useRef<HTMLDivElement>(null)
 
@@ -29,7 +31,7 @@ export const SettingsDropdown = ({ setShowSettings }: SettingsProps) => {
 
 	const onClick = () => {
 		if (ui === 'SIMPLE') {
-			showToast('در حالت ظاهری ساده، امکان تغییر و جابجایی ویجت ها نیست!', 'error')
+			showToast(t('navbar.simpleModeError'), 'error')
 			return
 		}
 		toggleCanReOrderWidget()
@@ -45,7 +47,7 @@ export const SettingsDropdown = ({ setShowSettings }: SettingsProps) => {
 				className="flex items-center w-full gap-3 px-3 py-2 text-sm text-right transition-colors rounded-none cursor-pointer group hover:bg-primary/10 hover:text-primary"
 			>
 				<HiCog size={16} className="text-muted group-hover:!text-primary" />
-				<span>تنظیمات</span>
+				<span>{t('settings.title')}</span>
 			</button>
 
 			<button
@@ -59,7 +61,7 @@ export const SettingsDropdown = ({ setShowSettings }: SettingsProps) => {
 						size={16}
 						className="text-muted group-hover:!text-primary"
 					/>
-					<span>مدیریت ویجت‌ها</span>
+					<span>{t('settings.manageWidgets')}</span>
 				</div>
 			</button>
 
@@ -73,9 +75,9 @@ export const SettingsDropdown = ({ setShowSettings }: SettingsProps) => {
 						className="text-muted group-hover:!text-primary"
 					/>
 					{canReOrderWidget ? (
-						<span>غیرفعال‌سازی حالت جابجایی</span>
+						<span>{t('navbar.reorderDisable')}</span>
 					) : (
-						<span>حالت جابجایی ویجت ها</span>
+						<span>{t('navbar.reorderEnable')}</span>
 					)}
 				</div>
 			</div>

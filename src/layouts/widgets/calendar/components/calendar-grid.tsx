@@ -1,4 +1,5 @@
 import { useAuth } from '@/context/auth.context'
+import { useLanguage } from '@/context/language.context'
 import { useGeneralSetting } from '@/context/general-setting.context'
 import { useGetEvents } from '@/services/hooks/date/getEvents.hook'
 import type React from 'react'
@@ -23,6 +24,8 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 	setSelectedDate,
 }) => {
 	const { isAuthenticated } = useAuth()
+	const { t, lang } = useLanguage()
+	const isJalali = lang === 'fa'
 	const [isOpenTooltip, setIsOpenTooltip] = useState<boolean>(false)
 	const { selected_timezone: timezone } = useGeneralSetting()
 	const [clickedElement, setClickedElement] = useState<HTMLDivElement | null>(null)
@@ -35,18 +38,35 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 		shamsiEvents: [],
 	}
 
+	const monthStart = isJalali
+		? currentDate.clone().doAsGregorian().startOf('jMonth')
+		: currentDate.clone().startOf('month')
+	const monthEnd = isJalali
+		? currentDate.clone().doAsGregorian().endOf('jMonth')
+		: currentDate.clone().endOf('month')
+
 	const { data: calendarData, refetch } = useGetCalendarData(
 		isAuthenticated,
-		currentDate.clone().doAsGregorian().startOf('jMonth').format('YYYY-MM-DD'),
-		currentDate.clone().doAsGregorian().endOf('jMonth').format('YYYY-MM-DD')
+		monthStart.format('YYYY-MM-DD'),
+		monthEnd.format('YYYY-MM-DD')
 	)
 
-	const firstDayOfMonth = currentDate.clone().startOf('jMonth').day()
-	const daysInMonth = currentDate.clone().endOf('jMonth').jDate()
-	const emptyDays = (firstDayOfMonth + 1) % 7
+	const weekdays = isJalali
+		? WEEKDAYS
+		: t('widgets.calendar.weekdaysGregorian').split(',')
 
-	const prevMonth = currentDate.clone().subtract(1, 'jMonth')
-	const daysInPrevMonth = prevMonth.clone().endOf('jMonth').jDate()
+	const firstDayOfMonth = isJalali
+		? currentDate.clone().startOf('jMonth').day()
+		: currentDate.clone().startOf('month').day()
+	const daysInMonth = isJalali
+		? currentDate.clone().endOf('jMonth').jDate()
+		: currentDate.clone().endOf('month').date()
+	const emptyDays = isJalali ? (firstDayOfMonth + 1) % 7 : firstDayOfMonth
+
+	const prevMonth = currentDate.clone().subtract(1, isJalali ? 'jMonth' : 'month')
+	const daysInPrevMonth = isJalali
+		? prevMonth.clone().endOf('jMonth').jDate()
+		: prevMonth.clone().endOf('month').date()
 	const prevMonthStartDay = daysInPrevMonth - emptyDays + 1
 
 	const totalCells = 42
@@ -57,7 +77,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 	return (
 		<>
 			<div className="grid grid-cols-7 gap-1 py-2 text-center">
-				{WEEKDAYS.map((day) => (
+				{weekdays.map((day) => (
 					<div key={day} className={'text-sm mb-1 text-content opacity-80'}>
 						{day}
 					</div>
@@ -79,6 +99,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 					<DayItem
 						key={`day-${i}`}
 						currentDate={currentDate}
+						isJalali={isJalali}
 						day={i + 1}
 						events={eventsForCalendar}
 						googleEvents={calendarData?.googleEvents || []}

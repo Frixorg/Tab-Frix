@@ -39,12 +39,12 @@ export const RewardsTab = () => {
 							<FiInfo className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
 							<div className="flex-1">
 								<p className="mb-2 text-sm font-medium text-content">
-									ویج‌کوین، سکه ویژه ویجتیفای است که می‌توانید آن را
+									ویج‌کوین، سکه ویژه تب فریکس است که می‌توانید آن را
 									جمع‌آوری و خرج کنید! 🎉
 								</p>
 								<p className="text-xs text-muted">
 									با جمع‌آوری ویج‌کوین می‌توانید آن‌ها را خرج کنید و محصولات
-									و امکانات ویژه داخل ویجتیفای را بخرید.
+									و امکانات ویژه داخل تب فریکس را بخرید.
 								</p>
 							</div>
 						</div>

@@ -39,7 +39,7 @@ const StepOne = ({ onGetStarted }: StepOneProps) => {
 		<>
 			<div className="mb-3">
 				<h3 className={'mb-0 text-2xl font-bold text-content'}>
-					به ویجتیفای خوش آمدید! 🎉
+					به تب فریکس خوش آمدید! 🎉
 				</h3>
 			</div>
 

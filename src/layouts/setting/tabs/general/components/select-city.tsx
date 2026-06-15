@@ -6,6 +6,7 @@ import Modal from '@/components/modal'
 import { SectionPanel } from '@/components/section-panel'
 import { useGetCitiesList } from '@/services/hooks/cities/getCitiesList'
 import { useAuth } from '@/context/auth.context'
+import { useLanguage } from '@/context/language.context'
 import { AuthRequiredModal } from '@/components/auth/AuthRequiredModal'
 import { useSetCity } from '@/services/hooks/user/userService.hook'
 import { TextInput } from '@/components/text-input'
@@ -22,6 +23,7 @@ interface Prop {
 	onSave?: () => void
 }
 export function SelectCity({ size }: Prop) {
+	const { t, dir } = useLanguage()
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [showAuthModal, setShowAuthModal] = useState(false)
@@ -81,19 +83,19 @@ export function SelectCity({ size }: Prop) {
 		: null
 
 	return (
-		<SectionPanel title="انتخاب شهر" size={size ? size : 'sm'}>
+		<SectionPanel title={t('settings.general.city.title')} size={size ? size : 'sm'}>
 			<div className="space-y-2">
 				<button
 					onClick={onModalOpen}
 					disabled={isSettingCity}
-					className="flex items-center justify-between w-full p-3 text-right transition-colors border cursor-pointer rounded-2xl bg-base-100 border-base-300 hover:bg-base-200 disabled:opacity-50 disabled:cursor-not-allowed"
+					className="flex items-center justify-between w-full p-3 text-start transition-colors border cursor-pointer rounded-2xl bg-base-100 border-base-300 hover:bg-base-200 disabled:opacity-50 disabled:cursor-not-allowed"
 				>
 					{isLoadingUser ? (
 						<IconLoading className="mx-auto text-center" />
 					) : selected ? (
 						selected.city
 					) : (
-						'انتخاب شهر...'
+						t('settings.general.city.placeholder')
 					)}
 					{isSettingCity ? (
 						<IconLoading />
@@ -103,12 +105,12 @@ export function SelectCity({ size }: Prop) {
 				</button>
 
 				{error && (
-					<div className="p-3 text-sm text-right duration-300 border rounded-lg border-error/20 bg-error/10 backdrop-blur-sm animate-in fade-in-0">
+					<div className="p-3 text-sm text-start duration-300 border rounded-lg border-error/20 bg-error/10 backdrop-blur-sm animate-in fade-in-0">
 						<div className="font-medium text-error">
-							خطا در دریافت اطلاعات
+							{t('settings.general.city.fetchError')}
 						</div>
 						<div className="mt-1 text-error/80">
-							لطفا اتصال اینترنت خود را بررسی کرده و مجدداً تلاش کنید.
+							{t('settings.general.city.fetchErrorDesc')}
 						</div>
 					</div>
 				)}
@@ -117,7 +119,7 @@ export function SelectCity({ size }: Prop) {
 				<AuthRequiredModal
 					isOpen={showAuthModal}
 					onClose={() => setShowAuthModal(!showAuthModal)}
-					message="برای انتخاب شهر، لطفاً وارد حساب کاربری خود شوید."
+					message={t('settings.general.city.authRequired')}
 				/>
 			)}
 			<Modal
@@ -126,15 +128,15 @@ export function SelectCity({ size }: Prop) {
 					setIsModalOpen(false)
 					setSearchTerm('')
 				}}
-				title="انتخاب شهر"
+				title={t('settings.general.city.title')}
 				size="lg"
-				direction="rtl"
+				direction={dir}
 			>
 				<div className="space-y-2 overflow-hidden">
 					<div className="relative">
 						<TextInput
 							type="text"
-							placeholder="جستجوی شهر..."
+							placeholder={t('settings.general.city.searchPlaceholder')}
 							value={searchTerm}
 							ref={searchInputRef}
 							onChange={(value) => setSearchTerm(value)}
@@ -146,16 +148,16 @@ export function SelectCity({ size }: Prop) {
 						{isLoading ? (
 							<div className="flex items-center justify-center p-4 text-center text-primary">
 								<IconLoading />
-								در حال بارگذاری...
+								{t('settings.general.city.loading')}
 							</div>
 						) : filteredCities?.length > 0 ? (
 							filteredCities.map((city) => (
 								<div
 									key={city.cityId}
 									onClick={() => handleSelectCity(city)}
-									className="flex items-center w-full p-3 text-right transition-all duration-200 border-b cursor-pointer border-base-200/30 last:border-b-0 group rounded-2xl hover:bg-primary/20 hover:text-primary"
+									className="flex items-center w-full p-3 text-start transition-all duration-200 border-b cursor-pointer border-base-200/30 last:border-b-0 group rounded-2xl hover:bg-primary/20 hover:text-primary"
 								>
-									<CiLocationOn className="flex-shrink-0 w-5 h-5 ml-3 transition-transform text-primary group-hover:scale-110" />
+									<CiLocationOn className="flex-shrink-0 w-5 h-5 me-3 transition-transform text-primary group-hover:scale-110" />
 									<span className="flex-1 font-medium">
 										{city.city}
 									</span>
@@ -163,22 +165,22 @@ export function SelectCity({ size }: Prop) {
 							))
 						) : searchTerm ? (
 							<div className="p-4 text-center text-base-content/60">
-								نتیجه‌ای یافت نشد
+								{t('settings.general.city.noResults')}
 							</div>
 						) : cities && cities.length === 0 ? (
 							<div className="p-4 text-center text-base-content/60">
-								هیچ شهری موجود نیست
+								{t('settings.general.city.empty')}
 							</div>
 						) : (
 							<div className="p-4 text-center text-base-content/60">
-								شهر مورد نظر خود را جستجو کنید
+								{t('settings.general.city.prompt')}
 							</div>
 						)}
 					</div>
 
 					<div className="pt-2 border-t border-base-300">
 						<p className="text-sm text-center text-base-content/60">
-							اگه شهر شما تو لیست نبود، لطفا اطلاع بدید تا اضافه بشه🤝
+							{t('settings.general.city.notListed')}
 						</p>
 					</div>
 				</div>

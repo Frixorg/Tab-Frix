@@ -1,13 +1,15 @@
 import Analytics from '@/analytics'
 import Tooltip from '@/components/toolTip'
 
+import { useLanguage } from '@/context/language.context'
 export function VoiceSearchButton({ onClick }: { onClick: () => void }) {
+	const { t } = useLanguage()
 	const onClickHandle = () => {
 		Analytics.event('searchbox_open_voice_search')
 		onClick()
 	}
 	return (
-		<Tooltip content="جستجوی گفتاری">
+		<Tooltip content={t('widgets.search.byVoice')}>
 			<div
 				onClick={() => onClickHandle()}
 				className="flex items-center justify-center transition-all duration-300 rounded-full cursor-pointer h-9 w-9 shrink-0 hover:bg-base-300 group"

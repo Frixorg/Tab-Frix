@@ -6,6 +6,7 @@ import { CalendarHeader } from './components/calendar-header'
 import { GoogleCalendarView } from './components/google-calendar/google-calendar-view'
 import Analytics from '@/analytics'
 import { BiCalendar, BiLogoGoogle } from 'react-icons/bi'
+import { useLanguage } from '@/context/language.context'
 
 interface CalendarTabSelectorProps {
 	activeTab: string
@@ -16,6 +17,7 @@ const CalendarTabSelector: React.FC<CalendarTabSelectorProps> = ({
 	activeTab,
 	setActiveTab,
 }) => {
+	const { t } = useLanguage()
 	return (
 		<div className="flex items-center w-full gap-1 p-1 transition-all duration-200 ease-in-out bg-muted rounded-xl">
 			<button
@@ -28,7 +30,7 @@ const CalendarTabSelector: React.FC<CalendarTabSelectorProps> = ({
 					}`}
 			>
 				<BiCalendar size={12} />
-				<span>تقویم</span>
+				<span>{t('widgets.calendar.tabCalendar')}</span>
 			</button>
 
 			<button
@@ -41,7 +43,7 @@ const CalendarTabSelector: React.FC<CalendarTabSelectorProps> = ({
 					}`}
 			>
 				<BiLogoGoogle size={12} />
-				<span>گوگل‌کلندر</span>
+				<span>{t('widgets.calendar.tabGoogle')}</span>
 			</button>
 		</div>
 	)

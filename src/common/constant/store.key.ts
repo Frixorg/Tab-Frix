@@ -20,6 +20,7 @@ import type { ExtensionConfigResponse } from '@/services/config-data/config_data
 import type { FetchedCurrency } from '@/services/hooks/currency/getCurrencyByCode.hook'
 import type { RecommendedSite, TrendItem } from '@/services/hooks/trends/getTrends'
 import type { UserProfile } from '@/services/hooks/user/userService.hook'
+import type { Language } from '@/i18n/types'
 import type { StoredWallpaper, Wallpaper } from '../wallpaper.interface'
 import type { Todo } from '@/services/hooks/todo/todo.interface'
 
@@ -80,6 +81,14 @@ export interface StorageKV {
 	petState: boolean
 	showNewBadgeForReOrderWidgets: boolean
 	navbarVisible: boolean
+	locale: Language
+	dashboardLayout: {
+		version: number
+		layouts: Record<
+			string,
+			{ i: string; x: number; y: number; w: number; h: number }[]
+		>
+	}
 	todoFilter: string
 	todoSort: string
 	[key: `removed_notification_${string}`]: string

@@ -32,6 +32,7 @@ export default defineConfig({
 		}) as any,
 	alias: {
 		'@/common': './src/common',
+		'@/i18n': './src/i18n',
 		'@/analytics': './src/analytics',
 		'@/services': './src/services',
 		'@/components': './src/components',
@@ -49,9 +50,9 @@ export default defineConfig({
 	],
 	manifest: {
 		version: '1.0.97',
-		name: 'Widgetify',
+		name: 'Tab Frix',
 		description:
-			'Transform your new tab into a smart dashboard with Widgetify! Get currency rates, crypto prices, weather & more.',
+			'Transform your new tab into a smart dashboard with Tab Frix! Get currency rates, crypto prices, weather & more.',
 		permissions: ['storage', 'search'],
 		optional_permissions: ['tabs', 'tabGroups', 'bookmarks', 'identity'],
 		browser_specific_settings: {
@@ -60,7 +61,7 @@ export default defineConfig({
 			},
 		},
 		action: {
-			default_title: 'Open Widgetify Dashboard',
+			default_title: 'Open Tab Frix Dashboard',
 			default_icon: {
 				16: 'icons/icon16.png',
 				32: 'icons/icon32.png',

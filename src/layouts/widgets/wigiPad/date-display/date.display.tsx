@@ -6,8 +6,10 @@ import { WidgetTabKeys } from '@/layouts/widgets-settings/constant/tab-keys'
 import { type WigiPadDateSetting, WigiPadDateType } from './date-setting.interface'
 import { GregorianDate } from './dates/gregorian.date'
 import { JalaliDate } from './dates/jalali.date'
+import { useLanguage } from '@/context/language.context'
 
 export function DateDisplay() {
+	const { lang } = useLanguage()
 	const [wigiPadDateSettings, setWigiPadDateSettings] =
 		useState<WigiPadDateSetting | null>(null)
 	useEffect(() => {
@@ -17,7 +19,10 @@ export function DateDisplay() {
 				setWigiPadDateSettings(wigiPadDateFromStore)
 			} else {
 				setWigiPadDateSettings({
-					dateType: WigiPadDateType.Jalali,
+					dateType:
+						lang === 'fa'
+							? WigiPadDateType.Jalali
+							: WigiPadDateType.Gregorian,
 				})
 			}
 		}

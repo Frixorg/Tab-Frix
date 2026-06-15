@@ -1,13 +1,14 @@
 import { SectionPanel } from '@/components/section-panel'
 import React from 'react'
 import { useEffect, useState } from 'react'
+import { useLanguage } from '@/context/language.context'
 
 interface Shortcut {
 	id: string
 	windowsKey: string
 	macKey: string
-	description: string
-	category: string
+	descriptionKey: string
+	categoryKey: string
 }
 
 // Helper function to format keyboard shortcuts
@@ -21,6 +22,7 @@ const formatShortcut = (shortcutText: string) => {
 }
 
 export function ShortcutsTab() {
+	const { t, dir } = useLanguage()
 	const [isMac, setIsMac] = useState(false)
 
 	useEffect(() => {
@@ -32,61 +34,59 @@ export function ShortcutsTab() {
 			id: 'open_bookmark_new_tab',
 			windowsKey: 'CTRL + Left-click',
 			macKey: '⌘ + Left-click',
-			description: 'باز کردن بوکمارک در تب جدید',
-			category: 'بوکمارک‌ها',
+			descriptionKey: 'settings.shortcuts.items.openBookmarkNewTab',
+			categoryKey: 'settings.shortcuts.categories.bookmarks',
 		},
 		{
 			id: 'open_bookmark_middle_click',
 			windowsKey: 'Middle-click',
 			macKey: 'Middle-click',
-			description: 'باز کردن بوکمارک در تب جدید با دکمه اسکرول',
-			category: 'بوکمارک‌ها',
+			descriptionKey: 'settings.shortcuts.items.openBookmarkMiddle',
+			categoryKey: 'settings.shortcuts.categories.bookmarks',
 		},
 		{
 			id: 'open_all_bookmarks',
 			windowsKey: 'CTRL + Left-click',
 			macKey: '⌘ + Left-click',
-			description: 'باز کردن همه بوکمارک‌های یک پوشه',
-			category: 'بوکمارک‌ها',
+			descriptionKey: 'settings.shortcuts.items.openAllBookmarks',
+			categoryKey: 'settings.shortcuts.categories.bookmarks',
 		},
 		{
 			id: 'toggle_theme',
 			windowsKey: 'CTRL + ALT + T',
 			macKey: '⌘ + ALT + T',
-			description: 'تغییر تم',
-			category: 'ظاهری',
+			descriptionKey: 'settings.shortcuts.items.toggleTheme',
+			categoryKey: 'settings.shortcuts.categories.appearance',
 		},
 		{
-			id: 'toggle_theme',
+			id: 'toggle_ui',
 			windowsKey: 'CTRL + ALT + Y',
 			macKey: '⌘ + ALT + Y',
-			description: 'تغییر رابط کاربری',
-			category: 'ظاهری',
+			descriptionKey: 'settings.shortcuts.items.toggleUI',
+			categoryKey: 'settings.shortcuts.categories.appearance',
 		},
 	]
 
 	const categories = shortcuts.reduce(
 		(acc, shortcut) => {
-			if (!acc[shortcut.category]) {
-				acc[shortcut.category] = []
+			if (!acc[shortcut.categoryKey]) {
+				acc[shortcut.categoryKey] = []
 			}
-			acc[shortcut.category].push(shortcut)
+			acc[shortcut.categoryKey].push(shortcut)
 			return acc
 		},
 		{} as Record<string, Shortcut[]>
 	)
 	return (
-		<div className="w-full max-w-xl mx-auto" dir="rtl">
-			<SectionPanel title="کلیدهای میانبر" delay={0.1}>
+		<div className="w-full max-w-xl mx-auto" dir={dir}>
+			<SectionPanel title={t('settings.shortcuts.title')} delay={0.1}>
 				<div className="space-y-5">
-					<p className="text-muted">
-						کلیدهای میانبر افزونه ویجتیفای برای استفاده راحت‌تر و سریع‌تر
-					</p>
+					<p className="text-muted">{t('settings.shortcuts.description')}</p>
 
-					{Object.entries(categories).map(([category, categoryShortcuts]) => (
-						<div key={category} className="mb-6">
+					{Object.entries(categories).map(([categoryKey, categoryShortcuts]) => (
+						<div key={categoryKey} className="mb-6">
 							<h3 className={'text-base font-medium mb-3 text-content'}>
-								{category}
+								{t(categoryKey)}
 							</h3>
 							<div className="space-y-2">
 								{categoryShortcuts.map((shortcut) => (
@@ -97,7 +97,7 @@ export function ShortcutsTab() {
 										}
 									>
 										<span className={'text-content'}>
-											{shortcut.description}
+											{t(shortcut.descriptionKey)}
 										</span>
 										<div
 											className={'px-3 py-1 text-sm font-mono'}

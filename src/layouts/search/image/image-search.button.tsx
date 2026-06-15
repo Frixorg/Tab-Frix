@@ -1,14 +1,16 @@
 import Analytics from '@/analytics'
 import Tooltip from '@/components/toolTip'
 
+import { useLanguage } from '@/context/language.context'
 export function ImageSearchButton({ onClick }: { onClick: () => void }) {
+	const { t } = useLanguage()
 	const onClickHandle = () => {
 		Analytics.event('searchbox_open_image_search')
 		onClick()
 	}
 
 	return (
-		<Tooltip content="جستجوی با تصویر">
+		<Tooltip content={t('widgets.search.byImage')}>
 			<button
 				type="button"
 				onClick={() => onClickHandle()}

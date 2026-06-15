@@ -15,11 +15,13 @@ interface ImageSearchPortalProps {
 	portalRef: React.RefObject<HTMLDivElement | null>
 }
 
+import { useLanguage } from '@/context/language.context'
 export function ImageSearchPortal({
 	onClose,
 	portalStyles,
 	portalRef,
 }: ImageSearchPortalProps) {
+	const { t } = useLanguage()
 	const [isUploading, setIsUploading] = useState(false)
 	const [imageUrl, setImageUrl] = useState('')
 	const fileInputRef = useRef<HTMLInputElement>(null)
@@ -27,12 +29,12 @@ export function ImageSearchPortal({
 
 	const handleUpload = async (file: File) => {
 		if (!file.type.startsWith('image/')) {
-			showToast('لطفاً فقط فایل تصویری انتخاب کنید', 'error')
+			showToast(t('widgets.search.imageOnlyFiles'), 'error')
 			return
 		}
 
 		if (file.size > 1 * 1024 * 1024) {
-			showToast('حجم فایل نباید بیشتر از ۱ مگابایت باشد', 'error')
+			showToast(t('widgets.search.imageMaxSize'), 'error')
 			return
 		}
 
@@ -90,7 +92,7 @@ export function ImageSearchPortal({
 			>
 				<div className="flex items-center justify-between px-2 mb-4">
 					<span className="text-sm font-black text-base-content/80">
-						جستجوی تصویر با گوگل
+						{t('widgets.search.imageTitle')}
 					</span>
 					<div className="flex flex-row items-center gap-1">
 						<a
@@ -161,9 +163,9 @@ export function ImageSearchPortal({
 								</svg>
 							</div>
 							<p className="text-xs font-bold text-base-content/60">
-								یک تصویر را اینجا بکشید یا{' '}
+								{t('widgets.search.imageDrag')}{' '}
 								<span className="text-primary hover:underline">
-									فایل را انتخاب کنید
+									{t('widgets.search.imageChoose')}
 								</span>
 							</p>
 							{isUploading && (
@@ -181,8 +183,8 @@ export function ImageSearchPortal({
 										<div className="flex flex-col items-center gap-1">
 											<span className="text-xs font-black text-base-content">
 												{uploadProgress < 100
-													? 'در حال ارسال تصویر...'
-													: 'در حال جستجو در گوگل...'}
+													? t('widgets.search.imageUploading')
+													: t('widgets.search.imageSearching')}
 											</span>
 											<span className="text-[10px] font-bold text-base-content/40 tracking-widest">
 												{uploadProgress}%
@@ -208,7 +210,7 @@ export function ImageSearchPortal({
 							type="url"
 							value={imageUrl}
 							onChange={(v) => setImageUrl(v)}
-							placeholder="لینک تصویر را پیست کنید..."
+							placeholder={t('widgets.search.imageLinkPlaceholder')}
 							className="flex-1 py-2 text-xs bg-transparent border-none! outline-none! ring-transparent! focus:placeholder:opacity-50"
 							onKeyDown={(e) => e.key === 'Enter' && handleUrlSearch()}
 							direction={imageUrl ? 'auto' : 'rtl'}
@@ -219,7 +221,7 @@ export function ImageSearchPortal({
 							isPrimary={true}
 							className="w-20 rounded-2xl"
 						>
-							جستجو
+							{t('common.search')}
 						</Button>
 					</div>
 				</div>

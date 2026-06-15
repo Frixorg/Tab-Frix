@@ -10,19 +10,21 @@ import {
 import { ItemSelector } from '../../../components/item-selector'
 import { WidgetSettingWrapper } from '../widget-settings-wrapper'
 import { useAppearanceSetting } from '@/context/appearance.context'
+import { useLanguage } from '@/context/language.context'
 
 export function ManageWidgets() {
 	const { isAuthenticated } = useAuth()
 	const { ui } = useAppearanceSetting()
+	const { t } = useLanguage()
 	const { visibility, toggleWidget } = useWidgetVisibility()
 	return (
 		<WidgetSettingWrapper>
 			{ui === 'SIMPLE' && (
 				<div className="alert alert-warning rounded-2xl ring-4 ring-warning/10">
-					در حالت ظاهری ساده، امکان مدیریت ویجت ها نیست!
+					{t('widgets.manage.simpleModeError')}
 				</div>
 			)}
-			<SectionPanel title="انتخاب ویجت‌ها برای نمایش" size="sm">
+			<SectionPanel title={t('widgets.manage.selectTitle')} size="sm">
 				<div
 					className={`grid grid-cols-2 gap-2 ${ui === 'SIMPLE' ? 'pointer-events-none blur-xs' : ''}`}
 				>
@@ -54,6 +56,7 @@ function WidgetItemComponent({
 	toggleWidget,
 	isAuthenticated,
 }: WidgetItemComponentProps) {
+	const { t } = useLanguage()
 	const isActive = visibility.includes(widget.id)
 	const canToggle =
 		isAuthenticated || isActive || visibility.length < MAX_VISIBLE_WIDGETS
@@ -82,24 +85,24 @@ function WidgetItemComponent({
 					<span
 						className={`text-xs ${!finalCanToggle ? 'text-muted' : ''} truncate`}
 					>
-						{widget.emoji} {widget.label}
+						{widget.emoji} {t(`widgets.names.${widget.id}`)}
 					</span>
 					<div className="flex gap-0.5">
 						{widget.isNew && (
 							<span className="text-white badge badge-primary badge-xs">
-								جدید
+								{t('common.new')}
 							</span>
 						)}
 						{widget.popular && (
 							<span className="badge badge-success badge-soft badge-sm">
-								محبوب
+								{t('widgets.manage.badgePopular')}
 							</span>
 						)}
 						{isDisabled && (
-							<span className="badge badge-error badge-xs">غیرفعال</span>
+							<span className="badge badge-error badge-xs">{t('widgets.manage.badgeDisabled')}</span>
 						)}
 						{isSoon && (
-							<span className="badge badge-warning badge-xs">به زودی</span>
+							<span className="badge badge-warning badge-xs">{t('widgets.manage.badgeSoon')}</span>
 						)}
 					</div>
 				</div>

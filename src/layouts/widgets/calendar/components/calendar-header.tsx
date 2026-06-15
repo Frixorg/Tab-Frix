@@ -1,4 +1,5 @@
 import { useGeneralSetting } from '@/context/general-setting.context'
+import { useLanguage } from '@/context/language.context'
 import type React from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import { TfiBackRight } from 'react-icons/tfi'
@@ -18,35 +19,44 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 	goToToday,
 }) => {
 	const { selected_timezone: timezone } = useGeneralSetting()
+	const { lang } = useLanguage()
+	const isJalali = lang === 'fa'
 
 	const isCurrentMonthToday = () => {
 		const realToday = getCurrentDate(timezone.value)
-		return (
-			currentDate.jMonth() === realToday.jMonth() &&
-			currentDate.jYear() === realToday.jYear()
-		)
+		return isJalali
+			? currentDate.jMonth() === realToday.jMonth() &&
+					currentDate.jYear() === realToday.jYear()
+			: currentDate.month() === realToday.month() &&
+					currentDate.year() === realToday.year()
 	}
 
 	const isTodaySelected = () => {
 		const realToday = getCurrentDate(timezone.value)
-		return (
-			selectedDate.jDate() === realToday.jDate() &&
-			selectedDate.jMonth() === realToday.jMonth() &&
-			selectedDate.jYear() === realToday.jYear()
-		)
+		return isJalali
+			? selectedDate.jDate() === realToday.jDate() &&
+					selectedDate.jMonth() === realToday.jMonth() &&
+					selectedDate.jYear() === realToday.jYear()
+			: selectedDate.date() === realToday.date() &&
+					selectedDate.month() === realToday.month() &&
+					selectedDate.year() === realToday.year()
 	}
 
 	const showTodayButton = !isCurrentMonthToday() || !isTodaySelected()
 
 	const changeMonth = (delta: number) => {
 		// @ts-ignore
-		setCurrentDate((prev: jalaliMoment.Moment) => prev.clone().add(delta, 'jMonth'))
+		setCurrentDate((prev: jalaliMoment.Moment) =>
+			prev.clone().add(delta, isJalali ? 'jMonth' : 'month')
+		)
 	}
 
 	return (
 		<div className="flex items-center justify-between">
 			<h3 className={'font-medium text-xs text-content'}>
-				{currentDate.format('dddd، jD jMMMM jYYYY')}
+				{isJalali
+					? currentDate.format('dddd، jD jMMMM jYYYY')
+					: currentDate.clone().locale('en').format('dddd, D MMMM YYYY')}
 			</h3>{' '}
 			<div className="flex gap-0.5">
 				{showTodayButton && (

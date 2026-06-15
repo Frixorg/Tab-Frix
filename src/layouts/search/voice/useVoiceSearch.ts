@@ -1,3 +1,4 @@
+import { useLanguage } from '@/context/language.context'
 import { useRef, useState } from 'react'
 import Analytics from '@/analytics'
 import { showToast } from '@/common/toast'
@@ -21,6 +22,7 @@ export function useVoiceSearch(
 	onResult: (transcript: string) => void,
 	language: string = 'fa-IR'
 ): UseVoiceSearchReturn {
+	const { t } = useLanguage()
 	const [isListening, setIsListening] = useState(false)
 	const [currentTranscript, setCurrentTranscript] = useState('')
 	const recognitionRef = useRef<any>(null)
@@ -29,7 +31,7 @@ export function useVoiceSearch(
 		const SpeechRecognition =
 			window.SpeechRecognition || window.webkitSpeechRecognition
 		if (!SpeechRecognition) {
-			showToast('مرورگر شما از جستجوی صوتی پشتیبانی نمی‌کند.', 'error')
+			showToast(t('widgets.search.voiceUnsupported'), 'error')
 			return null
 		}
 

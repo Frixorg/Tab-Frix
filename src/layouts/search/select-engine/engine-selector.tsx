@@ -8,12 +8,13 @@ import { type EngineMeta, useGetSearchboxData } from '@/services/hooks/trends/ge
 import type { ReactNode } from 'react'
 import { useState, useEffect, useMemo } from 'react'
 import { FcGoogle } from 'react-icons/fc'
+import { useLanguage } from '@/context/language.context'
 import { HiChevronDown } from 'react-icons/hi2'
 
 const GOOGLE: EngineMeta = {
 	id: 'google',
 	prefix: '',
-	label: 'گوگل',
+	label: 'Google',
 	icon: '',
 }
 
@@ -23,6 +24,7 @@ type EngineSelectorProps = {
 }
 
 export function EngineSelector({ trigger, onSelected }: EngineSelectorProps) {
+	const { t } = useLanguage()
 	const { isAuthenticated } = useAuth()
 	const { data: searchboxData, isLoading } = useGetSearchboxData({ enabled: true })
 	const changeEngineMutation = useChangeSearchEngine()
@@ -110,7 +112,7 @@ export function EngineSelector({ trigger, onSelected }: EngineSelectorProps) {
 		>
 			<div className="flex flex-col gap-1 p-2 min-w-40">
 				<p className="px-2 mb-1 text-xs font-medium text-base-content/60">
-					انتخاب موتور جستجو
+					{t('widgets.search.selectEngine')}
 				</p>
 
 				{engines.map((engine) => (

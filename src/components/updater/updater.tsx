@@ -148,7 +148,7 @@ export function UpdateChecker() {
 				<div className="flex flex-col gap-4 p-2 mt-4">
 					<div className="space-y-2 text-center">
 						<h3 className="text-lg font-semibold">
-							بروزرسانی جدید ویجتیفای منتشر شد!
+							بروزرسانی جدید تب فریکس منتشر شد!
 						</h3>
 						<div
 							className={

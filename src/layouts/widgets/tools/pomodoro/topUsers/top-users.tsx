@@ -8,7 +8,9 @@ import { TopUserItem } from './top-user-item'
 interface TopUsersTabProps {
 	type: TopUsersType
 }
+import { useLanguage } from '@/context/language.context'
 export const TopUsersTab: React.FC<TopUsersTabProps> = ({ type }) => {
+	const { t } = useLanguage()
 	const { data, isLoading, error } = useGetTopUsers(type)
 	const [activeProfileId, setActiveProfileId] = useState<string | null>(null)
 
@@ -23,7 +25,7 @@ export const TopUsersTab: React.FC<TopUsersTabProps> = ({ type }) => {
 	if (error) {
 		return (
 			<div className="p-4 font-bold text-center text-error bg-error/20 rounded-2xl">
-				خطا در بارگذاری داده‌ها
+				{t('widgets.pomodoro.loadError')}
 			</div>
 		)
 	}
@@ -31,7 +33,7 @@ export const TopUsersTab: React.FC<TopUsersTabProps> = ({ type }) => {
 	if (!data?.tops || data.tops.length === 0) {
 		return (
 			<div className="p-4 font-bold text-center text-primary bg-primary/20 rounded-2xl">
-				لیست کاربران خالی است
+				{t('widgets.pomodoro.emptyList')}
 			</div>
 		)
 	}

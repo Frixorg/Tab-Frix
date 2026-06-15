@@ -8,6 +8,7 @@ interface Prop {
 	setShowRequireNotificationModal: (value: boolean) => void
 	startPomodoro: () => void
 }
+import { useLanguage } from '@/context/language.context'
 export function RequestNotificationModal({
 	showRequireNotificationModal,
 	setShowRequireNotificationModal,
@@ -18,20 +19,22 @@ export function RequestNotificationModal({
 			Analytics.event('view_request_notification_modal')
 	}, [showRequireNotificationModal])
 
+	const { t } = useLanguage()
+
 	async function onRequestPermission() {
 		try {
 			const perm = await Notification.requestPermission()
 			if (perm === 'granted') {
-				showToast('اعلان‌ها با موفقیت فعال شدند!', 'success')
+				showToast(t('widgets.pomodoro.notifEnabled'), 'success')
 				setShowRequireNotificationModal(false)
 				startPomodoro()
 				Analytics.event('grant_notification_permission')
 			} else {
-				showToast('برای شروع باید اعلان‌ها را فعال کنید.', 'error')
+				showToast(t('widgets.pomodoro.notifNeeded'), 'error')
 				Analytics.event('deny_notification_permission')
 			}
 		} catch {
-			showToast('خطا در درخواست دسترسی اعلان‌ها.', 'error')
+			showToast(t('widgets.pomodoro.notifError'), 'error')
 		}
 	}
 
@@ -40,7 +43,7 @@ export function RequestNotificationModal({
 			isOpen={showRequireNotificationModal}
 			onClose={() => setShowRequireNotificationModal(false)}
 			size="sm"
-			title="فعال کردن اعلان‌ها"
+			title={t('widgets.pomodoro.notifTitle')}
 			direction="rtl"
 		>
 			<div className="p-4 max-h-[80vh] overflow-y-auto">
@@ -48,7 +51,7 @@ export function RequestNotificationModal({
 					{/* Type badge and title */}
 					<div className="flex items-start justify-between mb-3">
 						<h3 className="text-xl font-bold text-content">
-							می‌خواهیم به شما یادآوری کنیم!
+							{t('widgets.pomodoro.notifHeading')}
 						</h3>
 					</div>
 
@@ -58,11 +61,11 @@ export function RequestNotificationModal({
 								src={
 									'https://cdn.widgetify.ir/extension/pomodoroTimer-notification.png'
 								}
-								alt={'نمونه اعلان'}
+								alt={t('widgets.pomodoro.notifSampleAlt')}
 								className="object-cover w-full h-auto"
 							/>
 							<p className="p-2 text-xs text-center text-muted bg-content/30">
-								نمونه اعلان که دریافت خواهید کرد
+								{t('widgets.pomodoro.notifSampleCaption')}
 							</p>
 						</div>
 					</div>
@@ -70,9 +73,7 @@ export function RequestNotificationModal({
 					{/* Content */}
 					<div className="mt-2">
 						<p className="leading-relaxed text-justify text-muted">
-							برای اینکه به شما یادآوری کنیم، نیاز داریم اعلان‌ها را فعال
-							کنید. این کار باعث می‌شود هیچ تایمری یا یادآوری مهمی را از دست
-							ندهید.
+							{t('widgets.pomodoro.notifBody')}
 						</p>
 					</div>
 				</article>
@@ -86,7 +87,7 @@ export function RequestNotificationModal({
 						className="flex-1 px-4 py-2 text-sm font-medium transition-colors border rounded-2xl border-content text-content"
 						size="md"
 					>
-						فعلاً نه
+						{t('widgets.pomodoro.notLater')}
 					</Button>
 					<Button
 						isPrimary={true}
@@ -94,7 +95,7 @@ export function RequestNotificationModal({
 						onClick={onRequestPermission}
 						className="flex-1 px-4 py-2 text-sm font-medium text-white transition-colors rounded-2xl"
 					>
-						فعال کردن اعلان‌ها
+						{t('widgets.pomodoro.notifTitle')}
 					</Button>
 				</div>
 			</div>

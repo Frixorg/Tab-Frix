@@ -5,23 +5,24 @@ import { callEvent } from '@/common/utils/call-event'
 import { CheckBoxWithDescription } from '@/components/checkbox-description.component'
 import { ItemSelector } from '@/components/item-selector'
 import { type ClockSettings, ClockType } from './clock-setting.interface'
-
-const CLOCK_OPTIONS = [
-	{
-		key: 'digital',
-		label: 'ساعت دیجیتال',
-		description: 'نمایش ساعت به صورت عددی',
-		value: ClockType.Digital as const,
-	},
-	{
-		key: 'analog',
-		label: 'ساعت آنالوگ',
-		description: 'نمایش ساعت به صورت عقربه‌ای',
-		value: ClockType.Analog as const,
-	},
-]
+import { useLanguage } from '@/context/language.context'
 
 export function ClockSetting() {
+	const { t } = useLanguage()
+	const CLOCK_OPTIONS = [
+		{
+			key: 'digital',
+			label: t('widgets.wigiPad.digitalLabel'),
+			description: t('widgets.wigiPad.digitalDesc'),
+			value: ClockType.Digital as const,
+		},
+		{
+			key: 'analog',
+			label: t('widgets.wigiPad.analogLabel'),
+			description: t('widgets.wigiPad.analogDesc'),
+			value: ClockType.Analog as const,
+		},
+	]
 	const [clockSettings, setClockSettings] = useState<ClockSettings>({
 		clockType: ClockType.Digital,
 		showSeconds: true,
@@ -82,7 +83,7 @@ export function ClockSetting() {
 	return (
 		<div className="space-y-3">
 			<div>
-				<p className="mb-3 text-sm text-muted">نوع نمایش ساعت را انتخاب کنید:</p>
+				<p className="mb-3 text-sm text-muted">{t('widgets.wigiPad.clockPrompt')}</p>
 				<div className="flex gap-2">
 					{CLOCK_OPTIONS.map((option) => (
 						<ItemSelector
@@ -101,22 +102,22 @@ export function ClockSetting() {
 				<CheckBoxWithDescription
 					isEnabled={clockSettings.showSeconds}
 					onToggle={onToggleSeconds}
-					title="نمایش ثانیه"
-					description="نمایش ثانیه در ساعت دیجیتال"
+					title={t('widgets.wigiPad.showSeconds')}
+					description={t('widgets.wigiPad.showSecondsDesc')}
 				/>
 
 				<CheckBoxWithDescription
 					isEnabled={clockSettings.showTimeZone}
 					onToggle={onToggleTimeZone}
-					title="نمایش منطقه زمانی"
-					description="نمایش نام منطقه زمانی زیر ساعت"
+					title={t('widgets.wigiPad.showTimeZone')}
+					description={t('widgets.wigiPad.showTimeZoneDesc')}
 				/>
 
 				<CheckBoxWithDescription
 					isEnabled={clockSettings.useSelectedFont ?? false}
 					onToggle={onToggleUseSelectedFont}
-					title="استفاده از فونت انتخابی"
-					description="استفاده از فونت انتخابی در تنظیمات برای نمایش ساعت"
+					title={t('widgets.wigiPad.useFont')}
+					description={t('widgets.wigiPad.useFontDesc')}
 				/>
 			</div>
 		</div>

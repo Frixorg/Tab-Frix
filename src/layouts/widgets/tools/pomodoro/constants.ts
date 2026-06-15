@@ -1,11 +1,11 @@
 import type { TimerMode } from './types'
 
 export const modeLabels: Record<TimerMode, string> = {
-	work: 'کار',
-	'short-break': 'کوتاه',
+	work: 'widgets.pomodoro.modeWork',
+	'short-break': 'widgets.pomodoro.modeShort',
 }
 
 export const modeFullLabels: Record<TimerMode, string> = {
-	work: 'زمان کار',
-	'short-break': 'استراحت کوتاه',
+	work: 'widgets.pomodoro.modeWorkFull',
+	'short-break': 'widgets.pomodoro.modeShortFull',
 }

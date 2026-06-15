@@ -5,6 +5,7 @@ import { callEvent } from '@/common/utils/call-event'
 import { ItemSelector } from '@/components/item-selector'
 import { SectionPanel } from '@/components/section-panel'
 import { useAppearanceSetting } from '@/context/appearance.context'
+import { useLanguage } from '@/context/language.context'
 import type { UserInventoryItem } from '@/services/hooks/market/market.interface'
 
 interface FontItem {
@@ -13,35 +14,20 @@ interface FontItem {
 	description?: string
 }
 
-const defaultFonts: FontItem[] = [
-	{
-		value: 'Vazir',
-		label: 'وزیر',
-		description: 'وقتی بچه بودم می‌خواستم بزرگ بشم!',
-	},
-	{
-		value: 'Samim',
-		label: 'صمیم',
-		description: 'وقتی بچه بودم می‌خواستم بزرگ بشم!',
-	},
-	{
-		value: 'Pofak',
-		label: 'پفـک',
-		description: 'وقتی بچه بودم می‌خواستم بزرگ بشم!',
-	},
-	{
-		value: 'rooyin',
-		label: 'رویین',
-		description: 'وقتی بچه بودم می‌خواستم بزرگ بشم!',
-	},
-]
-
 interface FontSelectorProps {
 	fetched_fonts: UserInventoryItem[]
 }
 
 export function FontSelector({ fetched_fonts }: FontSelectorProps) {
+	const { t } = useLanguage()
 	const { fontFamily, setFontFamily } = useAppearanceSetting()
+
+	const defaultFonts: FontItem[] = [
+		{ value: 'Vazir', label: t('settings.appearance.font.vazir') },
+		{ value: 'Samim', label: t('settings.appearance.font.samim') },
+		{ value: 'Pofak', label: t('settings.appearance.font.pofak') },
+		{ value: 'rooyin', label: t('settings.appearance.font.rooyin') },
+	]
 
 	const [fonts, setFonts] = useState<FontItem[]>(defaultFonts)
 
@@ -49,8 +35,8 @@ export function FontSelector({ fetched_fonts }: FontSelectorProps) {
 		if (fetched_fonts.length) {
 			const mapped: FontItem[] = fetched_fonts.map((item) => ({
 				value: item.value,
-				label: item.name ?? 'بدون نام',
-				description: item?.description || 'فونت خریداری شده',
+				label: item.name ?? t('common.noName'),
+				description: item?.description || t('settings.appearance.font.purchased'),
 			}))
 			setFonts([...defaultFonts, ...mapped])
 		}
@@ -63,14 +49,14 @@ export function FontSelector({ fetched_fonts }: FontSelectorProps) {
 
 	const renderFontPreview = ({ value }: FontItem) => (
 		<span className="text-lg truncate" style={{ fontFamily: value }}>
-			دریاچه‌ای از آرامش
+			{t('settings.appearance.font.preview')}
 		</span>
 	)
 	return (
-		<SectionPanel title="فونت افزونه" delay={0.15} size="sm">
+		<SectionPanel title={t('settings.appearance.font.title')} delay={0.15} size="sm">
 			<div className="space-y-3">
 				<p className={'text-xs text-muted'}>
-					فونت مورد نظر خود را برای نمایش در تمامی بخش‌های افزونه انتخاب کنید:
+					{t('settings.appearance.font.description')}
 				</p>
 				<div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
 					{fonts.map((font) => (
@@ -89,7 +75,7 @@ export function FontSelector({ fetched_fonts }: FontSelectorProps) {
 						onClick={() => handleMoreClick()}
 					>
 						<FiShoppingBag size={18} />
-						<span>فروشگاه</span>
+						<span>{t('common.store')}</span>
 					</div>
 				</div>
 			</div>

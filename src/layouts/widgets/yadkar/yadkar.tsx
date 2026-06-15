@@ -5,9 +5,11 @@ import { TodosLayout } from '../todos/todos'
 import { TabNavigation } from '@/components/tab-navigation'
 import { HiOutlineCheckCircle, HiOutlineDocumentText } from 'react-icons/hi2'
 import { WidgetContainer } from '../widget-container'
+import { useLanguage } from '@/context/language.context'
 
 export function YadkarWidget() {
 	const [tab, setTab] = useState<'todos' | 'notes'>('todos')
+	const { t } = useLanguage()
 
 	const onChangeTab = (newTab: 'todos' | 'notes') => {
 		setTab(newTab)
@@ -26,12 +28,12 @@ export function YadkarWidget() {
 							tabs={[
 								{
 									id: 'todos',
-									label: 'تسک‌ها',
+									label: t('widgets.yadkar.tasks'),
 									icon: <HiOutlineCheckCircle size={14} />,
 								},
 								{
 									id: 'notes',
-									label: 'یادداشت',
+									label: t('widgets.yadkar.notes'),
 									icon: <HiOutlineDocumentText size={14} />,
 								},
 							]}

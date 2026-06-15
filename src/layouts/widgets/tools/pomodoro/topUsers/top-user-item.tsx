@@ -9,6 +9,7 @@ interface TopUserItemProps {
 	setActiveProfileId: (id: string | null) => void
 	activeProfileId: string | null
 }
+import { useLanguage } from '@/context/language.context'
 export function TopUserItem({
 	user,
 	rank,
@@ -25,14 +26,15 @@ export function TopUserItem({
 
 	const style = rank <= 3 ? 'bg-success/10 text-success' : 'bg-primary/10 text-primary'
 
+	const { t } = useLanguage()
 	const convertToHours = (duration: number) => {
 		const hours = Math.floor(duration / 60)
 		const minutes = duration % 60
-		return `${hours} ساعت و ${minutes} دقیقه`
+		return t('widgets.pomodoro.hoursMinutes', { hours, minutes })
 	}
 
 	const duration: string =
-		user.duration > 500 ? convertToHours(user.duration) : `${user.duration} دقیقه`
+		user.duration > 500 ? convertToHours(user.duration) : t('widgets.pomodoro.minutes', { minutes: user.duration })
 
 	return (
 		<>

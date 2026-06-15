@@ -1,9 +1,10 @@
-import { useState } from 'react' // اضافه شد
+import { useState } from 'react'
+import { useLanguage } from '@/context/language.context'
 import { PRIORITY_OPTIONS } from '@/common/constant/priority_options'
 import type { FetchedNote } from '@/services/hooks/note/note.interface'
 import moment from 'jalali-moment'
 import { FiCalendar } from 'react-icons/fi'
-import { HiChevronDown } from 'react-icons/hi2' // آیکون برای dropdown
+import { HiChevronDown } from 'react-icons/hi2'
 import Analytics from '@/analytics'
 
 interface Prop {
@@ -12,6 +13,7 @@ interface Prop {
 }
 
 export function NoteItem({ note, handleNoteClick }: Prop) {
+	const { t } = useLanguage()
 	const p = PRIORITY_OPTIONS.find((p) => p.value === note.priority)
 	const [isExpanded, setIsExpanded] = useState(false)
 
@@ -34,7 +36,7 @@ export function NoteItem({ note, handleNoteClick }: Prop) {
 			<div className="flex items-center justify-between gap-2 px-2.5 py-1.5  rounded-t-2xl">
 				<div className="flex items-center gap-1.5 min-w-0">
 					<h3 className="text-[12px] font-bold">
-						{note.title || 'بدون عنوان'}
+						{note.title || t('common.noName')}
 					</h3>
 				</div>
 				<div className="flex items-center gap-1 shrink-0">

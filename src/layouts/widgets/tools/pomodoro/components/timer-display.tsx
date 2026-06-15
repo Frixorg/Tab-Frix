@@ -1,5 +1,6 @@
 import type React from 'react'
 import { modeFullLabels } from '../constants'
+import { useLanguage } from '@/context/language.context'
 import type { TimerMode } from '../types'
 
 export const modeColors = {
@@ -19,6 +20,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({
 	progress,
 	mode,
 }) => {
+	const { t } = useLanguage()
 	const formatTime = (seconds: number) => {
 		const mins = Math.floor(seconds / 60)
 		const secs = seconds % 60
@@ -79,7 +81,7 @@ export const TimerDisplay: React.FC<TimerDisplayProps> = ({
 					fill="currentColor"
 					className={'text-muted'}
 				>
-					{modeFullLabels[mode]}
+					{t(modeFullLabels[mode])}
 				</text>
 			</svg>{' '}
 		</div>

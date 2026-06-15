@@ -1,8 +1,10 @@
 import { SectionPanel } from '@/components/section-panel'
 import { useGeneralSetting } from '@/context/general-setting.context'
+import { useLanguage } from '@/context/language.context'
 import { useTimezones } from '@/services/hooks/timezone/getTimezones.hook'
 
 export function TimezoneSettings() {
+	const { t } = useLanguage()
 	const { selected_timezone: timezone, setTimezone } = useGeneralSetting()
 	const { data: timezones, isLoading, error } = useTimezones()
 	const handleSelectTimezone = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -12,10 +14,10 @@ export function TimezoneSettings() {
 	}
 
 	return (
-		<SectionPanel title="منطقه‌ی زمانی" delay={0.1}>
+		<SectionPanel title={t('settings.general.timezone.title')} delay={0.1}>
 			<div className="space-y-3">
 				<p className={'text-sm text-muted'}>
-					منطقه‌ی زمانی مورد نظر خود را انتخاب کنید.
+					{t('settings.general.timezone.description')}
 				</p>
 
 				<div className="relative">
@@ -26,7 +28,7 @@ export function TimezoneSettings() {
 							</div>
 						) : error ? (
 							<div className="w-full p-3 text-center text-red-500">
-								خطا در دریافت اطلاعات مناطق زمانی
+								{t('settings.general.timezone.fetchError')}
 							</div>
 						) : (
 							<select
@@ -37,7 +39,9 @@ export function TimezoneSettings() {
 								}
 							>
 								{!timezone && (
-									<option value="">انتخاب منطقه زمانی...</option>
+									<option value="">
+										{t('settings.general.timezone.placeholder')}
+									</option>
 								)}
 								{timezones?.map((tz) => (
 									<option

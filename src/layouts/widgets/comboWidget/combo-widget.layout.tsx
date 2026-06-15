@@ -8,6 +8,7 @@ import { NewsLayout } from '../news/news.layout'
 import { WidgetContainer } from '../widget-container'
 import { WigiArzLayout } from '../wigiArz/wigi_arz.layout'
 import { TabNavigation } from '@/components/tab-navigation'
+import { useLanguage } from '@/context/language.context'
 import { HiOutlineCurrencyBangladeshi, HiOutlineNewspaper } from 'react-icons/hi2'
 import { CgOptions } from 'react-icons/cg'
 
@@ -45,6 +46,8 @@ export function ComboWidget() {
 		load()
 	}, [])
 
+	const { t } = useLanguage()
+
 	if (!activeTab) return null
 
 	return (
@@ -57,12 +60,12 @@ export function ComboWidget() {
 					tabs={[
 						{
 							id: 'currency',
-							label: 'ارزها',
+							label: t('widgets.combo.currencies'),
 							icon: <HiOutlineCurrencyBangladeshi size={14} />,
 						},
 						{
 							id: 'news',
-							label: 'اخبار',
+							label: t('widgets.combo.news'),
 							icon: <HiOutlineNewspaper size={14} />,
 						},
 					]}

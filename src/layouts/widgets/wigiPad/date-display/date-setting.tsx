@@ -4,23 +4,24 @@ import { getFromStorage, setToStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
 import { ItemSelector } from '@/components/item-selector'
 import { WigiPadDateType } from './date-setting.interface'
-
-const DateOptions = [
-	{
-		key: 'jalali',
-		label: 'هجری شمسی',
-		description: 'نمایش تاریخ به صورت هجری شمسی',
-		value: WigiPadDateType.Jalali as const,
-	},
-	{
-		key: 'gregorian',
-		label: 'تقویم میلادی',
-		description: 'نمایش تاریخ به صورت میلادی',
-		value: WigiPadDateType.Gregorian as const,
-	},
-]
+import { useLanguage } from '@/context/language.context'
 
 export function WigiPadDateSettingsModal() {
+	const { t, lang } = useLanguage()
+	const DateOptions = [
+		{
+			key: 'jalali',
+			label: t('widgets.wigiPad.jalaliLabel'),
+			description: t('widgets.wigiPad.jalaliDesc'),
+			value: WigiPadDateType.Jalali as const,
+		},
+		{
+			key: 'gregorian',
+			label: t('widgets.wigiPad.gregorianLabel'),
+			description: t('widgets.wigiPad.gregorianDesc'),
+			value: WigiPadDateType.Gregorian as const,
+		},
+	]
 	const [selectedType, setSelectedType] = useState<WigiPadDateType | null>()
 
 	useEffect(() => {
@@ -29,7 +30,11 @@ export function WigiPadDateSettingsModal() {
 			if (wigiPadDateFromStore) {
 				setSelectedType(wigiPadDateFromStore.dateType)
 			} else {
-				setSelectedType(WigiPadDateType.Jalali)
+				setSelectedType(
+					lang === 'fa'
+						? WigiPadDateType.Jalali
+						: WigiPadDateType.Gregorian
+				)
 			}
 		}
 
@@ -46,7 +51,7 @@ export function WigiPadDateSettingsModal() {
 	return (
 		<div className="space-y-3">
 			<div>
-				<p className="mb-3 text-sm text-muted">نوع نمایش تاریخ را انتخاب کنید:</p>
+				<p className="mb-3 text-sm text-muted">{t('widgets.wigiPad.datePrompt')}</p>
 
 				<div className="flex gap-2">
 					{DateOptions.map((option) => (

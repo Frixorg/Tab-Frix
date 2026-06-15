@@ -4,6 +4,7 @@ import Modal from '@/components/modal'
 import { safeAwait } from '@/services/api'
 import { useUpdateSearchAutocomplete } from '@/services/hooks/extension/updateSetting.hook'
 
+import { useLanguage } from '@/context/language.context'
 export function AutocompleteConsentModal({
 	isOpen,
 	onClose,
@@ -11,6 +12,7 @@ export function AutocompleteConsentModal({
 	isOpen: boolean
 	onClose: () => void
 }) {
+	const { t } = useLanguage()
 	const { mutateAsync, isPending } = useUpdateSearchAutocomplete()
 
 	const onUpdateStatus = async () => {
@@ -26,14 +28,13 @@ export function AutocompleteConsentModal({
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title="پیشنهادهای جستجو"
+			title={t('widgets.search.suggestionsTitle')}
 			size="sm"
 			direction="rtl"
 		>
 			<div className="flex flex-col gap-4 pt-1 searchbox-item">
 				<p className="px-1 text-sm leading-relaxed text-content">
-					با فعال کردن این گزینه، هنگام تایپ در باکس جستجو، پیشنهادها مستقیما از
-					گوگل دریافت می‌شوند. هیچ اطلاعاتی ذخیره نمی‌شود.
+					{t('settings.privacy.searchSuggestions.description')}
 				</p>
 				<div className="flex items-center justify-end gap-2 searchbox-item">
 					<Button
@@ -44,7 +45,7 @@ export function AutocompleteConsentModal({
 						}
 						disabled={isPending}
 					>
-						لغو
+						{t('common.cancel')}
 					</Button>
 					<Button
 						type="button"
@@ -57,7 +58,7 @@ export function AutocompleteConsentModal({
 							'btn btn-circle w-fit!  px-8 border-none shadow-none text-secondary rounded-xl transition-colors duration-300 ease-in-out'
 						}
 					>
-						قبوله، فعالسازی
+						{t('widgets.search.consentConfirm')}
 					</Button>
 				</div>
 			</div>

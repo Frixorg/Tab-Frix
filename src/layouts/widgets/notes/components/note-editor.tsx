@@ -3,6 +3,7 @@ import { Button } from '@/components/button/button'
 import { IconLoading } from '@/components/loading/icon-loading'
 import Tooltip from '@/components/toolTip'
 import { useNotes } from '@/context/notes.context'
+import { useLanguage } from '@/context/language.context'
 import type { FetchedNote } from '@/services/hooks/note/note.interface'
 import { useEffect, useRef, useState } from 'react'
 import { FiFlag } from 'react-icons/fi'
@@ -12,6 +13,7 @@ interface NoteEditorProps {
 }
 
 export function NoteEditor({ note }: NoteEditorProps) {
+	const { t } = useLanguage()
 	const { updateNote, isSaving } = useNotes()
 
 	const titleRef = useRef<HTMLInputElement>(null)
@@ -82,7 +84,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
 				className={
 					'w-full py-3 px-2 text-xs font-medium text-content rounded-xl bg-base-300/70 outline-none'
 				}
-				placeholder="عنوان یادداشت..."
+				placeholder={t('widgets.notes.titlePlaceholder')}
 				value={currentTitle}
 				onChange={(e) => handleInputChange('title', e.target.value, e.target)}
 				dir="rtl"
@@ -93,7 +95,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
 				className={
 					'w-full h-full px-2 pt-1 pb-4 text-sm flex-grow resize-none rounded-xl bg-base-300/70 outline-none font-light'
 				}
-				placeholder="متن یادداشت..."
+				placeholder={t('widgets.notes.textPlaceholder')}
 				value={currentBody}
 				onChange={(e) => handleInputChange('body', e.target.value, e.target)}
 				rows={3}
@@ -121,7 +123,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
 						isPrimary={true}
 						className="!p-0 !h-full !w-14  rounded-2xl !px-2"
 					>
-						<span className="!text-[12px]">ذخیـره</span>
+						<span className="!text-[12px]">{t('common.save')}</span>
 					</Button>
 				</div>
 			</div>

@@ -13,6 +13,7 @@ import { WeatherSetting } from '../widgets/weather/weather-setting'
 import { WigiArzSetting } from '../widgets/wigiArz/wigiArz-setting'
 import { WigiPadSetting } from '../widgets/wigiPad/wigiPad-setting'
 import { WidgetTabKeys } from './constant/tab-keys'
+import { useLanguage } from '@/context/language.context'
 import { ManageWidgets } from './manage-widgets/manage-widgets'
 
 interface WidgetSettingsModalProps {
@@ -20,55 +21,55 @@ interface WidgetSettingsModalProps {
 	onClose: () => void
 	selectedTab: string | null
 }
-const tabs: TabItem[] = [
-	{
-		parentName: 'مدیریت ویجت‌ها',
-		children: [
-			{
-				label: 'مدیریت ویجت ها',
-				element: <ManageWidgets />,
-				value: WidgetTabKeys.widget_management,
-				icon: <TbApps size={20} />,
-			},
-			{
-				label: 'ویجی پد',
-				element: <WigiPadSetting />,
-				value: WidgetTabKeys.wigiPad,
-				icon: <TbCalendarUser size={20} />,
-			},
-			{
-				label: 'ویجی ارز',
-				element: <WigiArzSetting />,
-				value: WidgetTabKeys.wigiArz,
-				icon: <TbCurrencyDollar size={20} />,
-			},
-			{
-				label: 'ویجی نیوز',
-				element: <RssFeedSetting />,
-				value: WidgetTabKeys.news_settings,
-				icon: <TbNews size={20} />,
-			},
-			{
-				label: 'ویجت آب و هوا',
-				element: <WeatherSetting />,
-				value: WidgetTabKeys.weather_settings,
-				icon: <TiWeatherCloudy size={20} />,
-			},
-			{
-				label: 'حیوان خانگی',
-				value: WidgetTabKeys.Pet,
-				icon: <MdPets size={20} />,
-				element: <PetSettings />,
-			},
-		],
-	},
-]
-
 export function WidgetSettingsModal({
 	isOpen,
 	onClose,
 	selectedTab,
 }: WidgetSettingsModalProps) {
+	const { t, dir } = useLanguage()
+	const tabs: TabItem[] = [
+		{
+			parentName: t('widgets.manage.groupTitle'),
+			children: [
+				{
+					label: t('settings.manageWidgets'),
+					element: <ManageWidgets />,
+					value: WidgetTabKeys.widget_management,
+					icon: <TbApps size={20} />,
+				},
+				{
+					label: t('widgets.manage.tabWigiPad'),
+					element: <WigiPadSetting />,
+					value: WidgetTabKeys.wigiPad,
+					icon: <TbCalendarUser size={20} />,
+				},
+				{
+					label: t('widgets.manage.tabWigiArz'),
+					element: <WigiArzSetting />,
+					value: WidgetTabKeys.wigiArz,
+					icon: <TbCurrencyDollar size={20} />,
+				},
+				{
+					label: t('widgets.manage.tabNews'),
+					element: <RssFeedSetting />,
+					value: WidgetTabKeys.news_settings,
+					icon: <TbNews size={20} />,
+				},
+				{
+					label: t('widgets.manage.tabWeather'),
+					element: <WeatherSetting />,
+					value: WidgetTabKeys.weather_settings,
+					icon: <TiWeatherCloudy size={20} />,
+				},
+				{
+					label: t('widgets.manage.tabPet'),
+					value: WidgetTabKeys.Pet,
+					icon: <MdPets size={20} />,
+					element: <PetSettings />,
+				},
+			],
+		},
+	]
 	function onClickSettings() {
 		onClose()
 		callEvent('openSettings')
@@ -79,16 +80,16 @@ export function WidgetSettingsModal({
 		<Modal
 			isOpen={isOpen}
 			onClose={onClose}
-			title="تنظیمات ویجت ها"
+			title={t('widgets.manage.modalTitle')}
 			size="xl"
-			direction="rtl"
+			direction={dir}
 			closeOnBackdropClick={true}
 		>
 			<TabManager
 				tabs={tabs}
 				tabOwner="widgets-settings"
 				defaultTab={selectedTab || WidgetTabKeys.widget_management}
-				direction="rtl"
+				direction={dir}
 			>
 				<button
 					className={`relative  items-center flex gap-3 px-4 py-3 rounded-full transition-all duration-200 ease-in-out justify-start cursor-pointer whitespace-nowrap active:scale-[0.98] text-muted hover:bg-base-300 w-42`}
@@ -97,7 +98,7 @@ export function WidgetSettingsModal({
 					}}
 				>
 					<VscSettings size={20} className="text-muted" />
-					<span className="text-sm font-light">تنظیمات</span>
+					<span className="text-sm font-light">{t('settings.title')}</span>
 				</button>
 			</TabManager>
 		</Modal>

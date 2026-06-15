@@ -16,12 +16,14 @@ const languages = [
 	{ code: 'en-US' as Language, name: 'English' },
 ]
 
+import { useLanguage } from '@/context/language.context'
 export function VoiceSearchPortal({
 	onClose,
 	onSearch,
 	portalStyles,
 	portalRef,
 }: VoiceSearchPortalProps) {
+	const { t } = useLanguage()
 	const [selectedLanguage, setSelectedLanguage] = useState<Language>('fa-IR')
 	const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false)
 
@@ -48,7 +50,7 @@ export function VoiceSearchPortal({
 				<div className="flex items-center justify-between px-1 mb-6">
 					<div className="flex items-center gap-2">
 						<span className="text-[15px] font-medium text-base-content/90">
-							جستجوی صوتی
+							{t('widgets.search.voiceTitle')}
 						</span>
 						<div className="flex items-end h-3 gap-1 mb-1">
 							{[...Array(4)].map((_, i) => (
@@ -80,8 +82,8 @@ export function VoiceSearchPortal({
 						>
 							{currentTranscript ||
 								(selectedLanguage === 'fa-IR'
-									? 'در حال گوش دادن...'
-									: 'Listening...')}
+									? t('widgets.search.listening')
+									: t('widgets.search.listening'))}
 						</p>
 					</div>
 

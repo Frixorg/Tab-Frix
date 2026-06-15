@@ -15,6 +15,7 @@ import { TimerDisplay } from './components/timer-display'
 import { TopUsersTab } from './topUsers/top-users'
 import type { PomodoroSettings, TimerMode } from './types'
 import { TabNavigation } from '@/components/tab-navigation'
+import { useLanguage } from '@/context/language.context'
 import { GoGear } from 'react-icons/go'
 import { TfiCup } from 'react-icons/tfi'
 import { CiPause1, CiPlay1 } from 'react-icons/ci'
@@ -25,6 +26,7 @@ interface PomodoroTimerProps {
 }
 
 export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
+	const { t } = useLanguage()
 	const [isRunning, setIsRunning] = useState(false)
 	const [mode, setMode] = useState<TimerMode>('work')
 	const [timeLeft, setTimeLeft] = useState(25 * 60)
@@ -124,11 +126,11 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
 				}
 			}
 			const textList: Record<TimerMode, string> = {
-				work: 'تایمر کار تمام شد! حالا وقت یه استراحت کوتاهه.',
-				'short-break': 'استراحت کوتاه تموم شد! آماده‌اید به کار ادامه بدید؟',
+				work: t('widgets.pomodoro.doneWork'),
+				'short-break': t('widgets.pomodoro.doneShort'),
 			}
 
-			new Notification('تایمر پومودورو', {
+			new Notification(t('widgets.pomodoro.notifTimerTitle'), {
 				body: textList[mode],
 				dir: 'rtl',
 			})
@@ -296,11 +298,11 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
 							onTabClick={(v) => handleModeChange(v as any)}
 							tabs={[
 								{
-									label: 'کار',
+									label: t('widgets.pomodoro.modeWork'),
 									id: 'work',
 								},
 								{
-									label: 'استراحت',
+									label: t('widgets.pomodoro.tabBreak'),
 									id: 'short-break',
 								},
 							]}
@@ -311,9 +313,9 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
 						<SelectBox
 							value={topUsersType}
 							options={[
-								{ label: 'جدول کلی', value: TopUsersType.ALL_TIME },
-								{ label: 'جدول هفتگی', value: TopUsersType.WEEKLY },
-								{ label: 'جدول روزانه', value: TopUsersType.DAILY },
+								{ label: t('widgets.pomodoro.topAll'), value: TopUsersType.ALL_TIME },
+								{ label: t('widgets.pomodoro.topWeekly'), value: TopUsersType.WEEKLY },
+								{ label: t('widgets.pomodoro.topDaily'), value: TopUsersType.DAILY },
 							]}
 							onChange={(val) => onChangeTopUsersType(val)}
 						/>
@@ -324,8 +326,8 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
 					<Tooltip
 						content={
 							currentTab === 'timer'
-								? 'جدول برترین کاربران'
-								: 'بازگشت به تایمر'
+								? t('widgets.pomodoro.topUsers')
+								: t('widgets.pomodoro.backToTimer')
 						}
 					>
 						<Button
@@ -340,7 +342,7 @@ export const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onComplete }) => {
 							<TfiCup size={12} />
 						</Button>
 					</Tooltip>
-					<Tooltip content="تنظیمات">
+					<Tooltip content={t('settings.title')}>
 						<Button
 							size="sm"
 							onClick={() => setShowSettings(!showSettings)}

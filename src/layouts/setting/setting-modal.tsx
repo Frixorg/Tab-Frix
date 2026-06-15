@@ -1,4 +1,4 @@
-import { MdApps, MdOutlinePrivacyTip } from 'react-icons/md'
+import { MdLanguage, MdOutlinePrivacyTip } from 'react-icons/md'
 import { TbApps } from 'react-icons/tb'
 import {
 	VscColorMode,
@@ -13,9 +13,11 @@ import { callEvent } from '@/common/utils/call-event'
 import Modal from '@/components/modal'
 import { type TabItem, TabManager } from '@/components/tab-manager'
 import { UpdateReleaseNotesModal } from '@/components/UpdateReleaseNotesModal'
+import { useLanguage } from '@/context/language.context'
 import { AboutUsTab } from './tabs/about-us/about-us'
 import { AppearanceSettingTab } from './tabs/appearance/appearance'
 import { GeneralSettingTab } from './tabs/general/general'
+import { LanguageTab } from './tabs/language/language'
 import { PrivacySettings } from './tabs/privacy/privacy-settings'
 import { ShortcutsTab } from './tabs/shortcuts/shortcuts'
 import { WallpaperSetting } from './tabs/wallpapers/wallpapers'
@@ -24,7 +26,6 @@ import { AccountTab } from './tabs/account/account'
 import { FiGift, FiUsers } from 'react-icons/fi'
 import { AllFriendsTab, RewardsTab } from './tabs/account/tabs'
 import { RiApps2AiLine } from 'react-icons/ri'
-import { Connections } from './tabs/account/tabs/user-profile/connections/connections'
 import { ConnectionPlatformsTab } from './tabs/account/tabs/connection/connectionsTab'
 
 interface SettingModalProps {
@@ -32,87 +33,96 @@ interface SettingModalProps {
 	onClose: () => void
 	selectedTab: string | null
 }
-const tabs: TabItem[] = [
-	{
-		parentName: 'حساب کاربری',
-		needAuth: true,
-		children: [
-			{
-				label: 'پروفایل من',
-				value: 'profile',
-				icon: <BiUserCircle size={20} />,
-				element: <AccountTab />,
-			},
-			{
-				label: 'پلتفرم‌ها',
-				value: 'platforms',
-				icon: <RiApps2AiLine size={20} />,
-				element: <ConnectionPlatformsTab />,
-			},
-			{
-				label: 'ماموریت‌ها و پاداش',
-				value: 'tasks',
-				icon: <FiGift size={20} />,
-				element: <RewardsTab />,
-			},
-			{
-				label: 'دوستان',
-				value: 'friends',
-				icon: <FiUsers size={20} />,
-				element: <AllFriendsTab />,
-			},
-		],
-	},
-	{
-		parentName: 'تنظیمات',
-		children: [
-			{
-				label: 'عمومی',
-				value: 'general',
-				icon: <VscSettingsGear size={20} />,
-				element: <GeneralSettingTab />,
-			},
 
-			{
-				label: 'حریم خصوصی',
-				value: 'access',
-				icon: <MdOutlinePrivacyTip size={20} />,
-				element: <PrivacySettings key="privacy" />,
-			},
-			{
-				label: 'ظاهری',
-				value: 'appearance',
-				icon: <VscColorMode size={20} />,
-				element: <AppearanceSettingTab />,
-			},
-			{
-				label: 'تصویر زمینه ها',
-				value: 'wallpapers',
-				icon: <VscPaintcan size={20} />,
-				element: <WallpaperSetting />,
-			},
-			{
-				label: 'میانبرها',
-				value: 'shortcuts',
-				icon: <VscRecordKeys size={20} />,
-				element: <ShortcutsTab />,
-			},
-		],
-	},
-	{
-		parentName: 'ویجتیفای',
-		children: [
-			{
-				label: 'درباره ما',
-				value: 'about',
-				icon: <VscInfo size={20} />,
-				element: <AboutUsTab />,
-			},
-		],
-	},
-]
 export const SettingModal = ({ isOpen, onClose, selectedTab }: SettingModalProps) => {
+	const { t, dir } = useLanguage()
 	const [isUpdateModalOpen, setUpdateModalOpen] = useState(false)
+
+	const tabs: TabItem[] = [
+		{
+			parentName: t('settings.groups.account'),
+			needAuth: true,
+			children: [
+				{
+					label: t('settings.tabs.profile'),
+					value: 'profile',
+					icon: <BiUserCircle size={20} />,
+					element: <AccountTab />,
+				},
+				{
+					label: t('settings.tabs.platforms'),
+					value: 'platforms',
+					icon: <RiApps2AiLine size={20} />,
+					element: <ConnectionPlatformsTab />,
+				},
+				{
+					label: t('settings.tabs.tasks'),
+					value: 'tasks',
+					icon: <FiGift size={20} />,
+					element: <RewardsTab />,
+				},
+				{
+					label: t('settings.tabs.friends'),
+					value: 'friends',
+					icon: <FiUsers size={20} />,
+					element: <AllFriendsTab />,
+				},
+			],
+		},
+		{
+			parentName: t('settings.groups.settings'),
+			children: [
+				{
+					label: t('settings.tabs.general'),
+					value: 'general',
+					icon: <VscSettingsGear size={20} />,
+					element: <GeneralSettingTab />,
+				},
+
+				{
+					label: t('settings.tabs.privacy'),
+					value: 'access',
+					icon: <MdOutlinePrivacyTip size={20} />,
+					element: <PrivacySettings key="privacy" />,
+				},
+				{
+					label: t('settings.tabs.appearance'),
+					value: 'appearance',
+					icon: <VscColorMode size={20} />,
+					element: <AppearanceSettingTab />,
+				},
+				{
+					label: t('settings.tabs.language'),
+					value: 'language',
+					icon: <MdLanguage size={20} />,
+					element: <LanguageTab />,
+				},
+				{
+					label: t('settings.tabs.wallpapers'),
+					value: 'wallpapers',
+					icon: <VscPaintcan size={20} />,
+					element: <WallpaperSetting />,
+				},
+				{
+					label: t('settings.tabs.shortcuts'),
+					value: 'shortcuts',
+					icon: <VscRecordKeys size={20} />,
+					element: <ShortcutsTab />,
+				},
+			],
+		},
+		{
+			parentName: t('settings.groups.app'),
+			children: [
+				{
+					label: t('settings.tabs.about'),
+					value: 'about',
+					icon: <VscInfo size={20} />,
+					element: <AboutUsTab />,
+				},
+			],
+		},
+	]
 
 	function openWidgetSettings() {
 		onClose()
@@ -133,15 +143,15 @@ export const SettingModal = ({ isOpen, onClose, selectedTab }: SettingModalProps
 			isOpen={isOpen}
 			onClose={onClose}
 			size="xl"
-			title="تنظیمات"
-			direction="rtl"
+			title={t('settings.title')}
+			direction={dir}
 		>
 			<TabManager
 				tabOwner="setting"
 				tabs={tabs}
 				defaultTab="general"
 				selectedTab={selectedTab}
-				direction="rtl"
+				direction={dir}
 			>
 				<div className="flex flex-row gap-1 sm:flex-col">
 					<button
@@ -149,14 +159,18 @@ export const SettingModal = ({ isOpen, onClose, selectedTab }: SettingModalProps
 						onClick={() => openWidgetSettings()}
 					>
 						<TbApps size={20} className="text-muted" />
-						<span className="text-sm font-light">مدیریت ویجت ها</span>
+						<span className="text-sm font-light">
+							{t('settings.manageWidgets')}
+						</span>
 					</button>
 					<button
 						className={`relative  items-center flex gap-3 px-4 py-3 rounded-full transition-all duration-200 ease-in-out justify-start cursor-pointer whitespace-nowrap active:scale-[0.98] text-muted hover:bg-base-300 w-42`}
 						onClick={() => setUpdateModalOpen(true)}
 					>
 						<VscMegaphone size={20} />
-						<span className="text-sm font-light">تغییرات اخیر</span>
+						<span className="text-sm font-light">
+							{t('settings.recentChanges')}
+						</span>
 					</button>
 				</div>
 			</TabManager>
