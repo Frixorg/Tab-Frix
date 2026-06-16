@@ -39,8 +39,19 @@ const DASHBOARD_STYLES = `
 .tf-dash .react-grid-item > .tf-cell {
 	width: 100%;
 	height: 100%;
-	overflow: auto;
+	overflow: hidden;
 	border-radius: 1rem;
+	display: flex;
+	flex-direction: column;
+}
+/* Make whatever a cell renders fill the cell exactly at any height: no empty gaps and
+   no whole-widget scrolling. Overrides each widget's fixed h-80 / h-72 sizing so a tile
+   looks clean whether it occupies half a slot or a full one. */
+.tf-dash .react-grid-item > .tf-cell > * {
+	flex: 1 1 0% !important;
+	min-height: 0 !important;
+	max-height: none !important;
+	height: auto !important;
 }
 
 /* Faint guide showing every spot a widget can snap into (reorder mode only). */
