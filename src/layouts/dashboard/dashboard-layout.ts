@@ -101,24 +101,24 @@ export function packLayout(ids: string[], cols: number = GRID_COLS.lg): GridCell
 	return cells
 }
 
-// Default 4-column arrangement for the always-available cells:
-//   cols0-1 = search (h1) over bookmarks (h1) on the left
-//   cols2-3 = wigiPad (h2) on the right
+// Default 4-column top band:
+//   col0    = wigiPad (h2, left)
+//   cols1-2 = search (h1) over bookmarks (h1) in the middle
+//   col3    = calendar (h2, right)
 //   remaining widgets fill the rows beneath, left-to-right.
 const DEFAULT_POSITIONS: Record<string, { x: number; y: number; w: number; h: number }> = {
+	wigiPad: { x: 0, y: 0, w: 1, h: 2 },
 	search: { x: 1, y: 0, w: 2, h: 1 },
 	bookmarks: { x: 1, y: 1, w: 2, h: 1 },
-	wigiPad: { x: 0, y: 0, w: 1, h: 2 },
-	calender: { x: 2, y: 0, w: 1, h: 2 },
+	calendar: { x: 3, y: 0, w: 1, h: 2 },
 }
 
 function defaultLgLayout(ids: string[]): GridCell[] {
 	const cols = GRID_COLS.lg
 	const cells: GridCell[] = []
-	for (const id of ['search', 'bookmarks', 'wigiPad', 'calender']) {
+	for (const id of ['wigiPad', 'search', 'bookmarks', 'calendar']) {
 		if (ids.includes(id) && DEFAULT_POSITIONS[id]) {
 			cells.push(withConstraints({ i: id, ...DEFAULT_POSITIONS[id] }, cols))
-			console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",cells)
 		}
 	}
 	// widgets flow beneath the top band (left-to-right), each 1 col x 2 rows

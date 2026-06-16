@@ -1,7 +1,7 @@
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Responsive, WidthProvider } from 'react-grid-layout/legacy'
+import { Responsive } from 'react-grid-layout/legacy'
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { useAppearanceSetting } from '@/context/appearance.context'
 import { DateProvider } from '@/context/date.context'
@@ -15,15 +15,14 @@ import {
 	GRID_ROW_HEIGHT,
 	GRID_ROWS,
 	type GridLayouts,
-	MAX_ROWS,
 	orderedCellIds,
 	ROW_UNITS,
 } from './dashboard-layout'
 
-const ResponsiveGridLayout = WidthProvider(Responsive)
+const ResponsiveGridLayout = Responsive
 
 // Bump to discard layouts saved by older, buggy versions and rebuild clean defaults.
-const LAYOUT_VERSION = 8
+const LAYOUT_VERSION = 9
 
 const BP_ORDER = ['lg', 'md', 'sm', 'xs'] as const
 type BP = (typeof BP_ORDER)[number]
@@ -109,24 +108,24 @@ export function WidgetDashboard() {
 	const [layoutsState, setLayoutsState] = useState<GridLayouts>({})
 	const [ready, setReady] = useState(false)
 	const containerRef = useRef<HTMLDivElement>(null)
-	const [rowHeight, setRowHeight] = useState(GRID_ROW_HEIGHT)
+	// Fixed row height so cells match the widgets' designed size and stay identical on
+	// every load (no viewport-based measurement that differed between first load + reload).
+	const rowHeight = GRID_ROW_HEIGHT
 	const [bp, setBp] = useState<BP>('lg')
+	// Measure the grid width ourselves (initialised from the window) instead of relying on
+	// WidthProvider, whose async measurement raced on reload and picked the wrong breakpoint
+	// — which made saved layouts appear to vanish.
+	const [width, setWidth] = useState(() =>
+		typeof window !== 'undefined' ? window.innerWidth : 1280
+	)
 
-	// Size rows so the default grid (MAX_ROWS height-units) fills the visible area -> big
-	// cells, and track the active breakpoint so the slot guide matches the real columns.
+	// Track the grid width + active breakpoint so the grid and slot guide use real columns.
 	useEffect(() => {
 		const compute = () => {
-			const el = containerRef.current
-			if (!el) return
-			const h = el.clientHeight
-			if (h > 0) {
-				const rh = Math.max(
-					48,
-					Math.floor((h - (MAX_ROWS + 1) * GRID_MARGIN[1]) / MAX_ROWS)
-				)
-				setRowHeight(rh)
-			}
-			const w = el.clientWidth
+			const node = containerRef.current
+			if (!node) return
+			const w = node.clientWidth
+			if (w > 0) setWidth(w)
 			let next: BP = 'xs'
 			for (const b of BP_ORDER) {
 				if (w >= GRID_BREAKPOINTS[b]) {
@@ -137,9 +136,15 @@ export function WidgetDashboard() {
 			setBp(next)
 		}
 		compute()
+		const node = containerRef.current
+		const ro = node ? new ResizeObserver(compute) : null
+		if (node && ro) ro.observe(node)
 		window.addEventListener('resize', compute)
-		return () => window.removeEventListener('resize', compute)
-	}, [])
+		return () => {
+			ro?.disconnect()
+			window.removeEventListener('resize', compute)
+		}
+	}, [ready])
 
 	// Load stored layout (or build defaults) on mount and whenever the set of cells changes.
 	useEffect(() => {
@@ -174,7 +179,9 @@ export function WidgetDashboard() {
 	// widgets never snap back to their old spot.
 	const onLayoutChange = useCallback(
 		(_current: unknown, allLayouts: GridLayouts) => {
-			layoutsRef.current = allLayouts
+			// Only react to real user drags/resizes. Ignoring mount/breakpoint/cell-set
+			// changes keeps the saved layout in layoutsRef from being clobbered before the
+			// widgets finish loading (which previously scrambled the first render).
 			if (!interactingRef.current) return
 			interactingRef.current = false
 			const next = buildLayouts(cellIds, allLayouts)
@@ -234,6 +241,7 @@ export function WidgetDashboard() {
 						preventCollision={false}
 						compactType={null}
 						useCSSTransforms={true}
+						width={width}
 						resizeHandles={['se']}
 						draggableCancel="input, textarea, button, a, select, [contenteditable='true']"
 						onDragStart={startInteract}
