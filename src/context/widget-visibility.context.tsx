@@ -135,12 +135,7 @@ interface WidgetVisibilityContextType {
 	getSortedWidgets: () => WidgetItem[]
 }
 
-const defaultVisibility: WidgetKeys[] = [
-	WidgetKeys.calendar,
-	WidgetKeys.tools,
-	WidgetKeys.yadKar,
-	WidgetKeys.comboWidget,
-]
+const defaultVisibility: WidgetKeys[] = []
 export const MAX_VISIBLE_WIDGETS = 5
 
 const WidgetVisibilityContext = createContext<WidgetVisibilityContextType | undefined>(
