@@ -5,6 +5,31 @@ import type { TranslationSchema } from './en'
 export const it: DeepPartial<TranslationSchema> = {
 	appName: 'Tab Frix',
 
+	welcome: {
+		title: 'Benvenuto su Tab Frix! 🎉',
+		imageAlt: 'Come attivare l’estensione',
+		activateHint: '⚠️ Per attivare l’estensione, fai clic sul pulsante "Keep It".',
+		getStarted: 'Inizia',
+	},
+	tour: {
+		cleanBrowserTitle: 'Libera spazio nel browser',
+		cleanBrowserDesc:
+			'Per nascondere questa barra, fai clic destro e scegli l’opzione qui sotto:',
+		cleanBrowserImageAlt: 'Come nascondere la barra inferiore del browser',
+		settings:
+			'Da questo pulsante puoi aprire le impostazioni generali e gestire i widget.',
+		profile: 'Qui puoi accedere al tuo profilo e alla lista amici e gestirli.',
+		bookmarks:
+			'Questa sezione ti permette di gestire i segnalibri: aggiungerne di nuovi, modificarli o eliminarli e cambiare le impostazioni di ciascuno.',
+		widgets:
+			'Questa è l’area principale dei widget — aggiungine quanti vuoi e disponili come preferisci.',
+		next: 'Avanti',
+		back: 'Indietro',
+		skip: 'Salta',
+		last: 'Fine',
+		close: 'Chiudi',
+	},
+
 	common: {
 		save: 'Salva',
 		cancel: 'Annulla',

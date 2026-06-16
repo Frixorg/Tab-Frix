@@ -14,7 +14,7 @@ export function CurrentWeatherBox({
 	fetchedWeather,
 	temperatureUnit,
 }: CurrentWeatherBoxProps) {
-	const { t } = useLanguage()
+	const { t, lang } = useLanguage()
 	return (
 		<>
 			<div
@@ -40,7 +40,13 @@ export function CurrentWeatherBox({
 				<div className="relative z-10 flex items-center justify-between py-1">
 					<div className="flex flex-col gap-1.5">
 						<span className="text-xs font-medium text-muted drop-shadow-lg">
-							{cleanCityName(fetchedWeather?.city?.fa || '')}
+							{cleanCityName(
+								(lang === 'fa'
+									? fetchedWeather?.city?.fa
+									: fetchedWeather?.city?.en) ||
+									fetchedWeather?.city?.fa ||
+									''
+							)}
 						</span>
 
 						<span className="flex items-baseline gap-1.5 text-4xl font-bold leading-none text-base-content drop-shadow-lg">

@@ -44,11 +44,20 @@ export function DayItem({
 		? currentDate.clone().jDate(day)
 		: currentDate.clone().date(day)
 	const dateStr = formatDateStr(cellDate)
-	const todayShamsiEvents = getShamsiEvents(events, cellDate)
-	const todayHijriEvents = getHijriEvents(events, cellDate)
+	// Shamsi + Hijri events belong to the Jalali calendar only. In Gregorian mode we
+	// show Gregorian events exclusively so Hijri/Shamsi days never leak in.
+	const todayShamsiEvents = isJalali ? getShamsiEvents(events, cellDate) : []
+	const todayHijriEvents = isJalali ? getHijriEvents(events, cellDate) : []
 	const todayGregorianEvents = getGregorianEvents(events, cellDate)
 
-	const hasEvent = todayShamsiEvents.length
+	const holidayEvents = isJalali
+		? [...todayShamsiEvents, ...todayHijriEvents]
+		: todayGregorianEvents
+
+	const hasEvent =
+		todayShamsiEvents.length +
+		todayHijriEvents.length +
+		todayGregorianEvents.length
 	const eventIcons = [
 		...todayGregorianEvents.filter((event) => event.icon).map((event) => event.icon),
 		...todayShamsiEvents.filter((event) => event.icon).map((event) => event.icon),
@@ -59,13 +68,10 @@ export function DayItem({
 	const isCurrentDay = isToday(cellDate, timezone, isJalali)
 
 	const isHoliday =
-		cellDate.day() === 5 ||
-		todayShamsiEvents.some((event) => event.isHoliday) ||
-		todayHijriEvents.some((event) => event.isHoliday)
+		(isJalali && cellDate.day() === 5) ||
+		holidayEvents.some((event) => event.isHoliday)
 
-	const isHolidayEvent =
-		todayShamsiEvents.some((event) => event.isHoliday) ||
-		todayHijriEvents.some((event) => event.isHoliday)
+	const isHolidayEvent = holidayEvents.some((event) => event.isHoliday)
 
 	const moodForDay = moods.find(
 		(mood) => mood.date === cellDate.doAsGregorian().format('YYYY-MM-DD')

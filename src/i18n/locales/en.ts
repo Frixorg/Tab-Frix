@@ -4,6 +4,31 @@
 export const en = {
 	appName: 'Tab Frix',
 
+	welcome: {
+		title: 'Welcome to Tab Frix! 🎉',
+		imageAlt: 'How to activate the extension',
+		activateHint: '⚠️ To activate the extension, click the "Keep It" button.',
+		getStarted: 'Get started',
+	},
+	tour: {
+		cleanBrowserTitle: 'Declutter your browser',
+		cleanBrowserDesc:
+			'To hide this bar, right-click it and choose the option below:',
+		cleanBrowserImageAlt: "How to hide the browser's bottom bar",
+		settings:
+			'From this button you can open the general settings and manage your widgets.',
+		profile: 'Here you can access your profile and friends list and manage them.',
+		bookmarks:
+			'This section lets you manage bookmarks: add new ones, edit or delete them, and change each one’s settings.',
+		widgets:
+			'This is the main widgets area — add as many widgets as you like and arrange them however you want.',
+		next: 'Next',
+		back: 'Back',
+		skip: 'Skip',
+		last: 'Finish',
+		close: 'Close',
+	},
+
 	common: {
 		save: 'Save',
 		cancel: 'Cancel',

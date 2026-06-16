@@ -1,5 +1,5 @@
 import { useGeneralSetting } from '@/context/general-setting.context'
-import { useLanguage } from '@/context/language.context'
+import { useDate } from '@/context/date.context'
 import type React from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import { TfiBackRight } from 'react-icons/tfi'
@@ -19,8 +19,7 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 	goToToday,
 }) => {
 	const { selected_timezone: timezone } = useGeneralSetting()
-	const { lang } = useLanguage()
-	const isJalali = lang === 'fa'
+	const { isJalali } = useDate()
 
 	const isCurrentMonthToday = () => {
 		const realToday = getCurrentDate(timezone.value)

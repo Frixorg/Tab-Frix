@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
+import { useLanguage } from '@/context/language.context'
 import keepItImage from '@/assets/keep-it.png'
 import { Button } from './button/button'
 import Checkbox from './checkbox'
@@ -14,12 +15,13 @@ export function ExtensionInstalledModal({
 	show,
 	onGetStarted,
 }: ExtensionInstalledModalProps) {
+	const { dir } = useLanguage()
 	return (
 		<Modal
 			isOpen={show}
 			onClose={() => {}}
 			size="sm"
-			direction="rtl"
+			direction={dir}
 			showCloseButton={false}
 			closeOnBackdropClick={false}
 		>
@@ -35,11 +37,12 @@ interface StepOneProps {
 	onGetStarted: () => void
 }
 const StepOne = ({ onGetStarted }: StepOneProps) => {
+	const { t } = useLanguage()
 	return (
 		<>
 			<div className="mb-3">
 				<h3 className={'mb-0 text-2xl font-bold text-content'}>
-					به تب فریکس خوش آمدید! 🎉
+					{t('welcome.title')}
 				</h3>
 			</div>
 
@@ -51,7 +54,7 @@ const StepOne = ({ onGetStarted }: StepOneProps) => {
 				<div className="flex items-center justify-center">
 					<img
 						src={keepItImage}
-						alt="نحوه فعالسازی افزونه"
+						alt={t('welcome.imageAlt')}
 						className="h-auto max-w-full rounded-lg shadow-xl"
 						style={{ maxHeight: '220px' }}
 					/>
@@ -64,7 +67,7 @@ const StepOne = ({ onGetStarted }: StepOneProps) => {
 				}
 			>
 				<p className="font-bold text-muted">
-					⚠️ برای فعالسازی افزونه، روی دکمه "Keep It" کلیک کنید.
+					{t('welcome.activateHint')}
 				</p>
 			</div>
 
@@ -74,7 +77,7 @@ const StepOne = ({ onGetStarted }: StepOneProps) => {
 				className="w-full text-base font-light shadow-sm rounded-2xl shadow-primary outline-none!"
 				isPrimary={true}
 			>
-				شروع کنید
+				{t('welcome.getStarted')}
 			</Button>
 		</>
 	)

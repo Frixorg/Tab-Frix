@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/auth.context'
 import { useLanguage } from '@/context/language.context'
+import { useDate } from '@/context/date.context'
 import { useGeneralSetting } from '@/context/general-setting.context'
 import { useGetEvents } from '@/services/hooks/date/getEvents.hook'
 import type React from 'react'
@@ -24,8 +25,8 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 	setSelectedDate,
 }) => {
 	const { isAuthenticated } = useAuth()
-	const { t, lang } = useLanguage()
-	const isJalali = lang === 'fa'
+	const { t } = useLanguage()
+	const { isJalali } = useDate()
 	const [isOpenTooltip, setIsOpenTooltip] = useState<boolean>(false)
 	const { selected_timezone: timezone } = useGeneralSetting()
 	const [clickedElement, setClickedElement] = useState<HTMLDivElement | null>(null)

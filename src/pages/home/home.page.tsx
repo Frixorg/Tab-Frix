@@ -1,4 +1,5 @@
 import { useAppearanceSetting } from '@/context/appearance.context'
+import { useLanguage } from '@/context/language.context'
 import { ContentSection } from './ui/content-section'
 import { HomeContentSimplify } from './ui/home-content-simplify'
 import { getFromStorage, setToStorage } from '@/common/storage'
@@ -8,25 +9,23 @@ import Joyride, { type Step } from 'react-joyride'
 import { UpdateReleaseNotesModal } from '@/components/UpdateReleaseNotesModal'
 import Analytics from '@/analytics'
 import { DialogChecker } from './dialog/dialog'
-const steps: Step[] = [
+const buildSteps = (t: (key: string) => string): Step[] => [
 	{
 		target: '#chrome-footer',
 		content: (
 			<div className="flex flex-col gap-1 text-center">
 				<h4 className="text-[14px] font-black text-primary italic">
-					خلوت کردن فضای مرورگر
+					{t('tour.cleanBrowserTitle')}
 				</h4>
 
 				<p className="text-[12px] leading-6 text-content font-medium">
-					برای مخفی کردن این نوار، کافیست روی آن{' '}
-					<span className="font-black text-error">راست کلیک</span> کرده و گزینه
-					زیر را انتخاب کنید:
+					{t('tour.cleanBrowserDesc')}
 				</p>
 
 				<div className="relative group">
 					<img
 						src="https://cdn.widgetify.ir/extension/how-to-disable-footer.png"
-						alt="نحوه مخفی کردن نوار پایین مرورگر"
+						alt={t('tour.cleanBrowserImageAlt')}
 						className="object-cover w-full transition-transform duration-500 rounded-xl shadow-2xl border-2 border-primary/20 group-hover:scale-[1.02]"
 					/>
 					<div className="absolute inset-0 pointer-events-none rounded-xl bg-linear-to-t from-black/20 to-transparent" />
@@ -50,28 +49,26 @@ const steps: Step[] = [
 	},
 	{
 		target: '#settings-button',
-		content:
-			'از این دکمه می‌توانید به تنظیمات عمومی افزونه و مدیریت ویجت‌ها دسترسی پیدا کنید و آن‌ها را سفارشی‌سازی کنید.',
+		content: t('tour.settings'),
 	},
 	{
 		target: '#profile-and-friends-list',
-		content:
-			'از این بخش می‌توانید به پروفایل شخصی خود و لیست دوستان دسترسی پیدا کنید و آن‌ها را مدیریت کنید.',
+		content: t('tour.profile'),
 	},
 	{
 		target: '#bookmarks',
-		content:
-			'این بخش به شما امکان می‌دهد بوکمارک‌ها را مدیریت کنید: بوکمارک جدید اضافه کنید، بوکمارک‌های موجود را ویرایش یا حذف کنید و تنظیمات هر بوکمارک را تغییر دهید.',
+		content: t('tour.bookmarks'),
 	},
 	{
 		target: '#widgets',
-		content:
-			'این محیط اصلی ویجت‌ها است. شما می‌توانید بدون محدودیت از ویجت‌ها استفاده کنید، اما برای جلوگیری از شلوغی بیش از حد، پیشنهاد می‌کنیم حداکثر ۴ ویجت را همزمان فعال نگه دارید.',
+		content: t('tour.widgets'),
 	},
 ]
 
 export function HomePage() {
 	const { ui } = useAppearanceSetting()
+	const { t } = useLanguage()
+	const steps = buildSteps(t)
 	const [showWelcomeModal, setShowWelcomeModal] = useState(false)
 	const [showReleaseNotes, setShowReleaseNotes] = useState(false)
 	const [showTour, setShowTour] = useState(false)
@@ -143,12 +140,12 @@ export function HomePage() {
 				showProgress
 				showSkipButton
 				locale={{
-					next: 'بعدی',
-					back: 'قبلی',
-					skip: 'رد کردن',
-					last: 'پایان',
-					close: 'بستن',
-					nextLabelWithProgress: 'بعدی {step}/{steps}',
+					next: t('tour.next'),
+					back: t('tour.back'),
+					skip: t('tour.skip'),
+					last: t('tour.last'),
+					close: t('tour.close'),
+					nextLabelWithProgress: `${t('tour.next')} {step}/{steps}`,
 				}}
 				callback={onDoneTour}
 				styles={{

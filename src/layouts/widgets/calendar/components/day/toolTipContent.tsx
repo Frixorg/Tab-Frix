@@ -37,9 +37,8 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 	moods,
 	onMoodChange,
 }) => {
-	const { selectedDate, today, getHijriDate } = useDate()
-	const { t, lang } = useLanguage()
-	const isJalali = lang === 'fa'
+	const { selectedDate, today, getHijriDate, isJalali } = useDate()
+	const { t } = useLanguage()
 	const { isAuthenticated } = useAuth()
 	const { mutateAsync: upsertMoodLog } = useUpsertMoodLog()
 
@@ -101,14 +100,18 @@ showToast(t('widgets.calendar.moodRemoved'), 'info')
 		Analytics.event('calendar_mood_clicked')
 	}
 
-	const todayShamsiEvents = getShamsiEvents(events, selectedDate)
-	const todayHijriEvents = getHijriEvents(events, selectedDate)
+	// Gregorian mode shows only Gregorian events; Hijri/Shamsi are Jalali-only.
+	const todayShamsiEvents = isJalali ? getShamsiEvents(events, selectedDate) : []
+	const todayHijriEvents = isJalali ? getHijriEvents(events, selectedDate) : []
 	const todayGregorianEvents = getGregorianEvents(events, selectedDate)
 
+	const holidayEvents = isJalali
+		? [...todayShamsiEvents, ...todayHijriEvents]
+		: todayGregorianEvents
+
 	const isHoliday =
-		selectedDate.day() === 5 ||
-		todayShamsiEvents.some((event) => event.isHoliday) ||
-		todayHijriEvents.some((event) => event.isHoliday)
+		(isJalali && selectedDate.day() === 5) ||
+		holidayEvents.some((event) => event.isHoliday)
 
 	const dayEvent = [
 		...todayShamsiEvents,
@@ -155,7 +158,7 @@ showToast(t('widgets.calendar.moodRemoved'), 'info')
 			</div>
 
 			<div className="p-2 space-y-2">
-				<div className="flex items-center justify-between px-1 text-xs text-muted">
+				<div className={`flex items-center justify-between px-1 text-xs text-muted ${isJalali ? '' : 'hidden'}`}>
 					<div className="flex items-center gap-1">
 						<FaMoon size={10} />
 						<span>
