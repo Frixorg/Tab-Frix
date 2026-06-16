@@ -399,6 +399,9 @@ export const en = {
 			badgeSoon: 'Soon',
 		},
 		names: {
+			search: 'Search',
+			bookmarks: 'Bookmarks',
+			wigiPad: 'WigiPad',
 			calendar: 'Calendar',
 			yadKar: 'Yadkar (Tasks & notes)',
 			tools: 'Tools',

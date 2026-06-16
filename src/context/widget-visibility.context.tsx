@@ -19,8 +19,14 @@ import { useAuth } from './auth.context'
 import { CurrencyProvider } from './currency.context'
 import { showToast } from '@/common/toast'
 import { YadkarWidget } from '@/layouts/widgets/yadkar/yadkar'
+import { SearchLayout } from '@/layouts/search/search'
+import { BookmarksList } from '@/layouts/bookmark/bookmarks'
+import { BookmarkProvider } from '@/layouts/bookmark/context/bookmark.context'
+import { WigiPadWidget } from '@/layouts/widgets/wigiPad/wigiPad.layout'
 
 export enum WidgetKeys {
+	search = 'search',
+	bookmarks = 'bookmarks',
 	comboWidget = 'comboWidget',
 	arzLive = 'arzLive',
 	news = 'news',
@@ -48,6 +54,34 @@ export interface WidgetItem {
 }
 
 export const widgetItems: WidgetItem[] = [
+	{
+		id: WidgetKeys.search,
+		emoji: '🔍',
+		label: 'جستجو',
+		order: -3,
+		node: <SearchLayout />,
+		canToggle: true,
+	},
+	{
+		id: WidgetKeys.bookmarks,
+		emoji: '🔖',
+		label: 'بوکمارک‌ها',
+		order: -2,
+		node: (
+			<BookmarkProvider>
+				<BookmarksList />
+			</BookmarkProvider>
+		),
+		canToggle: true,
+	},
+	{
+		id: WidgetKeys.wigiPad,
+		emoji: '📋',
+		label: 'ویجی‌پد',
+		order: -1,
+		node: <WigiPadWidget />,
+		canToggle: true,
+	},
 	{
 		id: WidgetKeys.calendar,
 		emoji: '📅',
@@ -135,7 +169,14 @@ interface WidgetVisibilityContextType {
 	getSortedWidgets: () => WidgetItem[]
 }
 
-const defaultVisibility: WidgetKeys[] = []
+// These three used to be permanent fixed cells; they are now toggleable widgets that are
+// shown by default and exempt from the guest widget limit.
+export const CORE_CELL_IDS: WidgetKeys[] = [
+	WidgetKeys.search,
+	WidgetKeys.bookmarks,
+	WidgetKeys.wigiPad,
+]
+const defaultVisibility: WidgetKeys[] = [...CORE_CELL_IDS]
 export const MAX_VISIBLE_WIDGETS = 5
 
 const WidgetVisibilityContext = createContext<WidgetVisibilityContextType | undefined>(
@@ -188,6 +229,16 @@ export function WidgetVisibilityProvider({ children }: { children: ReactNode }) 
 					saveActiveWidgets()
 				}
 
+				const coreMigrated = await getFromStorage('coreCellsMigrated')
+				if (!coreMigrated) {
+					for (let i = CORE_CELL_IDS.length - 1; i >= 0; i--) {
+						if (!visibilityIds.includes(CORE_CELL_IDS[i])) {
+							visibilityIds.unshift(CORE_CELL_IDS[i])
+						}
+					}
+					setToStorage('coreCellsMigrated', true)
+				}
+
 				setVisibility(visibilityIds)
 
 				const orders: Record<WidgetKeys, number> = {} as Record<
@@ -202,6 +253,7 @@ export function WidgetVisibilityProvider({ children }: { children: ReactNode }) 
 			} else {
 				setVisibility(defaultVisibility)
 				setWidgetOrders(getDefaultWidgetOrders())
+				setToStorage('coreCellsMigrated', true)
 			}
 			firstRender.current = false
 		}
@@ -219,8 +271,11 @@ export function WidgetVisibilityProvider({ children }: { children: ReactNode }) 
 		setVisibility((prev) => {
 			const isCurrentlyVisible = prev.includes(widgetId)
 
-			if (!isCurrentlyVisible) {
-				if (!isAuthenticated && prev.length >= MAX_VISIBLE_WIDGETS) {
+			if (!isCurrentlyVisible && !CORE_CELL_IDS.includes(widgetId)) {
+				const nonCoreCount = prev.filter(
+					(id) => !CORE_CELL_IDS.includes(id)
+				).length
+				if (!isAuthenticated && nonCoreCount >= MAX_VISIBLE_WIDGETS) {
 					showToast(
 						`کاربران مهمان تنها می‌توانند حداکثر ${MAX_VISIBLE_WIDGETS} ویجت فعال کنند. برای فعال کردن ویجت‌های بیشتر، وارد حساب کاربری خود شوید.`,
 						'error'

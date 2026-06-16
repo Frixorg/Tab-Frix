@@ -48,6 +48,7 @@ export interface StorageKV {
 	refresh_token: string | null
 	profile: UserProfile
 	activeWidgets: WidgetItem[]
+	coreCellsMigrated: boolean
 	search_trends: TrendItem[]
 	recommended_sites: RecommendedSite[]
 	deletedTodos: Todo[]

@@ -400,6 +400,9 @@ export const fa: DeepPartial<TranslationSchema> = {
 			badgeSoon: 'به زودی',
 		},
 		names: {
+			search: 'جستجو',
+			bookmarks: 'بوکمارک‌ها',
+			wigiPad: 'ویجی‌پد',
 			calendar: 'تقویم',
 			yadKar: 'یادکار (وظایف و یادداشت)',
 			tools: 'ابزارها',

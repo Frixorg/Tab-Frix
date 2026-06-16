@@ -26,7 +26,7 @@ export const MAX_ROWS = GRID_ROWS * ROW_UNITS
 export const GRID_MARGIN: [number, number] = [16, 16]
 
 // Non-widget cells that also live in the unified dashboard.
-export const FIXED_CELL_IDS = ['search', 'bookmarks', 'widgetifyCard', 'wigiPad'] as const
+export const FIXED_CELL_IDS = ['search', 'bookmarks', 'wigiPad'] as const
 
 // Default size (in grid units) per cell. Widgets fall back to WIDGET_SIZE.
 const DEFAULT_SIZE: Record<string, { w: number; h: number }> = {
@@ -74,10 +74,10 @@ function withConstraints(cell: GridCell, cols: number): GridCell {
 	}
 }
 
-/** Order cells: search first (spans 2), then bookmarks, side cards, then widgets. */
+/** Cells are driven entirely by widget visibility now (search/bookmarks/wigiPad are
+ *  toggleable widgets too), so pass the visible widget ids straight through. */
 export function orderedCellIds(widgetIds: string[]): string[] {
-	const fixed = ['search', 'bookmarks', 'widgetifyCard', 'wigiPad']
-	return [...fixed, ...widgetIds]
+	return [...widgetIds]
 }
 
 /** Shelf-pack ids into a grid of specified column width to produce a sensible default layout. */
@@ -101,21 +101,20 @@ export function packLayout(ids: string[], cols: number = GRID_COLS.lg): GridCell
 	return cells
 }
 
-// Default 4-column arrangement:
-//   col0 = tall widget (h2, left)        col3 = tall widget (h2, right)
-//   cols1-2 = search (h1) over bookmarks (h1) in the middle
+// Default 4-column arrangement for the always-available cells:
+//   cols0-1 = search (h1) over bookmarks (h1) on the left
+//   cols2-3 = wigiPad (h2) on the right
 //   remaining widgets fill the rows beneath, left-to-right.
 const DEFAULT_POSITIONS: Record<string, { x: number; y: number; w: number; h: number }> = {
-	widgetifyCard: { x: 0, y: 0, w: 1, h: 2 },
-	search: { x: 1, y: 0, w: 2, h: 1 },
-	bookmarks: { x: 1, y: 1, w: 2, h: 1 },
-	wigiPad: { x: 3, y: 0, w: 1, h: 2 },
+	search: { x: 0, y: 0, w: 2, h: 1 },
+	bookmarks: { x: 0, y: 1, w: 2, h: 1 },
+	wigiPad: { x: 2, y: 0, w: 2, h: 2 },
 }
 
 function defaultLgLayout(ids: string[]): GridCell[] {
 	const cols = GRID_COLS.lg
 	const cells: GridCell[] = []
-	for (const id of ['widgetifyCard', 'search', 'bookmarks', 'wigiPad']) {
+	for (const id of ['search', 'bookmarks', 'wigiPad']) {
 		if (ids.includes(id) && DEFAULT_POSITIONS[id]) {
 			cells.push(withConstraints({ i: id, ...DEFAULT_POSITIONS[id] }, cols))
 		}

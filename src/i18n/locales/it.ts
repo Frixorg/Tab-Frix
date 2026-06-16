@@ -404,6 +404,9 @@ export const it: DeepPartial<TranslationSchema> = {
 			badgeSoon: 'Presto',
 		},
 		names: {
+			search: 'Ricerca',
+			bookmarks: 'Segnalibri',
+			wigiPad: 'WigiPad',
 			calendar: 'Calendario',
 			yadKar: 'Yadkar (Attività e note)',
 			tools: 'Strumenti',

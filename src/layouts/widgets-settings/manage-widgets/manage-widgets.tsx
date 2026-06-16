@@ -1,6 +1,7 @@
 import { SectionPanel } from '@/components/section-panel'
 import { useAuth } from '@/context/auth.context'
 import {
+	CORE_CELL_IDS,
 	MAX_VISIBLE_WIDGETS,
 	useWidgetVisibility,
 	type WidgetItem,
@@ -58,8 +59,12 @@ function WidgetItemComponent({
 }: WidgetItemComponentProps) {
 	const { t } = useLanguage()
 	const isActive = visibility.includes(widget.id)
+	const isCore = CORE_CELL_IDS.includes(widget.id)
+	const nonCoreActive = visibility.filter(
+		(id) => !CORE_CELL_IDS.includes(id as WidgetKeys)
+	).length
 	const canToggle =
-		isAuthenticated || isActive || visibility.length < MAX_VISIBLE_WIDGETS
+		isAuthenticated || isActive || isCore || nonCoreActive < MAX_VISIBLE_WIDGETS
 
 	const isDisabled = widget.disabled || false
 	const isSoon = widget.soon || false

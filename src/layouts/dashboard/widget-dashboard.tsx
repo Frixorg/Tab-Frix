@@ -7,11 +7,6 @@ import { useAppearanceSetting } from '@/context/appearance.context'
 import { DateProvider } from '@/context/date.context'
 import { useWidgetVisibility } from '@/context/widget-visibility.context'
 import { useLanguage } from '@/context/language.context'
-import { BookmarksList } from '@/layouts/bookmark/bookmarks'
-import { BookmarkProvider } from '@/layouts/bookmark/context/bookmark.context'
-import { SearchLayout } from '@/layouts/search/search'
-import { WidgetifyLayout } from '@/layouts/widgetify-card/widgetify.layout'
-import { WigiPadWidget } from '@/layouts/widgets/wigiPad/wigiPad.layout'
 import {
 	buildLayouts,
 	GRID_BREAKPOINTS,
@@ -28,7 +23,7 @@ import {
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
 // Bump to discard layouts saved by older, buggy versions and rebuild clean defaults.
-const LAYOUT_VERSION = 7
+const LAYOUT_VERSION = 8
 
 const BP_ORDER = ['lg', 'md', 'sm', 'xs'] as const
 type BP = (typeof BP_ORDER)[number]
@@ -190,24 +185,7 @@ export function WidgetDashboard() {
 		[cellIds]
 	)
 
-	const renderCell = (id: string) => {
-		switch (id) {
-			case 'search':
-				return <SearchLayout />
-			case 'bookmarks':
-				return (
-					<BookmarkProvider>
-						<BookmarksList />
-					</BookmarkProvider>
-				)
-			case 'widgetifyCard':
-				return <WidgetifyLayout />
-			case 'wigiPad':
-				return <WigiPadWidget />
-			default:
-				return widgets.find((w) => w.id === id)?.node ?? null
-		}
-	}
+	const renderCell = (id: string) => widgets.find((w) => w.id === id)?.node ?? null
 
 	if (!ready) return null
 
