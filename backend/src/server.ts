@@ -4,6 +4,7 @@ import { config } from './config'
 import { eventsRoutes } from './routes/events.route'
 import { searchboxRoutes } from './routes/searchbox.route'
 import { contentsRoutes } from './routes/contents.route'
+import { authRoutes } from './routes/auth.route'
 import { healthRoutes } from './routes/health.route'
 
 export async function buildServer(): Promise<FastifyInstance> {
@@ -14,7 +15,7 @@ export async function buildServer(): Promise<FastifyInstance> {
 
 	await app.register(cors, {
 		origin: config.corsOrigin === '*' ? true : config.corsOrigin.split(','),
-		methods: ['GET', 'OPTIONS'],
+		methods: ['GET', 'POST', 'OPTIONS'],
 		// The extension sends these custom headers via its axios client.
 		allowedHeaders: ['Content-Type', 'Authorization', 'client', 'version'],
 	})
@@ -22,6 +23,7 @@ export async function buildServer(): Promise<FastifyInstance> {
 	await app.register(eventsRoutes)
 	await app.register(searchboxRoutes)
 	await app.register(contentsRoutes)
+	await app.register(authRoutes)
 	await app.register(healthRoutes)
 
 	app.get('/', async () => ({

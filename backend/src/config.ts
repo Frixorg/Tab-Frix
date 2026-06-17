@@ -28,6 +28,12 @@ export const config = {
 	searchboxRegion: process.env.SEARCHBOX_REGION ?? 'IR',
 	searchboxLimit: Number(process.env.SEARCHBOX_LIMIT ?? 10),
 
+	// Telegram Login Widget auth. Bot token verifies the login hash; the JWT
+	// secret signs the session token issued on success. Empty = endpoint disabled.
+	telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ?? '',
+	authJwtSecret: process.env.AUTH_JWT_SECRET ?? '',
+	authTokenTtlSec: Number(process.env.AUTH_TOKEN_TTL_SEC ?? 60 * 60 * 24 * 30),
+
 
 	// One-time seed: crawl once on boot if the events table is empty. The upstream
 	// feed is a static full-year dataset, so there is no recurring/scheduled crawl.

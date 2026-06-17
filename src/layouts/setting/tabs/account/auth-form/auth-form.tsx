@@ -1,31 +1,17 @@
-import { useState } from 'react'
+import LoginGoogleButton from './components/login-google.button'
+import LoginTelegramButton from './components/login-telegram.button'
 
-import AuthWithPassword from './auth-password'
-import AuthOtp from './auth-otp'
-import OtherOptionsContainer from './components/other-auth-options.container'
-
+// Login is limited to Google and Telegram. Email/phone (OTP) and password
+// sign-in have been removed.
 const AuthForm = () => {
-	const [showPasswordForm, setShowPasswordForm] = useState(false)
-	const [AuthOtpStep, setAuthOtpStep] = useState<'enter-email' | 'enter-otp'>(
-		'enter-email'
-	)
-
 	return (
 		<div className="flex flex-col w-full max-w-lg px-2 mx-auto md:px-0">
 			<div className="p-4 my-2 border shadow-md md:p-6 border-content bg-content rounded-xl md:rounded-2xl backdrop-blur-sm">
-				{showPasswordForm ? (
-					<AuthWithPassword />
-				) : (
-					<AuthOtp step={AuthOtpStep} setStep={setAuthOtpStep} />
-				)}
+				<div className="flex flex-col items-stretch gap-3">
+					<LoginGoogleButton />
+					<LoginTelegramButton />
+				</div>
 			</div>
-
-			{AuthOtpStep === 'enter-email' && (
-				<OtherOptionsContainer
-					setShowPasswordForm={setShowPasswordForm}
-					showPasswordForm={showPasswordForm}
-				/>
-			)}
 		</div>
 	)
 }
