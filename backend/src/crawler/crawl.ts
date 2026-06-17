@@ -93,7 +93,7 @@ function localizeSearchbox(
 ): Searchbox {
 	const tr = (s: string): string => {
 		if (lang === 'fa') return normalizeFa(s)
-		const t = map.get(s.trim())
+		const t = map.get(normalizeFa(s))
 		return (lang === 'en' ? t?.en : t?.it) || s
 	}
 	const engines = Array.isArray(raw.search_engines) ? raw.search_engines : []
@@ -115,7 +115,6 @@ export interface CrawlResult {
 	ok: boolean
 	events: ReplaceCounts
 	searchbox: boolean
-	translated: boolean
 	errors: string[]
 }
 
@@ -168,7 +167,7 @@ export async function crawl(): Promise<CrawlResult> {
 			const stored: StoredEvent[] = []
 			const add = (calendar: Calendar, arr: FetchedEvent[]) => {
 				for (const e of arr) {
-					const t = map.get(e.title.trim()) ?? { en: null, it: null }
+					const t = map.get(normalizeFa(e.title)) ?? { en: null, it: null }
 					stored.push({
 						calendar,
 						title: normalizeFa(e.title),
@@ -216,5 +215,5 @@ export async function crawl(): Promise<CrawlResult> {
 	)
 
 	if (!eventsOk && !searchboxOk) throw new Error(errors.join('; ') || 'crawl failed')
-	return { ok, events: counts, searchbox: searchboxOk, translated: config.llmApiKey.length > 0, errors }
+	return { ok, events: counts, searchbox: searchboxOk, errors }
 }

@@ -14,7 +14,9 @@
     "migrate": "node dist/db/migrate.js",
     "migrate:dev": "tsx src/db/migrate.ts",
     "crawl": "node dist/crawler/runOnce.js",
-    "crawl:dev": "tsx src/crawler/runOnce.ts"
+    "crawl:dev": "tsx src/crawler/runOnce.ts",
+    "seed": "node dist/seed/load.js",
+    "seed:dev": "tsx src/seed/load.ts"
   },
   "dependencies": {
     "@fastify/cors": "^10.0.1",

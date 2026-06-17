@@ -158,17 +158,31 @@ passes everything else through to `api.widgetify.ir`.
 
 ## Translations (en / it)
 
-Event titles and search labels arrive from the upstream in Persian only. At crawl
-time the backend translates them to English + Italian via an OpenAI-compatible
-LLM and stores all three; the `?lang=` param then selects which to serve (fa is
-the canonical fallback). Translations are cached in the `translations` table, so
-re-crawls only send new/changed strings to the LLM.
+English and Italian translations of every event title and search label are
+**pre-built and shipped** in `./seed` — there is no runtime translation service
+or API key:
 
-Enable it by setting `LLM_API_KEY` (and optionally `LLM_BASE_URL` / `LLM_MODEL`)
-in `.env`. With no key, the crawl still works and serves Persian for every
-language. Persian itself is normalized deterministically (Arabic→Persian
-characters, whitespace) and never rewritten by the LLM, so religious/cultural
-wording is preserved.
+- `seed/sources.json` — the unique Persian strings
+- `seed/translations.jsonl` — one `{"i":<index into sources>,"en":...,"it":...}` per line
+- `seed/events.json`, `seed/searchbox.json` — the raw Persian snapshots
+
+Load it all into the database:
+
+```bash
+npm run seed
+# in Docker:
+docker compose -f docker-compose.behind-proxy.yml exec app node dist/seed/load.js
+```
+
+The loader stores each event with its en/it title, writes the `searchbox` /
+`searchbox:en` / `searchbox:it` snapshots, and fills the `translations` table (so a
+later crawl reuses them). `?lang=` selects the language per request, falling back
+to Persian for anything untranslated. Persian is normalized deterministically
+(Arabic→Persian characters, whitespace) and never machine-rewritten, so
+religious/cultural wording is preserved.
+
+To refresh after the upstream adds events: re-run the crawl, add any new strings
+to `translations.jsonl`, and `npm run seed` again.
 
 ---
 
@@ -218,6 +232,4 @@ the events feed changes its source — everything else keeps working.
 | `UPSTREAM_CLIENT_HEADER` | `widgetify-extension` | `client` header sent upstream |
 | `CRAWL_ON_START` | `true` | One-time seed crawl on boot if table empty |
 | `CORS_ORIGIN` | `*` | `*` or comma-separated allow-list |
-| `LLM_API_KEY` | — | Enables en/it translation when set (empty = Persian only) |
-| `LLM_BASE_URL` / `LLM_MODEL` | OpenAI / `gpt-4o-mini` | OpenAI-compatible endpoint + model |
 | `DOMAIN` / `CERTBOT_EMAIL` | `tab.frix.me` / — | Used by Nginx + cert bootstrap |

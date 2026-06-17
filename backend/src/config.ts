@@ -28,14 +28,6 @@ export const config = {
 	searchboxRegion: process.env.SEARCHBOX_REGION ?? 'IR',
 	searchboxLimit: Number(process.env.SEARCHBOX_LIMIT ?? 10),
 
-	// LLM translation for API data (en/it). Runs at crawl time via an
-	// OpenAI-compatible chat-completions endpoint. If LLM_API_KEY is empty,
-	// translation is skipped and data is served in Persian only.
-	llmApiKey: process.env.LLM_API_KEY ?? '',
-	llmBaseUrl: (process.env.LLM_BASE_URL ?? 'https://api.openai.com/v1').replace(/\/+$/, ''),
-	llmModel: process.env.LLM_MODEL ?? 'gpt-4o-mini',
-	llmBatchSize: Number(process.env.LLM_BATCH_SIZE ?? 40),
-	llmTimeoutMs: Number(process.env.LLM_TIMEOUT_MS ?? 60000),
 
 	// One-time seed: crawl once on boot if the events table is empty. The upstream
 	// feed is a static full-year dataset, so there is no recurring/scheduled crawl.
