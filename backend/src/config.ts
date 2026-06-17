@@ -35,6 +35,13 @@ export const config = {
 	authJwtSecret: process.env.AUTH_JWT_SECRET ?? '',
 	authTokenTtlSec: Number(process.env.AUTH_TOKEN_TTL_SEC ?? 60 * 60 * 24 * 30),
 
+	// Public, externally-reachable base URL of this backend (no trailing slash).
+	// Used to build the Telegram OAuth redirect URI (PUBLIC_URL/auth/telegram/callback),
+	// which must EXACTLY match a "Redirect URI" registered in @BotFather.
+	publicUrl: (
+		process.env.PUBLIC_URL ??
+		(process.env.DOMAIN ? `https://${process.env.DOMAIN}` : 'https://tab.frix.me')
+	).replace(/\/+$/, ''),
 
 	// One-time seed: crawl once on boot if the events table is empty. The upstream
 	// feed is a static full-year dataset, so there is no recurring/scheduled crawl.

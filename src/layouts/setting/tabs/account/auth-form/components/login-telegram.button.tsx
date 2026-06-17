@@ -6,6 +6,8 @@ import { showToast } from '@/common/toast'
 import Analytics from '@/analytics'
 import { FaTelegramPlane } from 'react-icons/fa'
 
+const API_URL = (import.meta.env.VITE_API as string) || 'https://tab.frix.me'
+
 function base64Url(bytes: ArrayBuffer | Uint8Array): string {
 	const arr = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes)
 	let str = ''
@@ -22,9 +24,17 @@ async function makePkce(): Promise<{ verifier: string; challenge: string }> {
 	return { verifier, challenge: base64Url(digest) }
 }
 
-// Telegram OIDC login (authorization code + PKCE). Uses VITE_TELEGRAM_CLIENT_ID
-// (from @BotFather -> Login Widget). The bot's "Redirect URIs" must include the
-// extension redirect: https://<extension-id>.chromiumapp.org/telegram
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+// Telegram OIDC login. Telegram's authorization page is a polling widget that
+// only works in a first-party browser context, so chrome.identity.launchWebAuthFlow
+// (an isolated, storage-partitioned window) fails with "Authorization page could
+// not be loaded". Instead we open the authorize URL in a NORMAL popup window with
+// the redirect pointing at our backend callback (PUBLIC_URL/auth/telegram/callback),
+// then poll /auth/telegram/result for the session token.
+//
+// Requires VITE_TELEGRAM_CLIENT_ID (from @BotFather → Login Widget) and the backend
+// callback URL registered under the bot's "Redirect URIs".
 export default function LoginTelegramButton() {
 	const { login } = useAuth()
 	const [isLoading, setIsLoading] = useState(false)
@@ -37,17 +47,18 @@ export default function LoginTelegramButton() {
 			return
 		}
 		setIsLoading(true)
+		let popupId: number | undefined
 		try {
-			if (!(await browser.permissions.contains({ permissions: ['identity'] }))) {
-				const granted = await browser.permissions.request({
-					permissions: ['identity'],
-				})
-				if (!granted) return
-			}
-
-			const redirectUri = browser.identity.getRedirectURL('telegram')
 			const { verifier, challenge } = await makePkce()
-			const state = base64Url(crypto.getRandomValues(new Uint8Array(16)))
+			const state = base64Url(crypto.getRandomValues(new Uint8Array(24)))
+			const redirectUri = `${API_URL}/auth/telegram/callback`
+
+			// Register state + PKCE verifier server-side before opening the popup.
+			const client = await getMainClient()
+			await client.post('/auth/telegram/start', {
+				state,
+				code_verifier: verifier,
+			})
 
 			const url = new URL('https://oauth.telegram.org/auth')
 			url.searchParams.set('client_id', clientId)
@@ -58,38 +69,64 @@ export default function LoginTelegramButton() {
 			url.searchParams.set('code_challenge', challenge)
 			url.searchParams.set('code_challenge_method', 'S256')
 
-			const redirectUrl = await browser.identity.launchWebAuthFlow({
+			// Normal popup window = first-party context (works), unlike launchWebAuthFlow.
+			const win = await browser.windows.create({
 				url: url.toString(),
-				interactive: true,
+				type: 'popup',
+				width: 520,
+				height: 720,
 			})
-			if (!redirectUrl) {
-				showToast('ورود با تلگرام ناموفق بود', 'error')
-				return
+			popupId = win?.id
+
+			// Poll for the result (~2 min), then give up.
+			const deadline = Date.now() + 120_000
+			let loggedIn = false
+			while (Date.now() < deadline) {
+				await sleep(1500)
+				let data: { token?: string; error?: string; pending?: boolean } = {}
+				try {
+					const res = await client.get('/auth/telegram/result', {
+						params: { state },
+					})
+					data = res.data ?? {}
+				} catch {
+					continue // transient network error — keep polling
+				}
+				if (data.token) {
+					loggedIn = true
+					login(data.token)
+					break
+				}
+				if (data.error) {
+					console.error('[telegram-login] backend error', data.error)
+					showToast(`تلگرام: ${data.error}`, 'error')
+					break
+				}
+				// pending → keep polling
 			}
 
-			const parsed = new URL(redirectUrl)
-			const params = parsed.searchParams.has('code')
-				? parsed.searchParams
-				: new URLSearchParams(parsed.hash.replace(/^#/, ''))
-			const code = params.get('code')
-			if (!code || params.get('state') !== state) {
-				showToast('ورود با تلگرام ناموفق بود', 'error')
-				return
+			if (popupId !== undefined) {
+				try {
+					await browser.windows.remove(popupId)
+				} catch {
+					/* user may have already closed it */
+				}
 			}
-
-			const client = await getMainClient()
-			const { data } = await client.post('/auth/telegram', {
-				code,
-				redirect_uri: redirectUri,
-				code_verifier: verifier,
-			})
-			if (data?.token) {
-				login(data.token)
-			} else {
-				showToast('ورود با تلگرام ناموفق بود', 'error')
+			if (!loggedIn) {
+				// Only show the timeout toast if no error/success toast already fired.
+				const res = await client
+					.get('/auth/telegram/result', { params: { state } })
+					.catch(() => null)
+				if (!res?.data?.error) {
+					showToast('ورود با تلگرام به پایان نرسید. دوباره تلاش کنید.', 'error')
+				}
 			}
-		} catch {
-			showToast('ورود با تلگرام ناموفق بود', 'error')
+		} catch (e) {
+			const res = (e as { response?: { data?: { error?: string; detail?: string } } })
+				?.response
+			const detail = res?.data?.detail ?? res?.data?.error
+			console.error('[telegram-login] failed', res?.data ?? e)
+			showToast(detail ? `تلگرام: ${detail}` : 'ورود با تلگرام ناموفق بود', 'error')
 		} finally {
 			setIsLoading(false)
 		}
