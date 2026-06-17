@@ -4,16 +4,19 @@
 # Adapted from https://github.com/wmnnd/nginx-certbot (MIT).
 set -e
 
-# Load .env so DOMAIN / CERTBOT_EMAIL are available.
-if [ -f .env ]; then
-  set -a
-  # shellcheck disable=SC1091
-  . ./.env
-  set +a
-fi
+# Read a single key from .env WITHOUT executing it. Sourcing .env breaks on any
+# value containing spaces or shell metacharacters (e.g. a strong DB password, or
+# the old "CRAWL_CRON=0 3 * * *" line), so we parse only the two keys we need.
+read_env() {
+  [ -f .env ] || return 0
+  grep -E "^[[:space:]]*$1=" .env | tail -n 1 | cut -d= -f2- \
+    | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' \
+          -e 's/^"\(.*\)"$/\1/' -e "s/^'\(.*\)'\$/\1/"
+}
 
-domain="${DOMAIN:-tab.frix.me}"
-email="${CERTBOT_EMAIL:-}"
+domain="$(read_env DOMAIN)"
+domain="${domain:-tab.frix.me}"
+email="$(read_env CERTBOT_EMAIL)"
 rsa_key_size=4096
 data_path="./nginx/certbot"
 staging=0 # set to 1 to test against Let's Encrypt staging (avoids rate limits)
