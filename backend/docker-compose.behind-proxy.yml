@@ -1,0 +1,43 @@
+# For a VPS that ALREADY has a reverse proxy terminating :80/:443.
+# This stack does NOT bind 80/443 and does NOT run nginx/certbot — it only runs
+# the database + app, publishing the app on 127.0.0.1:${APP_HOST_PORT} so your
+# existing proxy (host nginx / Caddy / Traefik / etc.) can forward to it,
+# exactly like your other services.
+#
+#   docker compose -f docker-compose.behind-proxy.yml up -d --build
+#
+# Then point tab.frix.me at 127.0.0.1:${APP_HOST_PORT} in your proxy (see README).
+
+name: tabfrix-events
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    depends_on:
+      db:
+        condition: service_healthy
+    # Bound to localhost only — your existing reverse proxy forwards to this.
+    ports:
+      - "127.0.0.1:${APP_HOST_PORT:-7110}:3000"
+
+volumes:
+  pgdata:

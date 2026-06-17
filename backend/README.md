@@ -103,6 +103,36 @@ docker compose up -d --build app
 
 ---
 
+## Deploy behind an existing reverse proxy (host Nginx)
+
+Use this when your VPS already serves other sites on :80/:443. This stack then
+runs only the DB + app on `127.0.0.1:${APP_HOST_PORT}` (default 7110); your host
+Nginx routes `tab.frix.me` to it. You do **not** use `init-letsencrypt.sh`, the
+bundled `nginx/`, or the nginx/certbot services in `docker-compose.yml`.
+
+```bash
+cd backend
+cp .env.example .env        # set POSTGRES_PASSWORD; APP_HOST_PORT defaults to 7110
+docker compose -f docker-compose.behind-proxy.yml up -d --build
+curl http://127.0.0.1:7110/health          # app is up
+curl http://127.0.0.1:7110/date/events     # populated after the first boot crawl
+```
+
+Then add the vhost and issue the certificate with your existing Certbot:
+
+```bash
+sudo cp host-nginx.tab.frix.me.conf /etc/nginx/sites-available/tab.frix.me.conf
+sudo ln -s /etc/nginx/sites-available/tab.frix.me.conf /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d tab.frix.me        # adds HTTPS automatically
+curl https://tab.frix.me/date/events
+```
+
+`host-nginx.tab.frix.me.conf` serves `/date/events` + `/health` from the app and
+passes everything else through to `api.widgetify.ir`.
+
+---
+
 ## Local development
 
 ```bash
