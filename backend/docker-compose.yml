@@ -21,6 +21,11 @@ services:
       # daemon's `dns` setting, which otherwise causes npm EAI_AGAIN on some hosts.
       network: host
     restart: unless-stopped
+    # Explicit resolvers so the crawl can reach api.widgetify.ir regardless of the
+    # Docker daemon's DNS config (containers can't use the host's 127.0.0.53 stub).
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
     env_file: .env
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
