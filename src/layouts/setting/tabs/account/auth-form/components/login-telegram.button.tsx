@@ -6,17 +6,33 @@ import { showToast } from '@/common/toast'
 import Analytics from '@/analytics'
 import { FaTelegramPlane } from 'react-icons/fa'
 
-// Telegram Login Widget via the extension's web-auth flow (mirrors Google).
-// Requires VITE_TELEGRAM_BOT_ID (numeric bot id from @BotFather) and the bot's
-// domain set to the extension redirect domain (<id>.chromiumapp.org).
+function base64Url(bytes: ArrayBuffer | Uint8Array): string {
+	const arr = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes)
+	let str = ''
+	for (const b of arr) str += String.fromCharCode(b)
+	return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+async function makePkce(): Promise<{ verifier: string; challenge: string }> {
+	const verifier = base64Url(crypto.getRandomValues(new Uint8Array(32)))
+	const digest = await crypto.subtle.digest(
+		'SHA-256',
+		new TextEncoder().encode(verifier)
+	)
+	return { verifier, challenge: base64Url(digest) }
+}
+
+// Telegram OIDC login (authorization code + PKCE). Uses VITE_TELEGRAM_CLIENT_ID
+// (from @BotFather -> Login Widget). The bot's "Redirect URIs" must include the
+// extension redirect: https://<extension-id>.chromiumapp.org/telegram
 export default function LoginTelegramButton() {
 	const { login } = useAuth()
 	const [isLoading, setIsLoading] = useState(false)
-	const botId = import.meta.env.VITE_TELEGRAM_BOT_ID as string | undefined
+	const clientId = import.meta.env.VITE_TELEGRAM_CLIENT_ID as string | undefined
 
 	const loginTelegram = async () => {
 		Analytics.event('auth_method_changed_to_telegram')
-		if (!botId) {
+		if (!clientId) {
 			showToast('ورود با تلگرام پیکربندی نشده است', 'error')
 			return
 		}
@@ -30,30 +46,43 @@ export default function LoginTelegramButton() {
 			}
 
 			const redirectUri = browser.identity.getRedirectURL('telegram')
+			const { verifier, challenge } = await makePkce()
+			const state = base64Url(crypto.getRandomValues(new Uint8Array(16)))
+
 			const url = new URL('https://oauth.telegram.org/auth')
-			url.searchParams.set('bot_id', botId)
-			url.searchParams.set('origin', new URL(redirectUri).origin)
-			url.searchParams.set('return_to', redirectUri)
-			url.searchParams.set('request_access', 'write')
+			url.searchParams.set('client_id', clientId)
+			url.searchParams.set('redirect_uri', redirectUri)
+			url.searchParams.set('response_type', 'code')
+			url.searchParams.set('scope', 'openid profile')
+			url.searchParams.set('state', state)
+			url.searchParams.set('code_challenge', challenge)
+			url.searchParams.set('code_challenge_method', 'S256')
 
 			const redirectUrl = await browser.identity.launchWebAuthFlow({
 				url: url.toString(),
 				interactive: true,
 			})
-
-			const fragment = redirectUrl?.split('#')[1] ?? ''
-			const tgAuthResult = new URLSearchParams(fragment).get('tgAuthResult')
-			if (!tgAuthResult) {
+			if (!redirectUrl) {
 				showToast('ورود با تلگرام ناموفق بود', 'error')
 				return
 			}
 
-			const padded = tgAuthResult.replace(/-/g, '+').replace(/_/g, '/')
-			// decode base64 -> UTF-8 JSON (names may contain unicode)
-			const authData = JSON.parse(decodeURIComponent(escape(atob(padded))))
+			const parsed = new URL(redirectUrl)
+			const params = parsed.searchParams.has('code')
+				? parsed.searchParams
+				: new URLSearchParams(parsed.hash.replace(/^#/, ''))
+			const code = params.get('code')
+			if (!code || params.get('state') !== state) {
+				showToast('ورود با تلگرام ناموفق بود', 'error')
+				return
+			}
 
 			const client = await getMainClient()
-			const { data } = await client.post('/auth/telegram', authData)
+			const { data } = await client.post('/auth/telegram', {
+				code,
+				redirect_uri: redirectUri,
+				code_verifier: verifier,
+			})
 			if (data?.token) {
 				login(data.token)
 			} else {

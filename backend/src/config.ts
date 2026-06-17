@@ -28,9 +28,10 @@ export const config = {
 	searchboxRegion: process.env.SEARCHBOX_REGION ?? 'IR',
 	searchboxLimit: Number(process.env.SEARCHBOX_LIMIT ?? 10),
 
-	// Telegram Login Widget auth. Bot token verifies the login hash; the JWT
+	// Telegram OIDC login (Client ID/Secret from @BotFather → Login Widget). The JWT
 	// secret signs the session token issued on success. Empty = endpoint disabled.
-	telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ?? '',
+	telegramClientId: process.env.TELEGRAM_CLIENT_ID ?? '',
+	telegramClientSecret: process.env.TELEGRAM_CLIENT_SECRET ?? '',
 	authJwtSecret: process.env.AUTH_JWT_SECRET ?? '',
 	authTokenTtlSec: Number(process.env.AUTH_TOKEN_TTL_SEC ?? 60 * 60 * 24 * 30),
 
