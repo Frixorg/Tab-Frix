@@ -40,9 +40,11 @@ export function DayItem({
 }: DayItemProps) {
 	const dayRef = useRef<HTMLDivElement>(null)
 	const { t } = useLanguage()
+	// In Gregorian mode currentDate may carry the 'fa' locale (jalali-moment then treats
+	// .date(day) as the Jalali day). Force 'en' so the cell maps to the real Gregorian day.
 	const cellDate = isJalali
 		? currentDate.clone().jDate(day)
-		: currentDate.clone().date(day)
+		: currentDate.clone().locale('en').date(day)
 	const dateStr = formatDateStr(cellDate)
 	// Shamsi + Hijri events belong to the Jalali calendar only. In Gregorian mode we
 	// show Gregorian events exclusively so Hijri/Shamsi days never leak in.
@@ -176,11 +178,16 @@ export function DayItem({
 
 const isToday = (date: jalaliMoment.Moment, timezone: string, isJalali = true) => {
 	const today = getCurrentDate(timezone)
-	return isJalali
-		? date.jDate() === today.jDate() &&
-				date.jMonth() === today.jMonth() &&
-				date.jYear() === today.jYear()
-		: date.date() === today.date() &&
-				date.month() === today.month() &&
-				date.year() === today.year()
+	if (isJalali) {
+		return (
+			date.jDate() === today.jDate() &&
+			date.jMonth() === today.jMonth() &&
+			date.jYear() === today.jYear()
+		)
+	}
+	// Gregorian: compare on 'en' clones so .date()/.month()/.year() read the Gregorian
+	// fields rather than the Jalali ones (jalali-moment switches these on 'fa' locale).
+	const d = date.clone().locale('en')
+	const t = today.clone().locale('en')
+	return d.date() === t.date() && d.month() === t.month() && d.year() === t.year()
 }

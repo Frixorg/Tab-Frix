@@ -39,12 +39,18 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 		shamsiEvents: [],
 	}
 
+	// jalali-moment evaluates .date()/.month()/.startOf()/.endOf()/.day() against the
+	// Jalali calendar whenever the moment's locale is 'fa'. getCurrentDate() returns an
+	// 'fa' moment, so in Gregorian mode we must run the grid math on an 'en' clone —
+	// otherwise the grid is built on the Jalali month and "today" lands on the Jalali day.
+	const gregBase = currentDate.clone().locale('en')
+
 	const monthStart = isJalali
 		? currentDate.clone().doAsGregorian().startOf('jMonth')
-		: currentDate.clone().startOf('month')
+		: gregBase.clone().startOf('month')
 	const monthEnd = isJalali
 		? currentDate.clone().doAsGregorian().endOf('jMonth')
-		: currentDate.clone().endOf('month')
+		: gregBase.clone().endOf('month')
 
 	const { data: calendarData, refetch } = useGetCalendarData(
 		isAuthenticated,
@@ -58,13 +64,15 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 
 	const firstDayOfMonth = isJalali
 		? currentDate.clone().startOf('jMonth').day()
-		: currentDate.clone().startOf('month').day()
+		: gregBase.clone().startOf('month').day()
 	const daysInMonth = isJalali
 		? currentDate.clone().endOf('jMonth').jDate()
-		: currentDate.clone().endOf('month').date()
+		: gregBase.clone().endOf('month').date()
 	const emptyDays = isJalali ? (firstDayOfMonth + 1) % 7 : firstDayOfMonth
 
-	const prevMonth = currentDate.clone().subtract(1, isJalali ? 'jMonth' : 'month')
+	const prevMonth = isJalali
+		? currentDate.clone().subtract(1, 'jMonth')
+		: gregBase.clone().subtract(1, 'month')
 	const daysInPrevMonth = isJalali
 		? prevMonth.clone().endOf('jMonth').jDate()
 		: prevMonth.clone().endOf('month').date()
