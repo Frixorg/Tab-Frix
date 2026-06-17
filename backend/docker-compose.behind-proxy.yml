@@ -27,7 +27,11 @@ services:
       retries: 5
 
   app:
-    build: .
+    build:
+      context: .
+      # Build using the host network so npm can resolve DNS. BuildKit ignores the
+      # daemon's `dns` setting, which otherwise causes npm EAI_AGAIN on some hosts.
+      network: host
     restart: unless-stopped
     env_file: .env
     environment:
