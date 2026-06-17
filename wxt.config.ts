@@ -74,6 +74,7 @@ export default defineConfig({
 			'https://raw.githubusercontent.com/*',
 			'https://api.github.com/*',
 			'https://api.widgetify.ir/*',
+			'https://tab.frix.me/*',
 			'https://www.google-analytics.com/collect*',
 			'https://storage.c2.liara.space/*',
 		],

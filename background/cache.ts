@@ -17,6 +17,9 @@ const allowedPaths = [
 	'/weather',
 ]
 
+// Origin the extension's API lives on (self-hosted by default; VITE_API overrides).
+const API_ORIGIN = new URL(import.meta.env.VITE_API || 'https://tab.frix.me').origin
+
 export function setupCaching() {
 	try {
 		if (typeof self !== 'undefined' && '__WB_MANIFEST' in self) {
@@ -28,7 +31,7 @@ export function setupCaching() {
 		registerRoute(
 			({ url, request }) => {
 				if (request.method !== 'GET') return false
-				if (url.origin !== 'https://api.widgetify.ir') return false
+				if (url.origin !== API_ORIGIN) return false
 
 				return allowedPaths.some((path) => url.pathname.startsWith(path))
 			},

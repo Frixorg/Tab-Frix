@@ -55,9 +55,12 @@ export function setupEventListeners() {
 					requests
 						.filter((request) => {
 							const url = new URL(request.url)
+							const apiOrigin = new URL(
+								import.meta.env.VITE_API || 'https://tab.frix.me'
+							).origin
 
 							return (
-								url.origin === 'https://api.widgetify.ir' &&
+								url.origin === apiOrigin &&
 								url.pathname.startsWith(message.path)
 							)
 						})

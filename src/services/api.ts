@@ -7,20 +7,16 @@ import axios, {
 import { getFromStorage, setToStorage } from '@/common/storage'
 import { callEvent } from '@/common/utils/call-event'
 
-const rawGithubApi = axios.create({
-	baseURL: 'https://raw.githubusercontent.com/sajjadmrx/btime-desktop/main',
-})
+// Base URL the extension talks to. Defaults to the self-hosted Tab Frix backend
+// (which serves events/searchbox and proxies everything else to the upstream).
+// Override at build time with VITE_API in .env.
+const DEFAULT_API_URL = 'https://tab.frix.me'
 export let API_URL = ''
 export async function getMainClient(): Promise<AxiosInstance> {
 	let instance: AxiosInstance | undefined
 
 	const token = await getFromStorage('auth_token')
-	API_URL = import.meta.env.VITE_API
-
-	if (!API_URL) {
-		const urlResponse = await rawGithubApi.get('/.github/api.txt')
-		API_URL = urlResponse.data
-	}
+	API_URL = import.meta.env.VITE_API || DEFAULT_API_URL
 
 	instance = axios.create({
 		baseURL: API_URL,
