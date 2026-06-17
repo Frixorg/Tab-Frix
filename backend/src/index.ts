@@ -1,4 +1,3 @@
-import cron from 'node-cron'
 import { config } from './config'
 import { buildServer } from './server'
 import { migrate } from './db/migrate'
@@ -10,7 +9,9 @@ async function main(): Promise<void> {
 	// 1. Ensure the schema exists.
 	await migrate()
 
-	// 2. Seed on first boot if the table is empty (best-effort; never blocks start).
+	// 2. One-time seed: if the table is empty, crawl the full-year snapshot once.
+	//    The upstream feed is a static yearly dataset (events keyed by month/day, no
+	//    year), so there is no recurring crawl — refresh manually with `npm run crawl`.
 	if (config.crawlOnStartIfEmpty) {
 		try {
 			if ((await countEvents()) === 0) {
@@ -24,17 +25,7 @@ async function main(): Promise<void> {
 		}
 	}
 
-	// 3. Schedule the recurring crawl.
-	if (cron.validate(config.crawlCron)) {
-		cron.schedule(config.crawlCron, () => {
-			crawl().catch((err) => console.error('[cron] scheduled crawl failed', err))
-		})
-		console.log(`[boot] crawl scheduled: "${config.crawlCron}"`)
-	} else {
-		console.warn(`[boot] invalid CRAWL_CRON "${config.crawlCron}" — skipping schedule`)
-	}
-
-	// 4. Start the HTTP server.
+	// 3. Start the HTTP server.
 	const app = await buildServer()
 	await app.listen({ port: config.port, host: config.host })
 

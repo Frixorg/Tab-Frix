@@ -12,7 +12,7 @@ behind **Nginx** with a free **Let's Encrypt** certificate for `tab.frix.me`.
 ## What it does
 
 ```
-                ┌─────────── crawl (cron, default daily 03:00) ───────────┐
+                ┌──────── one-time crawl (first deploy / manual) ──────────┐
                 │                                                          ▼
   api.widgetify.ir/date/events ──────────────────────►  Fastify app  ──►  PostgreSQL
                                                               ▲                │
@@ -23,8 +23,10 @@ behind **Nginx** with a free **Let's Encrypt** certificate for `tab.frix.me`.
 - `GET /date/events` → `{ shamsiEvents, gregorianEvents, hijriEvents }`
   (each item: `{ isHoliday, title, day, month, icon }`).
 - `GET /health` → DB status, event count, and last crawl summary.
-- A scheduled crawl refreshes the snapshot; the upstream feed is treated as a
-  full snapshot and replaced transactionally (all-or-nothing).
+- The upstream feed is a **static full-year dataset** (events keyed by month/day,
+  no year), so it's crawled **once** on first deploy and stored transactionally
+  (all-or-nothing). There is **no recurring cron** — re-run the crawl manually
+  only if the upstream list ever changes.
 - Nginx serves `/date/events` from this app and **transparently proxies every
   other path to `api.widgetify.ir`**, so `https://tab.frix.me` is a drop-in
   base URL for the extension.
@@ -86,8 +88,8 @@ curl https://tab.frix.me/health
 curl https://tab.frix.me/date/events
 ```
 
-**Trigger a crawl manually** (otherwise it runs on the cron schedule, and once
-on first boot if the table is empty):
+**Re-crawl manually** (the app already crawls once on first boot if the table is
+empty; run this only to refresh after the upstream list changes — e.g. yearly):
 
 ```bash
 docker compose exec app node dist/crawler/runOnce.js
@@ -145,7 +147,6 @@ the events feed changes its source — everything else keeps working.
 | `POSTGRES_USER/PASSWORD/DB` | `tabfrix` | DB container creds + compose `DATABASE_URL` |
 | `UPSTREAM_API` | `https://api.widgetify.ir` | Source crawled for events |
 | `UPSTREAM_CLIENT_HEADER` | `widgetify-extension` | `client` header sent upstream |
-| `CRAWL_CRON` | `0 3 * * *` | Crawl schedule (cron) |
-| `CRAWL_ON_START` | `true` | Crawl on boot if table empty |
+| `CRAWL_ON_START` | `true` | One-time seed crawl on boot if table empty |
 | `CORS_ORIGIN` | `*` | `*` or comma-separated allow-list |
 | `DOMAIN` / `CERTBOT_EMAIL` | `tab.frix.me` / — | Used by Nginx + cert bootstrap |
