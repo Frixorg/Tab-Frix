@@ -3,6 +3,7 @@ import { buildServer } from './server'
 import { migrate } from './db/migrate'
 import { crawl } from './crawler/crawl'
 import { countEvents } from './db/events.repo'
+import { getSnapshot } from './db/snapshots.repo'
 import { pool } from './db/pool'
 
 async function main(): Promise<void> {
@@ -14,8 +15,10 @@ async function main(): Promise<void> {
 	//    year), so there is no recurring crawl — refresh manually with `npm run crawl`.
 	if (config.crawlOnStartIfEmpty) {
 		try {
-			if ((await countEvents()) === 0) {
-				console.log('[boot] events table empty — running initial crawl')
+			const needSeed =
+				(await countEvents()) === 0 || (await getSnapshot('searchbox')) === null
+			if (needSeed) {
+				console.log('[boot] missing data — running initial crawl')
 				await crawl().catch((err) =>
 					console.error('[boot] initial crawl failed', err)
 				)

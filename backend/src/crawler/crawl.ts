@@ -1,6 +1,7 @@
 import { config } from '../config'
 import { pool } from '../db/pool'
 import { replaceAllEvents, type ReplaceCounts } from '../db/events.repo'
+import { putSnapshot } from '../db/snapshots.repo'
 import type { FetchedAllEvents, FetchedEvent } from '../types'
 
 // Defensive normalisation: drop anything that isn't a usable event so a bad
@@ -22,68 +23,110 @@ function sanitizeList(list: unknown): FetchedEvent[] {
 	return out
 }
 
-// Fetch the upstream events feed and coerce it into our contract. Accepts both a
-// bare `{ shamsiEvents, ... }` body and a `{ data: { ... } }` wrapper.
-export async function fetchUpstreamEvents(): Promise<FetchedAllEvents> {
-	const url = `${config.upstreamUrl}/date/events`
+// Generic upstream JSON GET with the client header and a timeout.
+async function fetchUpstreamJson<T = unknown>(
+	path: string,
+	params?: Record<string, string | number>
+): Promise<T> {
+	let qs = ''
+	if (params) {
+		const sp = new URLSearchParams()
+		for (const [k, v] of Object.entries(params)) sp.set(k, String(v))
+		qs = '?' + sp.toString()
+	}
+	const url = `${config.upstreamUrl}${path}${qs}`
 	const controller = new AbortController()
 	const timer = setTimeout(() => controller.abort(), config.upstreamTimeoutMs)
 	try {
 		const res = await fetch(url, {
-			headers: {
-				client: config.clientHeader,
-				accept: 'application/json',
-			},
+			headers: { client: config.clientHeader, accept: 'application/json' },
 			signal: controller.signal,
 		})
 		if (!res.ok) {
-			throw new Error(`upstream responded ${res.status} ${res.statusText}`)
+			throw new Error(`upstream ${path} responded ${res.status} ${res.statusText}`)
 		}
-		const body = (await res.json()) as Record<string, unknown>
-		const hasTop =
-			body && (body.shamsiEvents || body.gregorianEvents || body.hijriEvents)
-		const root = (hasTop ? body : (body?.data ?? body)) as Record<string, unknown>
-		return {
-			shamsiEvents: sanitizeList(root?.shamsiEvents),
-			gregorianEvents: sanitizeList(root?.gregorianEvents),
-			hijriEvents: sanitizeList(root?.hijriEvents),
-		}
+		return (await res.json()) as T
 	} finally {
 		clearTimeout(timer)
 	}
 }
 
-export interface CrawlResult extends ReplaceCounts {
-	ok: boolean
+// Fetch + coerce the events feed. Accepts a bare body or a { data: {...} } wrapper.
+export async function fetchUpstreamEvents(): Promise<FetchedAllEvents> {
+	const body = await fetchUpstreamJson<Record<string, unknown>>('/date/events')
+	const hasTop =
+		body && (body.shamsiEvents || body.gregorianEvents || body.hijriEvents)
+	const root = (hasTop ? body : ((body as { data?: unknown })?.data ?? body)) as Record<
+		string,
+		unknown
+	>
+	return {
+		shamsiEvents: sanitizeList(root?.shamsiEvents),
+		gregorianEvents: sanitizeList(root?.gregorianEvents),
+		hijriEvents: sanitizeList(root?.hijriEvents),
+	}
 }
 
-// One full crawl: fetch upstream -> replace snapshot -> log the run.
+// Fetch the global searchbox payload (search engines + recommended sites). We
+// store it verbatim — the extension reads its own selected_engine from storage.
+export async function fetchUpstreamSearchbox(): Promise<unknown> {
+	return fetchUpstreamJson('/searchbox', {
+		region: config.searchboxRegion,
+		limit: config.searchboxLimit,
+	})
+}
+
+export interface CrawlResult {
+	ok: boolean
+	events: ReplaceCounts
+	searchbox: boolean
+	errors: string[]
+}
+
+const msg = (e: unknown) => (e instanceof Error ? e.message : String(e))
+
+// One crawl pass. Events and searchbox are fetched independently so a failure
+// in one never blocks the other. Throws only if BOTH fail (so the CLI exits non-zero).
 export async function crawl(): Promise<CrawlResult> {
 	const { rows } = await pool.query<{ id: number }>(
 		'INSERT INTO crawl_runs (started_at) VALUES (now()) RETURNING id'
 	)
 	const runId = rows[0].id
+
+	const errors: string[] = []
+	let events: ReplaceCounts = { shamsi: 0, gregorian: 0, hijri: 0 }
+	let eventsOk = false
+	let searchboxOk = false
+
 	try {
-		const data = await fetchUpstreamEvents()
-		const counts = await replaceAllEvents(data)
-		await pool.query(
-			`UPDATE crawl_runs
-			 SET finished_at = now(), ok = true,
-			     shamsi_count = $2, gregorian_count = $3, hijri_count = $4
-			 WHERE id = $1`,
-			[runId, counts.shamsi, counts.gregorian, counts.hijri]
-		)
+		events = await replaceAllEvents(await fetchUpstreamEvents())
+		eventsOk = true
 		console.log(
-			`[crawl] ok — shamsi=${counts.shamsi} gregorian=${counts.gregorian} hijri=${counts.hijri}`
+			`[crawl] events ok — shamsi=${events.shamsi} gregorian=${events.gregorian} hijri=${events.hijri}`
 		)
-		return { ok: true, ...counts }
 	} catch (err) {
-		const message = err instanceof Error ? err.message : String(err)
-		await pool.query(
-			'UPDATE crawl_runs SET finished_at = now(), ok = false, error = $2 WHERE id = $1',
-			[runId, message]
-		)
-		console.error('[crawl] failed —', message)
-		throw err
+		errors.push(`events: ${msg(err)}`)
+		console.error('[crawl] events failed —', msg(err))
 	}
+
+	try {
+		await putSnapshot('searchbox', await fetchUpstreamSearchbox())
+		searchboxOk = true
+		console.log('[crawl] searchbox ok')
+	} catch (err) {
+		errors.push(`searchbox: ${msg(err)}`)
+		console.error('[crawl] searchbox failed —', msg(err))
+	}
+
+	const ok = eventsOk && searchboxOk
+	await pool.query(
+		`UPDATE crawl_runs
+		 SET finished_at = now(), ok = $2,
+		     shamsi_count = $3, gregorian_count = $4, hijri_count = $5, error = $6
+		 WHERE id = $1`,
+		[runId, ok, events.shamsi, events.gregorian, events.hijri, errors.length ? errors.join('; ') : null]
+	)
+
+	if (!eventsOk && !searchboxOk) throw new Error(errors.join('; ') || 'crawl failed')
+	return { ok, events, searchbox: searchboxOk, errors }
 }

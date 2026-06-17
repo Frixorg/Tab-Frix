@@ -27,4 +27,12 @@ CREATE TABLE IF NOT EXISTS crawl_runs (
 	hijri_count     INTEGER DEFAULT 0,
 	error           TEXT
 );
+
+-- Generic key/value store for static global endpoints we crawl verbatim
+-- (e.g. 'searchbox'). Adding a new self-hosted endpoint = one new key.
+CREATE TABLE IF NOT EXISTS snapshots (
+	key        TEXT PRIMARY KEY,
+	payload    JSONB NOT NULL,
+	updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 `

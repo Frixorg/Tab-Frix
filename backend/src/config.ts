@@ -24,6 +24,10 @@ export const config = {
 	clientHeader: process.env.UPSTREAM_CLIENT_HEADER ?? 'widgetify-extension',
 	upstreamTimeoutMs: Number(process.env.UPSTREAM_TIMEOUT_MS ?? 15000),
 
+	// /searchbox crawl params (static global search engines + recommended sites).
+	searchboxRegion: process.env.SEARCHBOX_REGION ?? 'IR',
+	searchboxLimit: Number(process.env.SEARCHBOX_LIMIT ?? 10),
+
 	// One-time seed: crawl once on boot if the events table is empty. The upstream
 	// feed is a static full-year dataset, so there is no recurring/scheduled crawl.
 	crawlOnStartIfEmpty: bool(process.env.CRAWL_ON_START, true),

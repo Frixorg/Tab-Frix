@@ -22,7 +22,9 @@ behind **Nginx** with a free **Let's Encrypt** certificate for `tab.frix.me`.
 
 - `GET /date/events` → `{ shamsiEvents, gregorianEvents, hijriEvents }`
   (each item: `{ isHoliday, title, day, month, icon }`).
-- `GET /health` → DB status, event count, and last crawl summary.
+- `GET /searchbox` → `{ search_engines, recommendedSites, explorer, selected_engine }`
+  (the global search-engine list + recommended sites, mirrored verbatim).
+- `GET /health` → DB status, event count, mirrored snapshots, last crawl summary.
 - The upstream feed is a **static full-year dataset** (events keyed by month/day,
   no year), so it's crawled **once** on first deploy and stored transactionally
   (all-or-nothing). There is **no recurring cron** — re-run the crawl manually
@@ -32,6 +34,27 @@ behind **Nginx** with a free **Let's Encrypt** certificate for `tab.frix.me`.
   base URL for the extension.
 
 ---
+
+## Endpoints: self-hosted vs passthrough
+
+Only **static, global** data is worth mirroring. Dynamic and per-user endpoints
+stay proxied to the upstream API by the nginx vhost.
+
+| Endpoint | Mode | Why |
+| --- | --- | --- |
+| `GET /date/events` | **self-hosted** | Static yearly events, crawled + stored |
+| `GET /searchbox` | **self-hosted** | Global search engines + recommended sites |
+| `GET /health` | **self-hosted** | This service's status |
+| `/searchbox/suggest-search` | passthrough | Live query autocomplete |
+| `/weather/*`, `/currency/*` | passthrough | Dynamic (location / live prices) |
+| `/wallpapers*` | passthrough | Large media catalog hosted on the CDN |
+| `/auth/*`, `/users/@me/*`, `/extension/@me/*` | passthrough | Auth / per-user |
+| `/bookmarks`, `/todos`, `/notes`, `/friends`, `/market`, `/notifications` | passthrough | Per-user; need auth + an account DB |
+
+To self-host another static endpoint later: crawl it into a `snapshots` row (see
+`src/crawler/crawl.ts`), add a route that reads it (like `searchbox.route.ts`),
+and add an exact-match `location = /your-path` to the nginx vhost. Everything
+else keeps passing through to `api.widgetify.ir`.
 
 ## Project layout
 
