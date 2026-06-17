@@ -1,4 +1,5 @@
 import { getMainClient } from '@/services/api'
+import { useLanguage } from '@/context/language.context'
 import { useQuery } from '@tanstack/react-query'
 
 export interface ExplorerCategoryBadge {
@@ -44,12 +45,15 @@ export interface FetchedContentsResponse {
 }
 
 export const useGetContents = () => {
+	const { lang } = useLanguage()
 	return useQuery<FetchedContentsResponse>({
-		queryKey: ['contents'],
+		queryKey: ['contents', lang],
 		queryFn: async () => {
 			const api = await getMainClient()
 
-			const { data } = await api.get<FetchedContentsResponse>('/contents')
+			const { data } = await api.get<FetchedContentsResponse>('/contents', {
+				params: { lang },
+			})
 			return data
 		},
 		staleTime: 5 * 60 * 1000, // 5 minutes

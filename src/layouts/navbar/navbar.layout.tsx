@@ -9,7 +9,6 @@ import { SettingsDropdown } from './components/settingsDropdown'
 import { FriendsListNavbar } from './friends-list/friends.navbar'
 import { ProfileNav } from './profile/profile'
 import { useAppearanceSetting } from '@/context/appearance.context'
-import { MarketButton } from './market/market-button'
 import Analytics from '@/analytics'
 import {
 	HiGlobeAlt,
@@ -220,7 +219,6 @@ export function NavbarLayout(): JSX.Element {
 						<BlurModeButton />
 						<SettingsDropdown setShowSettings={setShowSettings} />
 						<FriendsListNavbar />
-						<MarketButton />
 						<ProfileNav />
 					</div>
 				</nav>

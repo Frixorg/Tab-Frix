@@ -86,11 +86,46 @@ function localizeSearchbox(
 	}
 }
 
+function localizeContents(
+	raw: Record<string, unknown>,
+	map: Map<string, Translation>,
+	lang: 'fa' | 'en' | 'it'
+): Record<string, unknown> {
+	const tr = (s: string): string => {
+		if (lang === 'fa') return normalizeFa(s)
+		const t = map.get(normalizeFa(s))
+		return (lang === 'en' ? t?.en : t?.it) || s
+	}
+	const cats = Array.isArray(raw.contents) ? (raw.contents as any[]) : []
+	return {
+		...raw,
+		contents: cats.map((cat) => ({
+			...cat,
+			category: typeof cat.category === 'string' ? tr(cat.category) : cat.category,
+			links: (Array.isArray(cat.links) ? cat.links : []).map((l: any) => ({
+				...l,
+				name: typeof l.name === 'string' ? tr(l.name) : l.name,
+				badge: typeof l.badge === 'string' ? tr(l.badge) : l.badge,
+			})),
+			badges: (Array.isArray(cat.badges) ? cat.badges : []).map((b: any) => ({
+				...b,
+				label: typeof b.label === 'string' ? tr(b.label) : b.label,
+			})),
+		})),
+	}
+}
+
 export async function seedDatabase(): Promise<void> {
 	await migrate()
 	const map = readTranslationMap()
 	const events = readJson('events.json')
 	const searchbox = readJson<Record<string, unknown>>('searchbox.json')
+	let contents: Record<string, unknown> | null = null
+	try {
+		contents = readJson<Record<string, unknown>>('contents.json')
+	} catch {
+		console.warn('[seed] contents.json not found — skipping contents')
+	}
 
 	// Seed the translations table so a future crawl reuses these (still no LLM).
 	await putTranslations(
@@ -126,6 +161,11 @@ export async function seedDatabase(): Promise<void> {
 	await putSnapshot('searchbox', localizeSearchbox(searchbox, map, 'fa'))
 	await putSnapshot('searchbox:en', localizeSearchbox(searchbox, map, 'en'))
 	await putSnapshot('searchbox:it', localizeSearchbox(searchbox, map, 'it'))
+	if (contents) {
+		await putSnapshot('contents', localizeContents(contents, map, 'fa'))
+		await putSnapshot('contents:en', localizeContents(contents, map, 'en'))
+		await putSnapshot('contents:it', localizeContents(contents, map, 'it'))
+	}
 
 	const withEn = stored.filter((s) => s.titleEn).length
 	console.log(

@@ -3,6 +3,7 @@ import cors from '@fastify/cors'
 import { config } from './config'
 import { eventsRoutes } from './routes/events.route'
 import { searchboxRoutes } from './routes/searchbox.route'
+import { contentsRoutes } from './routes/contents.route'
 import { healthRoutes } from './routes/health.route'
 
 export async function buildServer(): Promise<FastifyInstance> {
@@ -20,11 +21,12 @@ export async function buildServer(): Promise<FastifyInstance> {
 
 	await app.register(eventsRoutes)
 	await app.register(searchboxRoutes)
+	await app.register(contentsRoutes)
 	await app.register(healthRoutes)
 
 	app.get('/', async () => ({
 		name: 'tabfrix-events-backend',
-		endpoints: ['/date/events', '/searchbox', '/health'],
+		endpoints: ['/date/events', '/searchbox', '/contents', '/health'],
 	}))
 
 	return app
