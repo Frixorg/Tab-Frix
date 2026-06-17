@@ -1,31 +1,79 @@
 import type { PoolClient } from 'pg'
 import { pool } from './pool'
 import type { Calendar, FetchedAllEvents, FetchedEvent } from '../types'
-import { EMPTY_EVENTS } from '../types'
+import type { Lang } from '../lang'
 
-interface EventRow {
+export interface StoredEvent {
 	calendar: Calendar
-	title: string
+	title: string // Persian (normalized) — the canonical title
+	titleEn: string | null
+	titleIt: string | null
 	month: number
 	day: number
 	isHoliday: boolean
 	icon: string | null
 }
 
-// Read every stored event, grouped into the three calendar buckets.
-export async function getAllEvents(): Promise<FetchedAllEvents> {
-	const { rows } = await pool.query<EventRow>(
-		`SELECT calendar, title, month, day, is_holiday AS "isHoliday", icon
+export interface ReplaceCounts {
+	shamsi: number
+	gregorian: number
+	hijri: number
+}
+
+// Replace the whole events snapshot transactionally (the upstream feed is a full
+// snapshot). Stores Persian + English/Italian titles.
+export async function replaceAllEvents(events: StoredEvent[]): Promise<ReplaceCounts> {
+	const client: PoolClient = await pool.connect()
+	try {
+		await client.query('BEGIN')
+		await client.query('DELETE FROM events')
+		const counts: ReplaceCounts = { shamsi: 0, gregorian: 0, hijri: 0 }
+		for (const e of events) {
+			await client.query(
+				`INSERT INTO events (calendar, title, title_en, title_it, month, day, is_holiday, icon)
+				 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+				 ON CONFLICT (calendar, month, day, title) DO UPDATE
+				   SET title_en = EXCLUDED.title_en, title_it = EXCLUDED.title_it,
+				       is_holiday = EXCLUDED.is_holiday, icon = EXCLUDED.icon, updated_at = now()`,
+				[e.calendar, e.title, e.titleEn, e.titleIt, e.month, e.day, e.isHoliday, e.icon]
+			)
+			if (e.calendar === 'shamsi') counts.shamsi++
+			else if (e.calendar === 'gregorian') counts.gregorian++
+			else counts.hijri++
+		}
+		await client.query('COMMIT')
+		return counts
+	} catch (err) {
+		await client.query('ROLLBACK')
+		throw err
+	} finally {
+		client.release()
+	}
+}
+
+// Read every stored event with the title in the requested language (fa fallback).
+export async function getAllEvents(lang: Lang = 'fa'): Promise<FetchedAllEvents> {
+	const titleExpr =
+		lang === 'en'
+			? "CASE WHEN title_en IS NULL OR title_en = '' THEN title ELSE title_en END"
+			: lang === 'it'
+				? "CASE WHEN title_it IS NULL OR title_it = '' THEN title ELSE title_it END"
+				: 'title'
+
+	const { rows } = await pool.query<{
+		calendar: Calendar
+		title: string
+		month: number
+		day: number
+		isHoliday: boolean
+		icon: string | null
+	}>(
+		`SELECT calendar, ${titleExpr} AS title, month, day, is_holiday AS "isHoliday", icon
 		 FROM events
-		 ORDER BY month, day, title`
+		 ORDER BY month, day`
 	)
 
-	const out: FetchedAllEvents = {
-		shamsiEvents: [],
-		gregorianEvents: [],
-		hijriEvents: [],
-	}
-
+	const out: FetchedAllEvents = { shamsiEvents: [], gregorianEvents: [], hijriEvents: [] }
 	for (const r of rows) {
 		const event: FetchedEvent = {
 			isHoliday: r.isHoliday,
@@ -38,58 +86,7 @@ export async function getAllEvents(): Promise<FetchedAllEvents> {
 		else if (r.calendar === 'gregorian') out.gregorianEvents.push(event)
 		else if (r.calendar === 'hijri') out.hijriEvents.push(event)
 	}
-
 	return out
-}
-
-export interface ReplaceCounts {
-	shamsi: number
-	gregorian: number
-	hijri: number
-}
-
-// Replace the whole events snapshot transactionally. The upstream feed is a full
-// snapshot, so we wipe and re-insert inside one transaction (all-or-nothing).
-export async function replaceAllEvents(
-	data: FetchedAllEvents
-): Promise<ReplaceCounts> {
-	const client: PoolClient = await pool.connect()
-	try {
-		await client.query('BEGIN')
-		await client.query('DELETE FROM events')
-
-		const groups: Array<[Calendar, FetchedEvent[]]> = [
-			['shamsi', data.shamsiEvents ?? []],
-			['gregorian', data.gregorianEvents ?? []],
-			['hijri', data.hijriEvents ?? []],
-		]
-
-		for (const [calendar, list] of groups) {
-			for (const e of list) {
-				await client.query(
-					`INSERT INTO events (calendar, title, month, day, is_holiday, icon)
-					 VALUES ($1, $2, $3, $4, $5, $6)
-					 ON CONFLICT (calendar, month, day, title)
-					 DO UPDATE SET is_holiday = EXCLUDED.is_holiday,
-					               icon = EXCLUDED.icon,
-					               updated_at = now()`,
-					[calendar, e.title, e.month, e.day, !!e.isHoliday, e.icon ?? null]
-				)
-			}
-		}
-
-		await client.query('COMMIT')
-		return {
-			shamsi: data.shamsiEvents?.length ?? 0,
-			gregorian: data.gregorianEvents?.length ?? 0,
-			hijri: data.hijriEvents?.length ?? 0,
-		}
-	} catch (err) {
-		await client.query('ROLLBACK')
-		throw err
-	} finally {
-		client.release()
-	}
 }
 
 export async function countEvents(): Promise<number> {
@@ -115,9 +112,4 @@ export async function getLastCrawl(): Promise<CrawlRun | null> {
 		 FROM crawl_runs ORDER BY id DESC LIMIT 1`
 	)
 	return rows[0] ?? null
-}
-
-// Returns empty buckets — handy as a typed fallback.
-export function emptyEvents(): FetchedAllEvents {
-	return { ...EMPTY_EVENTS, shamsiEvents: [], gregorianEvents: [], hijriEvents: [] }
 }

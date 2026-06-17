@@ -20,10 +20,10 @@ behind **Nginx** with a free **Let's Encrypt** certificate for `tab.frix.me`.
                 (other routes pass through to api.widgetify.ir)
 ```
 
-- `GET /date/events` → `{ shamsiEvents, gregorianEvents, hijriEvents }`
-  (each item: `{ isHoliday, title, day, month, icon }`).
-- `GET /searchbox` → `{ search_engines, recommendedSites, explorer, selected_engine }`
-  (the global search-engine list + recommended sites, mirrored verbatim).
+- `GET /date/events?lang=fa|en|it` → `{ shamsiEvents, gregorianEvents, hijriEvents }`
+  (each item: `{ isHoliday, title, day, month, icon }`); titles localized per `lang`.
+- `GET /searchbox?lang=fa|en|it` → `{ search_engines, recommendedSites, explorer, selected_engine }`
+  (search-engine list + recommended sites, labels localized per `lang`).
 - `GET /health` → DB status, event count, mirrored snapshots, last crawl summary.
 - The upstream feed is a **static full-year dataset** (events keyed by month/day,
   no year), so it's crawled **once** on first deploy and stored transactionally
@@ -156,6 +156,22 @@ passes everything else through to `api.widgetify.ir`.
 
 ---
 
+## Translations (en / it)
+
+Event titles and search labels arrive from the upstream in Persian only. At crawl
+time the backend translates them to English + Italian via an OpenAI-compatible
+LLM and stores all three; the `?lang=` param then selects which to serve (fa is
+the canonical fallback). Translations are cached in the `translations` table, so
+re-crawls only send new/changed strings to the LLM.
+
+Enable it by setting `LLM_API_KEY` (and optionally `LLM_BASE_URL` / `LLM_MODEL`)
+in `.env`. With no key, the crawl still works and serves Persian for every
+language. Persian itself is normalized deterministically (Arabic→Persian
+characters, whitespace) and never rewritten by the LLM, so religious/cultural
+wording is preserved.
+
+---
+
 ## Local development
 
 ```bash
@@ -202,4 +218,6 @@ the events feed changes its source — everything else keeps working.
 | `UPSTREAM_CLIENT_HEADER` | `widgetify-extension` | `client` header sent upstream |
 | `CRAWL_ON_START` | `true` | One-time seed crawl on boot if table empty |
 | `CORS_ORIGIN` | `*` | `*` or comma-separated allow-list |
+| `LLM_API_KEY` | — | Enables en/it translation when set (empty = Persian only) |
+| `LLM_BASE_URL` / `LLM_MODEL` | OpenAI / `gpt-4o-mini` | OpenAI-compatible endpoint + model |
 | `DOMAIN` / `CERTBOT_EMAIL` | `tab.frix.me` / — | Used by Nginx + cert bootstrap |

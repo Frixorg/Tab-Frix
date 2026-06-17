@@ -1,7 +1,7 @@
-import type { FastifyInstance } from 'fastify'
+import type { FastifyInstance, FastifyRequest } from 'fastify'
 import { getSnapshot } from '../db/snapshots.repo'
+import { parseLang } from '../lang'
 
-// Returned before the first successful crawl so the extension never breaks.
 const EMPTY_SEARCHBOX = {
 	search_engines: [],
 	recommendedSites: [],
@@ -10,12 +10,17 @@ const EMPTY_SEARCHBOX = {
 }
 
 export async function searchboxRoutes(app: FastifyInstance): Promise<void> {
-	// Mirrors GET /searchbox. Query params (region/limit) are accepted but ignored —
-	// we serve the stored global snapshot. selected_engine stays null; the extension
-	// tracks the user's chosen engine in its own local storage.
-	app.get('/searchbox', async (_req, reply) => {
-		const data = await getSnapshot('searchbox')
-		reply.header('Cache-Control', 'public, max-age=600')
-		return data ?? EMPTY_SEARCHBOX
-	})
+	// GET /searchbox?lang=fa|en|it — localized label/title (fa fallback).
+	app.get(
+		'/searchbox',
+		async (req: FastifyRequest<{ Querystring: { lang?: string } }>, reply) => {
+			const lang = parseLang(req.query.lang)
+			const key =
+				lang === 'en' ? 'searchbox:en' : lang === 'it' ? 'searchbox:it' : 'searchbox'
+			const data =
+				(await getSnapshot(key)) ?? (await getSnapshot('searchbox')) ?? EMPTY_SEARCHBOX
+			reply.header('Cache-Control', 'public, max-age=600')
+			return data
+		}
+	)
 }

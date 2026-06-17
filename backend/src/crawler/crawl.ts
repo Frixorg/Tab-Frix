@@ -1,11 +1,12 @@
 import { config } from '../config'
 import { pool } from '../db/pool'
-import { replaceAllEvents, type ReplaceCounts } from '../db/events.repo'
+import { replaceAllEvents, type ReplaceCounts, type StoredEvent } from '../db/events.repo'
 import { putSnapshot } from '../db/snapshots.repo'
-import type { FetchedAllEvents, FetchedEvent } from '../types'
+import { normalizeFa, translateTexts } from '../translate/llm'
+import type { Translation } from '../db/translations.repo'
+import type { Calendar, FetchedAllEvents, FetchedEvent } from '../types'
+import type { Lang } from '../lang'
 
-// Defensive normalisation: drop anything that isn't a usable event so a bad
-// upstream payload can never poison the database.
 function sanitizeList(list: unknown): FetchedEvent[] {
 	if (!Array.isArray(list)) return []
 	const out: FetchedEvent[] = []
@@ -23,7 +24,6 @@ function sanitizeList(list: unknown): FetchedEvent[] {
 	return out
 }
 
-// Generic upstream JSON GET with the client header and a timeout.
 async function fetchUpstreamJson<T = unknown>(
 	path: string,
 	params?: Record<string, string | number>
@@ -42,20 +42,16 @@ async function fetchUpstreamJson<T = unknown>(
 			headers: { client: config.clientHeader, accept: 'application/json' },
 			signal: controller.signal,
 		})
-		if (!res.ok) {
-			throw new Error(`upstream ${path} responded ${res.status} ${res.statusText}`)
-		}
+		if (!res.ok) throw new Error(`upstream ${path} responded ${res.status} ${res.statusText}`)
 		return (await res.json()) as T
 	} finally {
 		clearTimeout(timer)
 	}
 }
 
-// Fetch + coerce the events feed. Accepts a bare body or a { data: {...} } wrapper.
 export async function fetchUpstreamEvents(): Promise<FetchedAllEvents> {
 	const body = await fetchUpstreamJson<Record<string, unknown>>('/date/events')
-	const hasTop =
-		body && (body.shamsiEvents || body.gregorianEvents || body.hijriEvents)
+	const hasTop = body && (body.shamsiEvents || body.gregorianEvents || body.hijriEvents)
 	const root = (hasTop ? body : ((body as { data?: unknown })?.data ?? body)) as Record<
 		string,
 		unknown
@@ -67,55 +63,147 @@ export async function fetchUpstreamEvents(): Promise<FetchedAllEvents> {
 	}
 }
 
-// Fetch the global searchbox payload (search engines + recommended sites). We
-// store it verbatim — the extension reads its own selected_engine from storage.
-export async function fetchUpstreamSearchbox(): Promise<unknown> {
-	return fetchUpstreamJson('/searchbox', {
+interface SearchEngine {
+	label?: unknown
+	[k: string]: unknown
+}
+interface RecSite {
+	title?: unknown
+	[k: string]: unknown
+}
+interface Searchbox {
+	search_engines?: SearchEngine[]
+	recommendedSites?: RecSite[]
+	[k: string]: unknown
+}
+
+export async function fetchUpstreamSearchbox(): Promise<Searchbox> {
+	return fetchUpstreamJson<Searchbox>('/searchbox', {
 		region: config.searchboxRegion,
 		limit: config.searchboxLimit,
 	})
+}
+
+// Produce a localized copy of the searchbox payload. fa = normalized Persian;
+// en/it = translated label/title (falling back to the original string).
+function localizeSearchbox(
+	raw: Searchbox,
+	map: Map<string, Translation>,
+	lang: Lang
+): Searchbox {
+	const tr = (s: string): string => {
+		if (lang === 'fa') return normalizeFa(s)
+		const t = map.get(s.trim())
+		return (lang === 'en' ? t?.en : t?.it) || s
+	}
+	const engines = Array.isArray(raw.search_engines) ? raw.search_engines : []
+	const sites = Array.isArray(raw.recommendedSites) ? raw.recommendedSites : []
+	return {
+		...raw,
+		search_engines: engines.map((e) => ({
+			...e,
+			label: typeof e.label === 'string' ? tr(e.label) : e.label,
+		})),
+		recommendedSites: sites.map((s) => ({
+			...s,
+			title: typeof s.title === 'string' ? tr(s.title) : s.title,
+		})),
+	}
 }
 
 export interface CrawlResult {
 	ok: boolean
 	events: ReplaceCounts
 	searchbox: boolean
+	translated: boolean
 	errors: string[]
 }
 
 const msg = (e: unknown) => (e instanceof Error ? e.message : String(e))
 
-// One crawl pass. Events and searchbox are fetched independently so a failure
-// in one never blocks the other. Throws only if BOTH fail (so the CLI exits non-zero).
 export async function crawl(): Promise<CrawlResult> {
 	const { rows } = await pool.query<{ id: number }>(
 		'INSERT INTO crawl_runs (started_at) VALUES (now()) RETURNING id'
 	)
 	const runId = rows[0].id
-
 	const errors: string[] = []
-	let events: ReplaceCounts = { shamsi: 0, gregorian: 0, hijri: 0 }
+
+	let ev: FetchedAllEvents | null = null
+	let sb: Searchbox | null = null
+	try {
+		ev = await fetchUpstreamEvents()
+	} catch (err) {
+		errors.push(`events: ${msg(err)}`)
+	}
+	try {
+		sb = await fetchUpstreamSearchbox()
+	} catch (err) {
+		errors.push(`searchbox: ${msg(err)}`)
+	}
+
+	// Collect every Persian source string and translate once (cached + batched).
+	const texts: string[] = []
+	if (ev)
+		for (const arr of [ev.shamsiEvents, ev.gregorianEvents, ev.hijriEvents])
+			for (const e of arr) texts.push(e.title)
+	if (sb) {
+		for (const e of Array.isArray(sb.search_engines) ? sb.search_engines : [])
+			if (typeof e.label === 'string') texts.push(e.label)
+		for (const s of Array.isArray(sb.recommendedSites) ? sb.recommendedSites : [])
+			if (typeof s.title === 'string') texts.push(s.title)
+	}
+	let map = new Map<string, Translation>()
+	try {
+		map = await translateTexts(texts)
+	} catch (err) {
+		errors.push(`translate: ${msg(err)}`)
+	}
+
+	let counts: ReplaceCounts = { shamsi: 0, gregorian: 0, hijri: 0 }
 	let eventsOk = false
 	let searchboxOk = false
 
-	try {
-		events = await replaceAllEvents(await fetchUpstreamEvents())
-		eventsOk = true
-		console.log(
-			`[crawl] events ok — shamsi=${events.shamsi} gregorian=${events.gregorian} hijri=${events.hijri}`
-		)
-	} catch (err) {
-		errors.push(`events: ${msg(err)}`)
-		console.error('[crawl] events failed —', msg(err))
+	if (ev) {
+		try {
+			const stored: StoredEvent[] = []
+			const add = (calendar: Calendar, arr: FetchedEvent[]) => {
+				for (const e of arr) {
+					const t = map.get(e.title.trim()) ?? { en: null, it: null }
+					stored.push({
+						calendar,
+						title: normalizeFa(e.title),
+						titleEn: t.en,
+						titleIt: t.it,
+						month: e.month,
+						day: e.day,
+						isHoliday: e.isHoliday,
+						icon: e.icon,
+					})
+				}
+			}
+			add('shamsi', ev.shamsiEvents)
+			add('gregorian', ev.gregorianEvents)
+			add('hijri', ev.hijriEvents)
+			counts = await replaceAllEvents(stored)
+			eventsOk = true
+			console.log(
+				`[crawl] events ok — shamsi=${counts.shamsi} gregorian=${counts.gregorian} hijri=${counts.hijri}`
+			)
+		} catch (err) {
+			errors.push(`events-store: ${msg(err)}`)
+		}
 	}
 
-	try {
-		await putSnapshot('searchbox', await fetchUpstreamSearchbox())
-		searchboxOk = true
-		console.log('[crawl] searchbox ok')
-	} catch (err) {
-		errors.push(`searchbox: ${msg(err)}`)
-		console.error('[crawl] searchbox failed —', msg(err))
+	if (sb) {
+		try {
+			await putSnapshot('searchbox', localizeSearchbox(sb, map, 'fa'))
+			await putSnapshot('searchbox:en', localizeSearchbox(sb, map, 'en'))
+			await putSnapshot('searchbox:it', localizeSearchbox(sb, map, 'it'))
+			searchboxOk = true
+			console.log('[crawl] searchbox ok (fa/en/it)')
+		} catch (err) {
+			errors.push(`searchbox-store: ${msg(err)}`)
+		}
 	}
 
 	const ok = eventsOk && searchboxOk
@@ -124,9 +212,9 @@ export async function crawl(): Promise<CrawlResult> {
 		 SET finished_at = now(), ok = $2,
 		     shamsi_count = $3, gregorian_count = $4, hijri_count = $5, error = $6
 		 WHERE id = $1`,
-		[runId, ok, events.shamsi, events.gregorian, events.hijri, errors.length ? errors.join('; ') : null]
+		[runId, ok, counts.shamsi, counts.gregorian, counts.hijri, errors.length ? errors.join('; ') : null]
 	)
 
 	if (!eventsOk && !searchboxOk) throw new Error(errors.join('; ') || 'crawl failed')
-	return { ok, events, searchbox: searchboxOk, errors }
+	return { ok, events: counts, searchbox: searchboxOk, translated: config.llmApiKey.length > 0, errors }
 }

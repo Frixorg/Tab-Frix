@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { getMainClient } from '@/services/api'
+import { useLanguage } from '@/context/language.context'
 
 export interface TrendItem {
 	title: string
@@ -36,13 +37,18 @@ export interface SearchBoxResponse {
 	selected_engine: string
 }
 
-async function fetchSearchbox(region = 'IR', limit = 10): Promise<SearchBoxResponse> {
+async function fetchSearchbox(
+	region = 'IR',
+	limit = 10,
+	lang = 'fa'
+): Promise<SearchBoxResponse> {
 	const client = await getMainClient()
 
 	const response = await client.get<SearchBoxResponse>('/searchbox', {
 		params: {
 			region,
 			limit,
+			lang,
 		},
 	})
 	return response.data
@@ -57,9 +63,10 @@ export function useGetSearchboxData(
 	} = {}
 ) {
 	const { region = 'IR', limit = 10, refetchInterval = null, enabled = true } = options
+	const { lang } = useLanguage()
 	return useQuery<SearchBoxResponse>({
-		queryKey: ['getTrends', region, limit],
-		queryFn: () => fetchSearchbox(region, limit),
+		queryKey: ['getTrends', region, limit, lang],
+		queryFn: () => fetchSearchbox(region, limit, lang),
 		refetchInterval: refetchInterval || false,
 		enabled,
 	})

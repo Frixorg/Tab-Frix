@@ -1,4 +1,5 @@
 import { getMainClient } from '@/services/api'
+import { useLanguage } from '@/context/language.context'
 import { useQuery } from '@tanstack/react-query'
 
 export interface FetchedEvent {
@@ -15,16 +16,19 @@ export interface FetchedAllEvents {
 }
 
 export const useGetEvents = () => {
+	const { lang } = useLanguage()
 	return useQuery<FetchedAllEvents>({
-		queryKey: ['get-events'],
-		queryFn: async () => getEvents(),
+		queryKey: ['get-events', lang],
+		queryFn: async () => getEvents(lang),
 		retry: 0,
 		staleTime: 10 * 60 * 1000,
 	})
 }
 
-async function getEvents(): Promise<FetchedAllEvents> {
+async function getEvents(lang: string): Promise<FetchedAllEvents> {
 	const client = await getMainClient()
-	const { data } = await client.get<FetchedAllEvents>('/date/events')
+	const { data } = await client.get<FetchedAllEvents>('/date/events', {
+		params: { lang },
+	})
 	return data ?? []
 }
