@@ -120,7 +120,7 @@ export function useTheme() {
 }
 
 export async function loadRemoteTheme(themeName: string) {
-	const url = `https://cdn.widgetify.ir/themes/${themeName}.css`
+	const url = `/cdn/themes/${themeName}.css`
 
 	const css = await fetch(url).then((r) => r.text())
 

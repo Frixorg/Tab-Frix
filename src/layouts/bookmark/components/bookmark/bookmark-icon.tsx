@@ -14,7 +14,7 @@ const colors = [
 	'bg-cyan-500/60',
 	'bg-indigo-500/60',
 ]
-const DEF = 'https://cdn.widgetify.ir/system/bookmark.png'
+const DEF = '/cdn/system/bookmark.png'
 
 const getInitials = (title: string) => {
 	return title

@@ -24,7 +24,7 @@ const buildSteps = (t: (key: string) => string): Step[] => [
 
 				<div className="relative group">
 					<img
-						src="https://cdn.widgetify.ir/extension/how-to-disable-footer.png"
+						src="/cdn/extension/how-to-disable-footer.png"
 						alt={t('tour.cleanBrowserImageAlt')}
 						className="object-cover w-full transition-transform duration-500 rounded-xl shadow-2xl border-2 border-primary/20 group-hover:scale-[1.02]"
 					/>

@@ -59,7 +59,7 @@ export function RequestNotificationModal({
 						<div className="my-2 overflow-hidden rounded-lg shadow-md">
 							<img
 								src={
-									'https://cdn.widgetify.ir/extension/pomodoroTimer-notification.png'
+									'/cdn/extension/pomodoroTimer-notification.png'
 								}
 								alt={t('widgets.pomodoro.notifSampleAlt')}
 								className="object-cover w-full h-auto"

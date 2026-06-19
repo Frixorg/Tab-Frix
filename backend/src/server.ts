@@ -5,6 +5,7 @@ import { eventsRoutes } from './routes/events.route'
 import { searchboxRoutes } from './routes/searchbox.route'
 import { contentsRoutes } from './routes/contents.route'
 import { authRoutes } from './routes/auth.route'
+import { timezonesRoutes } from './routes/timezones.route'
 import { healthRoutes } from './routes/health.route'
 
 export async function buildServer(): Promise<FastifyInstance> {
@@ -24,11 +25,18 @@ export async function buildServer(): Promise<FastifyInstance> {
 	await app.register(searchboxRoutes)
 	await app.register(contentsRoutes)
 	await app.register(authRoutes)
+	await app.register(timezonesRoutes)
 	await app.register(healthRoutes)
 
 	app.get('/', async () => ({
 		name: 'tabfrix-events-backend',
-		endpoints: ['/date/events', '/searchbox', '/contents', '/health'],
+		endpoints: [
+			'/date/events',
+			'/date/timezones',
+			'/searchbox',
+			'/contents',
+			'/health',
+		],
 	}))
 
 	return app

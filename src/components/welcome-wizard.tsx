@@ -138,7 +138,7 @@ export const WelcomeWizard = ({ isOpen, onClose }: WelcomeWizardProps) => {
 							</Button>
 						</div>
 						<StepImage
-							src="https://cdn.widgetify.ir/extension/wizard/1.webp"
+							src="/cdn/extension/wizard/1.webp"
 							alt="Welcome"
 						/>
 					</StepWrapper>
@@ -194,7 +194,7 @@ export const WelcomeWizard = ({ isOpen, onClose }: WelcomeWizardProps) => {
 							</div>
 						</div>
 						<StepImage
-							src="https://cdn.widgetify.ir/extension/wizard/2.webp"
+							src="/cdn/extension/wizard/2.webp"
 							alt="Welcome"
 						/>
 					</StepWrapper>
@@ -261,7 +261,7 @@ export const WelcomeWizard = ({ isOpen, onClose }: WelcomeWizardProps) => {
 							</div>
 						</div>
 						<StepImage
-							src="https://cdn.widgetify.ir/extension/wizard/3.webp"
+							src="/cdn/extension/wizard/3.webp"
 							alt="Welcome"
 						/>
 					</StepWrapper>
@@ -336,7 +336,7 @@ export const WelcomeWizard = ({ isOpen, onClose }: WelcomeWizardProps) => {
 							</Button>
 						</div>
 						<StepImage
-							src="https://cdn.widgetify.ir/extension/wizard/4.webp"
+							src="/cdn/extension/wizard/4.webp"
 							alt="Welcome"
 						/>
 					</StepWrapper>
@@ -365,7 +365,7 @@ export const WelcomeWizard = ({ isOpen, onClose }: WelcomeWizardProps) => {
 							</Button>
 						</div>
 						<StepImage
-							src="https://cdn.widgetify.ir/extension/wizard/5.webp"
+							src="/cdn/extension/wizard/5.webp"
 							alt="Welcome"
 						/>
 					</StepWrapper>

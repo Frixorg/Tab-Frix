@@ -60,8 +60,11 @@ function applyWallpaper(wallpaper: StoredWallpaper) {
 		})
 
 		video.onerror = () => {
-			console.error('Video error:', video.error)
-			document.body.style.backgroundColor = '#000'
+			// The source couldn't load/decode — fall back to the default gradient
+			// instead of leaving a black screen.
+			console.warn('Background video unavailable; using default background', video.error?.code)
+			video.remove()
+			applyWallpaper(DEFAULT_GRADIENT)
 		}
 		video.onloadeddata = () => {
 			video.play().catch((e) => console.warn('Play failed:', e))

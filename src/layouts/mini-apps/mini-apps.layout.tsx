@@ -9,7 +9,7 @@ import { HiOutlineInformationCircle } from 'react-icons/hi2'
 import Modal from '@/components/modal'
 import { Button } from '@/components/button/button'
 import { useLanguage } from '@/context/language.context'
-const EmptyMiniAppImage = 'https://cdn.widgetify.ir/extension/empty-mini-app.png'
+const EmptyMiniAppImage = '/cdn/extension/empty-mini-app.png'
 export function MiniAppsLayout() {
 	const { t, dir } = useLanguage()
 	const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage, isError } =

@@ -193,7 +193,7 @@ export function NavbarLayout(): JSX.Element {
 							className="flex items-center justify-center border rounded-full border-white/10 bg-black/20 outline-2 outline-base-300"
 						>
 							<img
-								src={'https://cdn.widgetify.ir/extension/logo.png'}
+								src={'/cdn/extension/logo.png'}
 								alt="Logo"
 								className="object-contain w-7 h-7 sm:w-8 sm:h-8"
 							/>

@@ -123,7 +123,7 @@ export const UpdateReleaseNotesModal = ({
 						className="absolute inset-0 scale-105 bg-top bg-no-repeat bg-contain animate-pan"
 						style={{
 							backgroundImage:
-								'url(http://cdn.widgetify.ir/extension/sahel-update.jpg)',
+								'url(/cdn/extension/sahel-update.jpg)',
 							maskImage:
 								'linear-gradient(to bottom, black 65%, transparent 100%)',
 							WebkitMaskImage:

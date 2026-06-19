@@ -93,7 +93,7 @@ export default function LoginGoogleButton() {
 					<IconLoading className="!h-4 !w-4 md:!h-5 md:!w-5" />
 				) : (
 					<img
-						src="https://cdn.widgetify.ir/sites/google.png"
+						src="/cdn/sites/google.png"
 						alt=""
 						aria-hidden="true"
 						className="w-4 h-4 transition-all duration-200 md:w-5 md:h-5 group-hover:scale-110 group-hover:rotate-3"
