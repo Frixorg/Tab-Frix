@@ -10,7 +10,6 @@ import {
 } from '../../utils'
 import { useDate } from '@/context/date.context'
 import type React from 'react'
-import { useAuth } from '@/context/auth.context'
 import {
 	type MoodType,
 	useUpsertMoodLog,
@@ -39,7 +38,6 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 }) => {
 	const { selectedDate, today, getHijriDate, isJalali } = useDate()
 	const { t } = useLanguage()
-	const { isAuthenticated } = useAuth()
 	const { mutateAsync: upsertMoodLog } = useUpsertMoodLog()
 
 	const [mood, setMood] = useState<MoodType | ''>('')
@@ -49,10 +47,6 @@ export const CalendarDayDetails: React.FC<CalendarDayDetailsProps> = ({
 	const handleMoodChange = async (value: string) => {
 		if (isAdding) return
 		if (value === '') return
-		if (!isAuthenticated) {
-			showToast(t('widgets.calendar.moodSignIn'), 'error')
-			return
-		}
 
 		const currentGregorian = today.clone().doAsGregorian()
 		const selectedGregorian = selectedDate.clone().doAsGregorian()

@@ -75,7 +75,13 @@ export function ExplorerContent() {
 		Analytics.event('explorer_click_category')
 	}
 
-	const contents = catalogData?.contents || []
+	// Categories removed from the Explorer. Matched by `id`, which the backend keeps
+	// in Persian across all languages (only the display name is translated), so this
+	// hides them in fa/en/it alike: "تایمر سال" (Year Timer) and "آموزش ها" (Tutorials).
+	const HIDDEN_CATEGORY_IDS = ['تایمر سال', 'آموزش ها']
+	const contents = (catalogData?.contents || []).filter(
+		(c: CategoryItem) => !HIDDEN_CATEGORY_IDS.includes((c.id || '').trim())
+	)
 	const categories = contents.filter((f) => !f.hideName && f.links.length)
 
 	return (

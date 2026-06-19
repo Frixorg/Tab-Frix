@@ -1,5 +1,6 @@
 import Modal from '@/components/modal'
 import { useAuth } from '@/context/auth.context'
+import { useLanguage } from '@/context/language.context'
 import AuthForm from './auth-form/auth-form'
 import { SettingModal } from '../../setting-modal'
 interface FriendSettingModalProps {
@@ -13,6 +14,7 @@ export const UserAccountModal = ({
 	selectedTab,
 }: FriendSettingModalProps) => {
 	const { isAuthenticated } = useAuth()
+	const { t, dir } = useLanguage()
 
 	if (!isAuthenticated)
 		return (
@@ -20,8 +22,8 @@ export const UserAccountModal = ({
 				isOpen={isOpen}
 				onClose={onClose}
 				size="md"
-				title="ورود به حساب کاربری"
-				direction="rtl"
+				title={t('auth.loginTitle')}
+				direction={dir}
 			>
 				<AuthForm />
 			</Modal>

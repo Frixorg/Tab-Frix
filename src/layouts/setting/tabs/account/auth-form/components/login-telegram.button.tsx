@@ -1,5 +1,6 @@
 import { IconLoading } from '@/components/loading/icon-loading'
 import { useAuth } from '@/context/auth.context'
+import { useLanguage } from '@/context/language.context'
 import { getMainClient } from '@/services/api'
 import { useState } from 'react'
 import { showToast } from '@/common/toast'
@@ -37,13 +38,14 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 // callback URL registered under the bot's "Redirect URIs".
 export default function LoginTelegramButton() {
 	const { login } = useAuth()
+	const { t } = useLanguage()
 	const [isLoading, setIsLoading] = useState(false)
 	const clientId = import.meta.env.VITE_TELEGRAM_CLIENT_ID as string | undefined
 
 	const loginTelegram = async () => {
 		Analytics.event('auth_method_changed_to_telegram')
 		if (!clientId) {
-			showToast('ورود با تلگرام پیکربندی نشده است', 'error')
+			showToast(t('auth.telegramNotConfigured'), 'error')
 			return
 		}
 		setIsLoading(true)
@@ -99,7 +101,7 @@ export default function LoginTelegramButton() {
 				}
 				if (data.error) {
 					console.error('[telegram-login] backend error', data.error)
-					showToast(`تلگرام: ${data.error}`, 'error')
+					showToast(t('auth.telegramError', { detail: data.error }), 'error')
 					break
 				}
 				// pending → keep polling
@@ -118,7 +120,7 @@ export default function LoginTelegramButton() {
 					.get('/auth/telegram/result', { params: { state } })
 					.catch(() => null)
 				if (!res?.data?.error) {
-					showToast('ورود با تلگرام به پایان نرسید. دوباره تلاش کنید.', 'error')
+					showToast(t('auth.telegramTimedOut'), 'error')
 				}
 			}
 		} catch (e) {
@@ -126,7 +128,10 @@ export default function LoginTelegramButton() {
 				?.response
 			const detail = res?.data?.detail ?? res?.data?.error
 			console.error('[telegram-login] failed', res?.data ?? e)
-			showToast(detail ? `تلگرام: ${detail}` : 'ورود با تلگرام ناموفق بود', 'error')
+			showToast(
+				detail ? t('auth.telegramError', { detail }) : t('auth.telegramFailed'),
+				'error'
+			)
 		} finally {
 			setIsLoading(false)
 		}
@@ -147,7 +152,7 @@ export default function LoginTelegramButton() {
 				)}
 			</div>
 			<span className="transition-all duration-200 group-hover:scale-105 whitespace-nowrap text-base-content/80 group-hover:text-base-content">
-				{isLoading ? 'درحال پردازش...' : 'ورود با تلگرام'}
+				{isLoading ? t('auth.processing') : t('auth.telegram')}
 			</span>
 		</button>
 	)

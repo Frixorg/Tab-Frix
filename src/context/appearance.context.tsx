@@ -121,20 +121,17 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
 	}
 
 	const setUI = async (ui: UI) => {
-		if (!isAuthenticated)
-			return showToast(
-				'برای استفاده از این حالت، باید وارد حساب کاربری خود شوید!',
-				'error'
-			)
-
+		// Available without signing in — apply locally; sync to the account only if logged in.
 		const currentUI = settings.ui
 		updateSetting('ui', ui)
-		const [err] = await safeAwait(changeUIAsync({ ui }))
-		if (err) {
-			updateSetting('ui', currentUI)
-			return showToast(translateError(err) as any, 'error')
-		}
 		Analytics.event(`set_ui_${ui}`)
+		if (isAuthenticated) {
+			const [err] = await safeAwait(changeUIAsync({ ui }))
+			if (err) {
+				updateSetting('ui', currentUI)
+				return showToast(translateError(err) as any, 'error')
+			}
+		}
 	}
 
 	const toggleCanReOrderWidget = async () => {

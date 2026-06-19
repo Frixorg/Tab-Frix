@@ -65,12 +65,6 @@ export function SelectCity({ size }: Prop) {
 	}
 
 	const onModalOpen = () => {
-		if (!isAuthenticated) {
-			Analytics.event('open_city_selection_modal_unauthenticated')
-			setShowAuthModal(true)
-			return
-		}
-
 		setIsModalOpen(true)
 		Analytics.event('open_city_selection_modal')
 		setTimeout(() => {

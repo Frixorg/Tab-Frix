@@ -106,21 +106,14 @@ export function WallpaperProvider({ children }: { children: React.ReactNode }) {
 			setSelectedBackground(wallpaper)
 			return
 		}
-		if (wallpaper.coin && !isAuthenticated) {
-			showToast('برای انتخاب این تصویر زمینه باید وارد حساب کاربری شوید.', 'error')
-			return
-		}
+		// All wallpapers are free and available without signing in — apply locally.
+		setSelectedBackground(wallpaper)
 
-		let isSet = false
-		if (!wallpaper.coin || wallpaper.isOwned) {
-			setSelectedBackground(wallpaper)
-			isSet = true
-		}
-
+		// Logged-in users also sync the choice to their account (+ unlock coin items).
 		if (isAuthenticated) {
 			const wallpaperId =
 				wallpaper.type === 'GRADIENT' ? 'custom-wallpaper' : wallpaper.id
-			const [error, responseWallpaper] = await safeAwait<AxiosError, Wallpaper>(
+			const [error] = await safeAwait<AxiosError, Wallpaper>(
 				mutateAsync({ wallpaperId })
 			)
 
@@ -134,8 +127,6 @@ export function WallpaperProvider({ children }: { children: React.ReactNode }) {
 				queryClient.invalidateQueries({ queryKey: ['userProfile'] })
 				playAlarm('market')
 			}
-
-			if (!isSet) setSelectedBackground(responseWallpaper)
 		}
 
 		Analytics.event('wallpaper_changed')

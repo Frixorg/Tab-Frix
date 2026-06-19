@@ -4,7 +4,6 @@ import { FiChevronDown, FiTrash2, FiEdit3, FiTag, FiUsers } from 'react-icons/fi
 import CustomCheckbox from '@/components/checkbox'
 import type { FetchedTodo, Todo } from '@/services/hooks/todo/todo.interface'
 import { ConfirmationModal } from '@/components/modal/confirmation-modal'
-import { useAuth } from '@/context/auth.context'
 import { useLanguage } from '@/context/language.context'
 import { showToast } from '@/common/toast'
 import { useRemoveTodo } from '@/services/hooks/todo/remove-todo.hook'
@@ -28,7 +27,6 @@ interface Prop {
 }
 
 export function TodoItem({ todo, blurMode = false, onEdit, onUpdated }: Prop) {
-	const { isAuthenticated } = useAuth()
 	const { t } = useLanguage()
 	const translatedPriority = {
 		low: t('widgets.todos.prioShortLow'),
@@ -50,14 +48,12 @@ export function TodoItem({ todo, blurMode = false, onEdit, onUpdated }: Prop) {
 		if (isTemp) return showToast(t('widgets.todos.notSynced'), 'error')
 		e.stopPropagation()
 		if (isPending) return
-		if (!isAuthenticated) return showToast(t('widgets.todos.signInDelete'), 'error')
 		setShowConfirmation(true)
 	}
 
 	const handleEdit = (e: React.MouseEvent) => {
 		if (isTemp) return showToast(t('widgets.todos.notSynced'), 'error')
 		e.stopPropagation()
-		if (!isAuthenticated) return showToast(t('widgets.todos.signInEdit'), 'error')
 		onEdit(todo)
 	}
 

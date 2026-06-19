@@ -1,5 +1,6 @@
 import { IconLoading } from '@/components/loading/icon-loading'
 import { useAuth } from '@/context/auth.context'
+import { useLanguage } from '@/context/language.context'
 import {
 	type AuthResponse,
 	useGoogleSignIn,
@@ -15,6 +16,7 @@ import { sleep } from '@/common/utils/timeout'
 
 export default function LoginGoogleButton() {
 	const { login } = useAuth()
+	const { t } = useLanguage()
 	const [isLoading, setIsLoading] = useState(false)
 	const googleSignInMutation = useGoogleSignIn()
 
@@ -99,7 +101,7 @@ export default function LoginGoogleButton() {
 				)}
 			</div>
 			<span className="transition-all duration-200 group-hover:scale-105 whitespace-nowrap text-base-content/80 group-hover:text-base-content">
-				{isLoading ? 'درحال پردازش...' : 'ورود با گوگل'}
+				{isLoading ? t('auth.processing') : t('auth.google')}
 			</span>
 		</button>
 	)

@@ -3,15 +3,12 @@ import { FiChevronLeft, FiTrash2 } from 'react-icons/fi'
 import { Button } from '@/components/button/button'
 import Tooltip from '@/components/toolTip'
 import { useNotes } from '@/context/notes.context'
-import { useAuth } from '@/context/auth.context'
 import Analytics from '@/analytics'
 import { IconLoading } from '@/components/loading/icon-loading'
 import { MdEdit, MdRefresh } from 'react-icons/md'
-import { callEvent } from '@/common/utils/call-event'
 import { useLanguage } from '@/context/language.context'
 
 export function NoteNavigation() {
-	const { isAuthenticated } = useAuth()
 	const { t } = useLanguage()
 
 	const {
@@ -41,11 +38,6 @@ export function NoteNavigation() {
 	}
 
 	const onAdd = () => {
-		if (!isAuthenticated) {
-			callEvent('open_require_auth_modal')
-			Analytics.event('note_open_required_auth_modal')
-			return
-		}
 		addNote()
 	}
 

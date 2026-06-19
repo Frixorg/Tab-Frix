@@ -1,8 +1,6 @@
 import { getFromStorage, setToStorage } from '@/common/storage'
-import { callEvent } from '@/common/utils/call-event'
 import { NewBadge } from '@/components/badges/new.badge'
 import { Dropdown } from '@/components/dropdown'
-import { useAuth } from '@/context/auth.context'
 import { useChangeSearchEngine } from '@/services/hooks/extension/updateSetting.hook'
 import { type EngineMeta, useGetSearchboxData } from '@/services/hooks/trends/getTrends'
 import type { ReactNode } from 'react'
@@ -25,7 +23,6 @@ type EngineSelectorProps = {
 
 export function EngineSelector({ trigger, onSelected }: EngineSelectorProps) {
 	const { t } = useLanguage()
-	const { isAuthenticated } = useAuth()
 	const { data: searchboxData, isLoading } = useGetSearchboxData({ enabled: true })
 	const changeEngineMutation = useChangeSearchEngine()
 	const [currentEngine, setCurrentEngine] = useState<EngineMeta>(GOOGLE)
@@ -73,10 +70,6 @@ export function EngineSelector({ trigger, onSelected }: EngineSelectorProps) {
 	}, [searchboxData?.selected_engine, engines])
 
 	const handleSelect = async (engine: EngineMeta) => {
-		if (!isAuthenticated) {
-			callEvent('open_require_auth_modal')
-			return
-		}
 		setCurrentEngine(engine)
 
 		await setToStorage('selected_engine', engine.id)

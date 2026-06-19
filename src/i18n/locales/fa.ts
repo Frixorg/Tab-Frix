@@ -5,6 +5,18 @@ import type { TranslationSchema } from './en'
 export const fa: DeepPartial<TranslationSchema> = {
 	appName: 'تب فریکس',
 
+	auth: {
+		loginTitle: 'ورود به حساب کاربری',
+		google: 'ورود با گوگل',
+		telegram: 'ورود با تلگرام',
+		processing: 'درحال پردازش...',
+		telegramNotConfigured: 'ورود با تلگرام پیکربندی نشده است',
+		telegramError: 'تلگرام: {detail}',
+		telegramFailed: 'ورود با تلگرام ناموفق بود',
+		telegramNoCode: 'ورود با تلگرام ناموفق بود (کد دریافت نشد)',
+		telegramTimedOut: 'ورود با تلگرام به پایان نرسید. دوباره تلاش کنید.',
+	},
+
 	welcome: {
 		title: 'به تب فریکس خوش آمدید! 🎉',
 		imageAlt: 'نحوه فعال‌سازی افزونه',

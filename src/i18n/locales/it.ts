@@ -5,6 +5,18 @@ import type { TranslationSchema } from './en'
 export const it: DeepPartial<TranslationSchema> = {
 	appName: 'Tab Frix',
 
+	auth: {
+		loginTitle: 'Accedi al tuo account',
+		google: 'Accedi con Google',
+		telegram: 'Accedi con Telegram',
+		processing: 'Elaborazione…',
+		telegramNotConfigured: 'L’accesso con Telegram non è configurato',
+		telegramError: 'Telegram: {detail}',
+		telegramFailed: 'Accesso con Telegram non riuscito',
+		telegramNoCode: 'Accesso con Telegram non riuscito (codice non ricevuto)',
+		telegramTimedOut: 'L’accesso con Telegram non è stato completato. Riprova.',
+	},
+
 	welcome: {
 		title: 'Benvenuto su Tab Frix! 🎉',
 		imageAlt: 'Come attivare l’estensione',

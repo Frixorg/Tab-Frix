@@ -4,6 +4,18 @@
 export const en = {
 	appName: 'Tab Frix',
 
+	auth: {
+		loginTitle: 'Sign in to your account',
+		google: 'Sign in with Google',
+		telegram: 'Sign in with Telegram',
+		processing: 'Processing…',
+		telegramNotConfigured: 'Telegram sign-in is not configured',
+		telegramError: 'Telegram: {detail}',
+		telegramFailed: 'Telegram sign-in failed',
+		telegramNoCode: 'Telegram sign-in failed (no code received)',
+		telegramTimedOut: 'Telegram sign-in didn’t finish. Please try again.',
+	},
+
 	welcome: {
 		title: 'Welcome to Tab Frix! 🎉',
 		imageAlt: 'How to activate the extension',
