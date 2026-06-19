@@ -16,6 +16,19 @@ export const en = {
 		telegramTimedOut: 'Telegram sign-in didn’t finish. Please try again.',
 	},
 
+	wallpapers: {
+		galleryTitle: 'Image gallery',
+		customImage: 'Custom image',
+		animated: 'Animated',
+		preview: 'Preview',
+		loadError: 'Failed to load',
+		noImage: 'No image',
+		folder: 'Folder',
+		categoriesError: 'Failed to load categories',
+		suitableDefault: 'Suited to the default appearance',
+		suitableSimple: 'Suited to the simple appearance',
+	},
+
 	welcome: {
 		title: 'Welcome to Tab Frix! 🎉',
 		imageAlt: 'How to activate the extension',

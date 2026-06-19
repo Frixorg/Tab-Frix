@@ -1,5 +1,6 @@
 import { RiArrowLeftSLine } from 'react-icons/ri'
 import type { FolderPathItem } from '../types/bookmark.types'
+import { useLanguage } from '@/context/language.context'
 
 type FolderPathProps = {
 	folderPath: FolderPathItem[]
@@ -8,6 +9,7 @@ type FolderPathProps = {
 }
 
 export function FolderPath({ folderPath, onNavigate, className }: FolderPathProps) {
+	const { t } = useLanguage()
 	if (folderPath.length === 0) return null
 
 	return (
@@ -24,7 +26,7 @@ export function FolderPath({ folderPath, onNavigate, className }: FolderPathProp
 						}
 						aria-label="Go to root folder"
 					>
-						بازگشت
+						{t('common.back')}
 					</button>
 				</li>
 

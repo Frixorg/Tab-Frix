@@ -1,4 +1,6 @@
 import { FiFolder } from 'react-icons/fi'
+import { useLanguage } from '@/context/language.context'
+import { translateWallpaperName } from '@/i18n/wallpaper-names'
 
 interface CategoryFolderProps {
 	id: string
@@ -13,6 +15,7 @@ export function CategoryFolder({
 	previewImages,
 	onSelect,
 }: CategoryFolderProps) {
+	const { t, lang } = useLanguage()
 	return (
 		<div
 			onClick={() => onSelect(id)}
@@ -20,7 +23,9 @@ export function CategoryFolder({
 		>
 			<div className="flex items-center gap-2 mb-2">
 				<FiFolder className="text-base-content/10" size={12} />
-				<p className="font-medium truncate text-muted">{name}</p>
+				<p className="font-medium truncate text-muted">
+					{translateWallpaperName(name, lang)}
+				</p>
 			</div>
 
 			<div className="flex-grow">
@@ -43,7 +48,7 @@ export function CategoryFolder({
 				) : (
 					<div className="flex flex-col items-center justify-center h-full rounded">
 						<FiFolder className="mb-2 text-content/40" size={32} />
-						<p className="text-xs text-gray-400">بدون تصویر</p>
+						<p className="text-xs text-gray-400">{t('wallpapers.noImage')}</p>
 					</div>
 				)}
 			</div>

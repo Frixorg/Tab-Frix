@@ -5,15 +5,17 @@ import { CategoryView } from './components/category/category-view'
 import { WallpaperView } from './components/wallpaper-item/wallpaper-view'
 import { UploadArea } from '../../components/upload-area.component'
 import { useAuth } from '@/context/auth.context'
+import { useLanguage } from '@/context/language.context'
 import { useWallpaperContext } from '@/context/wallpaper.context'
 
 export function GalleryTab() {
 	const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
 	const { user, isSuccessFetchingUser } = useAuth()
+	const { t } = useLanguage()
 	const { customWallpaper, handleCustomWallpaperChange } = useWallpaperContext()
 
 	return (
-		<SectionPanel title="گالری تصاویر" size="xs">
+		<SectionPanel title={t('wallpapers.galleryTitle')} size="xs">
 			<div className="p-1">
 				{!selectedCategory ? (
 					<CategoryView onCategorySelect={setSelectedCategory} />
@@ -26,7 +28,7 @@ export function GalleryTab() {
 			</div>
 
 			{user?.isVip && isSuccessFetchingUser ? (
-				<SectionPanel title="تصویر دلخواه" size="xs">
+				<SectionPanel title={t('wallpapers.customImage')} size="xs">
 					<div className="p-4">
 						<UploadArea
 							customWallpaper={customWallpaper}

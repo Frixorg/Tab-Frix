@@ -1,6 +1,7 @@
 import type { Category } from '@/common/wallpaper.interface'
 import { Pagination } from '@/components/pagination'
 import { useGetWallpaperCategoriesPaginated } from '@/services/hooks/wallpapers/getWallpaperCategories.hook'
+import { useLanguage } from '@/context/language.context'
 import { CategoryFolder } from './category-folder.component'
 
 interface CategoryGridProps {
@@ -8,6 +9,7 @@ interface CategoryGridProps {
 }
 const CATEGORIES_PER_PAGE = 12
 export function CategoryView({ onCategorySelect }: CategoryGridProps) {
+	const { t } = useLanguage()
 	const [currentPage, setCurrentPage] = useState(1)
 
 	const {
@@ -58,7 +60,7 @@ export function CategoryView({ onCategorySelect }: CategoryGridProps) {
 	if (error) {
 		return (
 			<div className="flex items-center justify-center h-48">
-				<div className="text-red-500">خطا در بارگذاری دسته‌بندی‌ها</div>
+				<div className="text-red-500">{t('wallpapers.categoriesError')}</div>
 			</div>
 		)
 	}

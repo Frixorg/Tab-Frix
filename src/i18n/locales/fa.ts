@@ -17,6 +17,19 @@ export const fa: DeepPartial<TranslationSchema> = {
 		telegramTimedOut: 'ورود با تلگرام به پایان نرسید. دوباره تلاش کنید.',
 	},
 
+	wallpapers: {
+		galleryTitle: 'گالری تصاویر',
+		customImage: 'تصویر دلخواه',
+		animated: 'متحرک',
+		preview: 'پیش‌نمایش',
+		loadError: 'خطا در بارگذاری',
+		noImage: 'بدون تصویر',
+		folder: 'پوشه',
+		categoriesError: 'خطا در بارگذاری دسته‌بندی‌ها',
+		suitableDefault: 'مناسب حالت ظاهری پیشفرض',
+		suitableSimple: 'مناسب حالت ظاهری ساده',
+	},
+
 	welcome: {
 		title: 'به تب فریکس خوش آمدید! 🎉',
 		imageAlt: 'نحوه فعال‌سازی افزونه',

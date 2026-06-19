@@ -4,6 +4,8 @@ import type { Category, Wallpaper } from '@/common/wallpaper.interface'
 import { FolderPath } from '@/layouts/bookmark/components/folder-path'
 import { useGetWallpapersInfiniteQuery } from '@/services/hooks/wallpapers/getWallpaperCategories.hook'
 import { useWallpaperContext } from '@/context/wallpaper.context'
+import { useLanguage } from '@/context/language.context'
+import { translateWallpaperName } from '@/i18n/wallpaper-names'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { WallpaperItem } from './wallpaper-item'
 import { usePreviewHandler } from '@/hooks/usePreviewHandler'
@@ -30,6 +32,7 @@ export function WallpaperView({
 	} = useWallpaperContext()
 
 	const { previewHandler } = usePreviewHandler()
+	const { t, lang } = useLanguage()
 
 	const handlePreview = (wallpaper: Wallpaper) => {
 		previewHandler(
@@ -104,7 +107,9 @@ export function WallpaperView({
 					folderPath={[
 						{
 							id: 'subfolder',
-							title: selectedCategory?.name || 'پوشه',
+							title:
+								translateWallpaperName(selectedCategory?.name, lang) ||
+								t('wallpapers.folder'),
 						},
 					]}
 					onNavigate={onBackToCategories}

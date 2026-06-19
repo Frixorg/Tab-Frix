@@ -17,6 +17,19 @@ export const it: DeepPartial<TranslationSchema> = {
 		telegramTimedOut: 'L’accesso con Telegram non è stato completato. Riprova.',
 	},
 
+	wallpapers: {
+		galleryTitle: 'Galleria immagini',
+		customImage: 'Immagine personalizzata',
+		animated: 'Animato',
+		preview: 'Anteprima',
+		loadError: 'Caricamento non riuscito',
+		noImage: 'Nessuna immagine',
+		folder: 'Cartella',
+		categoriesError: 'Caricamento delle categorie non riuscito',
+		suitableDefault: 'Adatto all’aspetto predefinito',
+		suitableSimple: 'Adatto all’aspetto semplice',
+	},
+
 	welcome: {
 		title: 'Benvenuto su Tab Frix! 🎉',
 		imageAlt: 'Come attivare l’estensione',
