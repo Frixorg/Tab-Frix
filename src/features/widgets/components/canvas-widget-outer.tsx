@@ -64,7 +64,7 @@ function CanvasWidgetOuterImpl({
 }: CanvasWidgetOuterProps) {
 	const { isVip } = useAuth()
 	const keyboardFocus = useKeyboardFocusWithin()
-	const { isWidgetVipOnly, isVariantVipOnly, isSizeVipOnly } = useWidgetVipResolver()
+	const { isWidgetVipOnly, isVariantVipOnly } = useWidgetVipResolver()
 	const {
 		setCanvasMode,
 		setSelectedInstanceId,
@@ -78,10 +78,7 @@ function CanvasWidgetOuterImpl({
 
 	const isCurrentWidgetVipOnly = isWidgetVipOnly(widget.id)
 	const isCurrentVariantVipOnly = isVariantVipOnly(widget.id, widget.meta?.variant)
-	const isCurrentSizeVipOnly = isSizeVipOnly(widget.id, widget.size)
-	const isLocked =
-		!isVip &&
-		(isCurrentWidgetVipOnly || isCurrentVariantVipOnly || isCurrentSizeVipOnly)
+	const isLocked = !isVip && (isCurrentWidgetVipOnly || isCurrentVariantVipOnly)
 	const isCompactSize = widget.size.w === 1 && widget.size.h === 1
 
 	const [isDragging, setIsDragging] = useState(false)

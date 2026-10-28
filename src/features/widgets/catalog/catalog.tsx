@@ -173,10 +173,7 @@ export function AddWidgetModal({
 
 	const isCurrentWidgetVipOnly = isWidgetVipOnly(selectedDef?.id)
 	const isCurrentVariantVipOnly = isVariantVipOnly(selectedDef?.id, selectedVariant?.id)
-	const isCurrentSizeVipOnly =
-		!selectedVariant && isSizeVipOnly(selectedDef?.id, selectedSize)
-	const isVipRequired =
-		isCurrentWidgetVipOnly || isCurrentVariantVipOnly || isCurrentSizeVipOnly
+	const isVipRequired = isCurrentWidgetVipOnly || isCurrentVariantVipOnly
 
 	const isLimitReached = !isVip && runtimeLayout.length >= maxFreeWidgets
 

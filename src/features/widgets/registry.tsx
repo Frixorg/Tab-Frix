@@ -51,7 +51,7 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		icon: 'search',
 		category: 'productivity',
 		allowedSizes: [
-			{ w: 2, h: 1, isVipOnly: true },
+			{ w: 2, h: 1 },
 			{ w: 4, h: 1 },
 		],
 		defaultSize: { w: 4, h: 1 },
@@ -156,8 +156,8 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		canToggle: true,
 		popular: true,
 		allowedSizes: [
-			{ w: 1, h: 1, isVipOnly: false },
-			{ w: 2, h: 1, isVipOnly: true },
+			{ w: 1, h: 1 },
+			{ w: 2, h: 1 },
 			{ w: 2, h: 3 },
 		],
 		defaultSize: { w: 2, h: 3 },
@@ -242,9 +242,9 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		order: 3,
 		canToggle: true,
 		allowedSizes: [
-			{ w: 1, h: 1, isVipOnly: true },
+			{ w: 1, h: 1 },
 			{ w: 2, h: 1 },
-			{ w: 2, h: 2, isVipOnly: true },
+			{ w: 2, h: 2 },
 			{ w: 2, h: 3 },
 		],
 		defaultSize: { w: 2, h: 3 },
@@ -285,8 +285,8 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		canToggle: true,
 		allowedSizes: [
 			{ w: 2, h: 3 },
-			{ w: 2, h: 6, isVipOnly: true },
-			{ w: 4, h: 3, isVipOnly: true },
+			{ w: 2, h: 6 },
+			{ w: 4, h: 3 },
 		],
 		defaultSize: { w: 2, h: 3 },
 		canDuplicate: false,
@@ -302,7 +302,7 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		order: 2,
 		canToggle: true,
 		allowedSizes: [
-			{ w: 2, h: 1, isVipOnly: true },
+			{ w: 2, h: 1 },
 			{ w: 2, h: 3 },
 		],
 		defaultSize: { w: 2, h: 3 },
@@ -322,7 +322,7 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		order: 5,
 		canToggle: true,
 		allowedSizes: [
-			{ w: 1, h: 1, isVipOnly: true },
+			{ w: 1, h: 1 },
 			{ w: 2, h: 3 },
 		],
 		defaultSize: { w: 2, h: 3 },
@@ -376,8 +376,8 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		order: 7,
 		canToggle: true,
 		allowedSizes: [
-			{ w: 1, h: 1, isVipOnly: true },
-			{ w: 2, h: 1, isVipOnly: true },
+			{ w: 1, h: 1 },
+			{ w: 2, h: 1 },
 			{ w: 2, h: 3 },
 		],
 		defaultSize: { w: 2, h: 3 },
@@ -397,8 +397,8 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		allowedSizes: [
 			{ w: 2, h: 1 },
 			{ w: 2, h: 3 },
-			{ w: 2, h: 6, isVipOnly: true },
-			{ w: 4, h: 3, isVipOnly: true },
+			{ w: 2, h: 6 },
+			{ w: 4, h: 3 },
 		],
 		defaultSize: { w: 2, h: 3 },
 		canDuplicate: false,
@@ -414,8 +414,8 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		allowedSizes: [
 			{ w: 2, h: 1 },
 			{ w: 2, h: 3 },
-			{ w: 2, h: 6, isVipOnly: true },
-			{ w: 4, h: 3, isVipOnly: true },
+			{ w: 2, h: 6 },
+			{ w: 4, h: 3 },
 		],
 		defaultSize: { w: 2, h: 3 },
 		canDuplicate: true,
@@ -436,9 +436,9 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		category: 'productivity',
 		allowedSizes: [
 			{ w: 2, h: 3 },
-			{ w: 2, h: 2, isVipOnly: true },
-			{ w: 4, h: 3, isVipOnly: true },
-			{ w: 2, h: 6, isVipOnly: true },
+			{ w: 2, h: 2 },
+			{ w: 4, h: 3 },
+			{ w: 2, h: 6 },
 		],
 		defaultSize: { w: 2, h: 3 },
 		variants: [
@@ -552,7 +552,7 @@ const WIDGET_DEFINITIONS: Record<WidgetKeys, WidgetDefinition> = {
 		category: 'lifestyle',
 		isVipOnly: false,
 		allowedSizes: [
-			{ w: 1, h: 1, isVipOnly: true },
+			{ w: 1, h: 1 },
 			{ w: 2, h: 1 },
 			{ w: 2, h: 2 },
 			{ w: 2, h: 4 },

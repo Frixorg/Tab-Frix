@@ -12,7 +12,6 @@ import {
 	VipBadge,
 } from '@/components/ui'
 import { useAuth } from '@/context/auth.context'
-import { useWidgetVipResolver } from '@/features/widgets/hooks/use-widget-vip-resolver'
 import { callEvent } from '@/common/utils/call-event'
 import { cn } from '@/common/utils/cn'
 import { t } from '@/common/i18n'
@@ -54,7 +53,6 @@ export function WidgetContextMenu({
 	onDelete,
 }: WidgetContextMenuProps) {
 	const { isVip } = useAuth()
-	const { isSizeVipOnly } = useWidgetVipResolver()
 
 	const menuLabel = definition.menuLabel
 		? t(definition.menuLabel)
@@ -111,16 +109,13 @@ export function WidgetContextMenu({
 			>
 				{fittingSizes.map((size) => {
 					const isCurrent = size.w === widget.size.w && size.h === widget.size.h
-					const isSizeVip = !isVip && isSizeVipOnly(definition.id, size)
 
 					return (
 						<button
 							key={`${size.w}x${size.h}`}
 							type="button"
 							aria-pressed={isCurrent}
-							onClick={
-								isSizeVip ? openVip : runAndClose(() => onResize(size))
-							}
+							onClick={runAndClose(() => onResize(size))}
 							className={cn(
 								'flex items-center justify-center flex-1 gap-0.5 h-6.5 rounded-lg text-2xs font-semibold tabular-nums cursor-pointer transition-ui focus-visible:focus-ring',
 								isCurrent
@@ -129,14 +124,6 @@ export function WidgetContextMenu({
 							)}
 						>
 							{size.w}×{size.h}
-							{isSizeVip && (
-								<Icon
-									name="diamond"
-									size={8}
-									className="text-vip"
-									aria-label={t('ui.vip.pro')}
-								/>
-							)}
 						</button>
 					)
 				})}

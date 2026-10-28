@@ -49,26 +49,8 @@ export function useWidgetVipResolver(enabled = true) {
 	)
 
 	const isSizeVipOnly = useCallback(
-		(widgetKey?: string, size?: { w: number; h: number }): boolean => {
-			if (!widgetKey || !size) return false
-			const serverItem = serverCatalog?.widgets?.find(
-				(w) => w.widgetKey === widgetKey
-			)
-			if (serverItem?.allowedSizes) {
-				const match = serverItem.allowedSizes.find(
-					(s) => s.w === size.w && s.h === size.h
-				)
-				if (match) {
-					return Boolean(match.isVipOnly)
-				}
-			}
-			const localDef = getWidgetRegistry()[widgetKey]
-			const localSize = localDef?.allowedSizes?.find(
-				(s) => s.w === size.w && s.h === size.h
-			)
-			return Boolean(localSize?.isVipOnly)
-		},
-		[serverCatalog]
+		(_widgetKey?: string, _size?: { w: number; h: number }): boolean => false,
+		[]
 	)
 
 	const isWidgetNew = useCallback(
